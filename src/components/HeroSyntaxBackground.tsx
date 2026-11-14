@@ -18,27 +18,58 @@ interface GiantSyntaxParticle {
 }
 
 const GIANTS_SYMBOLS = [
-  "{",
-  "}",
-  "[",
-  "]",
-  ";",
-  "/>",
-  "</",
-  "(",
-  ")",
-  "=>",
-  "&&",
-  "||",
-  "*",
-  "//",
-  "++",
-  "#",
-  "$",
-  "{}",
-  "[]",
-  "::",
-  "==",
+  // Programação
+  "{", "}", "[", "]", "(", ")",
+  "<", ">", "/", "\\", ";", ":",
+  "=", "+", "-", "*", "%", "&",
+  "|", "!", "?", "~", "^", "#",
+  "$", "@", "_", "`", ".",
+
+  // Operadores
+  "≠", "≈", "≤", "≥", "≡",
+  "±", "×", "÷", "∞", "∝",
+  "∧", "∨", "¬", "⊕", "⊗",
+  "∴", "∵", "∼", "∫", "∂",
+
+  // Matemáticos
+  "∆", "∇", "∑", "√", "∏",
+  "∮", "∅", "∈", "∉", "∋",
+  "∩", "∪", "⊂", "⊃", "⊆",
+  "⊇", "∀", "∃", "ℵ", "℘",
+
+  // Gregos
+  "λ", "π", "Ω", "α", "β",
+  "θ", "μ", "φ", "ψ", "σ",
+  "δ", "ε", "γ", "η", "ξ",
+  "τ", "ρ", "ω", "ζ", "χ",
+  "κ", "ν", "ι", "υ", "Φ",
+  "Ψ", "Σ", "Δ", "Γ", "Θ",
+
+  // Geométricos
+  "◆", "◇", "○", "●", "◈",
+  "△", "▽", "◁", "▷", "□",
+  "■", "▪", "▫", "◉", "◎",
+  "◌", "◍", "◐", "◑", "◒",
+  "◓", "◔", "◕", "⬡", "⬢",
+
+  // Setas
+  "←", "→", "↑", "↓",
+  "↔", "↕", "↗", "↘",
+  "↙", "↖", "⇄", "⇆",
+  "⇌", "⇢", "⇠", "⇧",
+  "⇩", "➜", "➤", "➝",
+
+  // Técnicos e especiais
+  "⌘", "⌥", "⌫", "⌦", "⎋",
+  "⌖", "⌬", "⌭", "⌑", "⏣",
+  "⏢", "⏥", "⎔", "⎇", "⎈",
+  "※", "⁂", "⁑", "⁕", "⁖",
+
+  // Outros caracteres visuais
+  "§", "¶", "†", "‡", "°",
+  "¬", "¦", "¤", "¢", "£",
+  "¥", "₿", "‰", "‱", "※",
+  "⁜", "⁘", "⁙", "⁛", "⁝"
 ];
 
 export default function HeroSyntaxBackground() {
@@ -74,7 +105,7 @@ export default function HeroSyntaxBackground() {
 
     const initParticles = (width: number, height: number) => {
       const isMobile = width < 768;
-      const count = isMobile ? 11 : 20;
+      const count = isMobile ? 11 : 50;
       particles = [];
 
       const floorY = height - 20;
@@ -98,12 +129,12 @@ export default function HeroSyntaxBackground() {
         particles.push({
           x: spawnX,
           y: spawnY,
-          vx: (Math.random() - 0.5) * 1.6,
-          vy: prefersReducedMotion ? 0 : 2.0 + Math.random() * 3.0,
+          vx: (Math.random() - 0.5) * 1.0,
+          vy: prefersReducedMotion ? 0 : 2.0 + Math.random() * 2.0,
           radius,
           mass,
-          rotation: (Math.random() - 0.5) * 0.8,
-          angularVelocity: (Math.random() - 0.5) * 0.035,
+          rotation: (Math.random() - 0.5) * 0.5,
+          angularVelocity: (Math.random() - 0.5) * 0.01,
           symbol,
           fontSize,
           baseOpacity,
@@ -136,11 +167,11 @@ export default function HeroSyntaxBackground() {
           p.y += p.vy * dt;
           p.rotation += p.angularVelocity * dt;
 
-          if (p.y > floorY - p.radius) {
+          if (p.y >= floorY - p.radius) {
             p.y = floorY - p.radius;
-            p.vy = -p.vy * 0.3;
-            p.vx *= 0.85;
-            p.angularVelocity *= 0.8;
+            p.vy = 0;
+            p.vx *= 0.8;
+            p.angularVelocity = 0;
           }
           if (p.x < p.radius + 15) {
             p.x = p.radius + 15;
@@ -196,14 +227,15 @@ export default function HeroSyntaxBackground() {
             const vn = nx * kx + ny * ky;
 
             if (vn > 0) {
-              const impulse = (1.3 * vn) / totalMass;
+              const impulse = (1.2 * vn) / totalMass;
               p1.vx -= impulse * p2.mass * nx;
               p1.vy -= impulse * p2.mass * ny;
               p2.vx += impulse * p1.mass * nx;
               p2.vy += impulse * p1.mass * ny;
 
-              p1.angularVelocity += (Math.random() - 0.5) * 0.008;
-              p2.angularVelocity += (Math.random() - 0.5) * 0.008;
+              // Gentle rotational stabilization on impact (zero random kicks)
+              p1.angularVelocity *= 0.9;
+              p2.angularVelocity *= 0.9;
             }
           }
         }
@@ -248,18 +280,34 @@ export default function HeroSyntaxBackground() {
         for (let i = 0; i < particles.length; i++) {
           const p = particles[i];
 
+          // Continuous rotational air resistance & cap mid-air rotation
+          p.angularVelocity *= 0.985;
+          p.angularVelocity = Math.max(
+            -0.012,
+            Math.min(0.012, p.angularVelocity)
+          );
+
           // Gravity and velocity integration
           p.vy += gravity * dt;
           p.x += p.vx * dt;
           p.y += p.vy * dt;
           p.rotation += p.angularVelocity * dt;
 
-          // Floor boundary collision with restitution & rolling friction
-          if (p.y > floorY - p.radius) {
+          // Floor boundary collision with restitution & ground rotation lock
+          if (p.y >= floorY - p.radius) {
             p.y = floorY - p.radius;
-            p.vy = -p.vy * 0.32;
-            p.vx *= 0.88;
-            p.angularVelocity *= 0.84;
+            if (Math.abs(p.vy) < 0.8) {
+              p.vy = 0;
+            } else {
+              p.vy = -p.vy * 0.22;
+            }
+            p.vx *= 0.82;
+            // Floor rapidly kills rotation so they never spin while fallen
+            p.angularVelocity *= 0.65;
+            if (Math.abs(p.vx) < 0.25) {
+              p.angularVelocity = 0;
+              p.vx = 0;
+            }
           }
 
           // Side walls boundary collision
@@ -283,11 +331,17 @@ export default function HeroSyntaxBackground() {
               const nx = dx / dist;
               const ny = dy / dist;
               const pushFactor = Math.pow(1 - dist / mouseEffectiveRadius, 2);
-              const pushForce = pushFactor * 4.5;
+              const pushForce = pushFactor * 4.0;
 
-              p.vx += nx * pushForce + mouse.vx * 0.25;
-              p.vy += ny * pushForce + mouse.vy * 0.25;
-              p.angularVelocity += (nx > 0 ? 1 : -1) * pushForce * 0.015;
+              p.vx += nx * pushForce + mouse.vx * 0.2;
+              p.vy += ny * pushForce + mouse.vy * 0.2;
+              p.angularVelocity = Math.max(
+                -0.015,
+                Math.min(
+                  0.015,
+                  p.angularVelocity + (nx > 0 ? 1 : -1) * pushForce * 0.003
+                )
+              );
             }
           }
 
