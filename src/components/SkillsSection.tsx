@@ -36,9 +36,12 @@ function getCategoryIcon(iconName?: string) {
 
 interface SkillScatter {
   tilt: number;
+  xShift: number;
   yShift: number;
   marginLeft: number;
   marginRight: number;
+  marginTop: number;
+  marginBottom: number;
   bgOpacity: number;
 }
 
@@ -49,17 +52,25 @@ function getSkillScatter(skill: string, catIdx: number, itemIdx: number): SkillS
   }
   hash += catIdx * 73 + itemIdx * 19;
 
-  // Rotação orgânica sutil: entre -2.0deg e +2.0deg
-  const tilt = Number((((hash % 9) - 4) * 0.45).toFixed(2));
-  // Deslocamento vertical sutil: entre -2.5px e +2.5px
-  const yShift = Number((((hash % 7) - 3) * 0.8).toFixed(1));
-  // Margens sutis para quebrar o alinhamento retangular rígido
-  const marginLeft = (hash % 5 === 1) ? 2 : (hash % 5 === 2) ? 4 : 0;
-  const marginRight = (hash % 5 === 3) ? 3 : 0;
-  // Variação sutil de opacidade de fundo
-  const bgOpacity = Number((0.025 + (hash % 4) * 0.012).toFixed(3));
+  // Rotação orgânica sutil: entre -2.2deg e +2.2deg
+  const tilt = Number((((hash % 11) - 5) * 0.44).toFixed(2));
 
-  return { tilt, yShift, marginLeft, marginRight, bgOpacity };
+  // Deslocamento horizontal: entre -8px e +8px
+  const xShift = Number((((hash % 9) - 4) * 1.8).toFixed(1));
+
+  // Deslocamento vertical: entre -7px e +7px
+  const yShift = Number((((hash % 9) - 4) * 1.6).toFixed(1));
+
+  // Margens orgânicas para distribuir e ocupar a área interior do card
+  const marginLeft = (hash % 5 === 1) ? 6 : (hash % 5 === 2) ? 12 : 4;
+  const marginRight = (hash % 5 === 3) ? 10 : (hash % 5 === 4) ? 6 : 4;
+  const marginTop = (hash % 4 === 1) ? 6 : (hash % 4 === 2) ? 10 : 4;
+  const marginBottom = (hash % 4 === 3) ? 8 : 4;
+
+  // Variação sutil de opacidade de fundo
+  const bgOpacity = Number((0.025 + (hash % 4) * 0.015).toFixed(3));
+
+  return { tilt, xShift, yShift, marginLeft, marginRight, marginTop, marginBottom, bgOpacity };
 }
 
 function getShuffledSkills(skills: string[], categoryIndex: number): string[] {
@@ -86,23 +97,25 @@ function SkillPill({ skill, application, scatter }: SkillPillProps) {
 
   return (
     <div
-      className="relative transition-all duration-200"
+      className="relative transition-all duration-300"
       style={{
         transform: isHovered
-          ? "rotate(0deg) translateY(-2px) scale(1.05)"
-          : `rotate(${scatter.tilt}deg) translateY(${scatter.yShift}px)`,
+          ? "rotate(0deg) translate(0px, -3px) scale(1.06)"
+          : `translate(${scatter.xShift}px, ${scatter.yShift}px) rotate(${scatter.tilt}deg)`,
         marginLeft: `${scatter.marginLeft}px`,
         marginRight: `${scatter.marginRight}px`,
-        zIndex: isHovered ? 30 : 1,
+        marginTop: `${scatter.marginTop}px`,
+        marginBottom: `${scatter.marginBottom}px`,
+        zIndex: isHovered ? 40 : 1,
       }}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
       <div
-        className={`inline-flex items-center text-xs font-mono px-3 py-1.5 rounded-lg border transition-all duration-200 cursor-default select-none ${
+        className={`inline-flex items-center text-xs font-mono px-3.5 py-2 rounded-lg border transition-all duration-200 cursor-default select-none ${
           isHovered
-            ? "bg-white/[0.12] text-white border-white/25 shadow-lg shadow-black/40"
-            : "text-zinc-300 border-white/[0.07] hover:border-white/20"
+            ? "bg-white/[0.14] text-white border-white/30 shadow-[0_4px_20px_rgba(255,255,255,0.1)]"
+            : "text-zinc-300 border-white/[0.08] hover:border-white/20"
         }`}
         style={{
           backgroundColor: !isHovered
@@ -121,7 +134,7 @@ function SkillPill({ skill, application, scatter }: SkillPillProps) {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 2, scale: 0.96 }}
             transition={{ duration: 0.15, ease: "easeOut" }}
-            className="absolute left-1/2 -translate-x-1/2 bottom-full mb-2 z-40 whitespace-nowrap px-2.5 py-1 rounded-md bg-zinc-900/95 border border-white/10 shadow-xl text-[11px] font-mono text-zinc-300 pointer-events-none"
+            className="absolute left-1/2 -translate-x-1/2 bottom-full mb-2.5 z-50 whitespace-nowrap px-2.5 py-1 rounded-md bg-zinc-900/95 border border-white/10 shadow-xl text-[11px] font-mono text-zinc-300 pointer-events-none"
           >
             <span className="text-zinc-400">Projeto:</span>{" "}
             <span className="text-white font-medium">
@@ -170,7 +183,7 @@ function SpotlightCard({ category, index, className = "" }: SpotlightCardProps) 
           setIsHovered(false);
           setMousePos({ x: -1000, y: -1000 });
         }}
-        className="group relative h-full flex flex-col rounded-2xl bg-zinc-950/70 border border-white/[0.08] p-6 sm:p-7 backdrop-blur-md overflow-hidden transition-all duration-300 hover:border-white/20 hover:shadow-[0_8px_32px_rgba(0,0,0,0.5)]"
+        className="group relative h-full min-h-[380px] sm:min-h-[400px] flex flex-col rounded-2xl bg-zinc-950/70 border border-white/[0.08] p-6 sm:p-7 backdrop-blur-md overflow-hidden transition-all duration-300 hover:border-white/20 hover:shadow-[0_8px_32px_rgba(0,0,0,0.5)]"
       >
         {/* Efeito Spotlight Dinâmico no Mouse */}
         <div
@@ -212,8 +225,8 @@ function SpotlightCard({ category, index, className = "" }: SpotlightCardProps) 
           </div>
         </div>
 
-        {/* Distribuição Orgânica das Pílulas de Habilidade */}
-        <div className="relative z-10 flex flex-wrap items-center gap-x-2.5 gap-y-3.5 mt-auto pt-2 pb-1">
+        {/* Distribuição Orgânica das Pílulas aproveitando toda a área interior do card */}
+        <div className="relative z-10 flex-1 flex flex-wrap content-around justify-around items-center py-2 px-1">
           {getShuffledSkills(category.skills, index).map((skill, itemIdx) => (
             <SkillPill
               key={skill}

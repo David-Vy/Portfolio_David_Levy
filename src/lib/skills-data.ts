@@ -110,11 +110,11 @@ export const skillsData: SkillCategory[] = [
       "TypeScript & JavaScript",
       "Python",
       "SQL (PostgreSQL & MySQL)",
-      "C# (.NET Core & MVC)",
+      "C#",
       "Java",
       "Dart (Flutter)",
       "PHP (Laravel)",
-      "C / C++ (Node-API)",
+      "C / C++",
       "HTML5 & CSS3"
     ],
   },
@@ -124,7 +124,7 @@ export const skillsData: SkillCategory[] = [
     accentColor: "rgba(59, 130, 246, 0.15)",
     skills: [
       "React.js & Next.js 15",
-      "Electron (Desktop Nativo)",
+      "Electron",
       "Tailwind CSS & CSS Modules",
       "Vite & Webpack",
       "Radix UI & Shadcn",
@@ -138,14 +138,14 @@ export const skillsData: SkillCategory[] = [
     iconName: "server",
     accentColor: "rgba(16, 185, 129, 0.15)",
     skills: [
-      "Node.js (Express & Fastify)",
-      "APIs RESTful & Endpoints Seguros",
-      "WebSockets (Telemetria Real-Time)",
-      "WebRTC (Streaming de Baixa Latência)",
-      "Microsserviços & Monorepos (PNPM)",
-      "AWS S3 / MinIO (Object Storage)",
-      "Serverless Functions (Vercel)",
-      "Integração Financeira & PIX (Asaas API)"
+      "Node.js",
+      "APIs RESTful & Endpoints",
+      "WebSockets",
+      "WebRTC",
+      "Microsserviços & Monorepos",
+      "AWS S3 / MinIO",
+      "Serverless Functions",
+      "Integração Financeira & PIX"
     ],
   },
   {
@@ -153,11 +153,11 @@ export const skillsData: SkillCategory[] = [
     iconName: "database",
     accentColor: "rgba(245, 158, 11, 0.15)",
     skills: [
-      "PostgreSQL & Supabase (RLS)",
-      "MongoDB & Mongoose (NoSQL)",
+      "PostgreSQL & Supabase",
+      "MongoDB & Mongoose",
       "Firebase Firestore & Auth",
       "Docker & Docker Compose",
-      "Git & GitHub (Versionamento Ágil)",
+      "Git & GitHub",
       "CI/CD Pipelines",
       "Linux & Shell Scripting",
       "Entity Framework Core"
@@ -174,7 +174,7 @@ export const skillsData: SkillCategory[] = [
       "Metodologias Ágeis (Scrum / Kanban)",
       "Testes Automatizados (Jest, Supertest)",
       "Inglês (Intermediário — CIL)",
-      "Espanhol (Avançado/Fluente — CIL 440h)"
+      "Espanhol (Avançado — CIL)"
     ],
   },
 ];
