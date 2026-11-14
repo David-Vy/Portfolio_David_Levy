@@ -37,7 +37,6 @@ export const projectsData: Project[] = [
       "Áudio WASAPI Loopback com conversão PCM Float32 sem locks",
       "Pipeline WebRTC LiveKit com cancelamento de ruído Krisp AI"
     ],
-    githubUrl: "https://github.com/David-Vy/LyMadhouse",
     longDescriptionHtml: `
       <p class="mb-4">O <strong>LyMadhouse</strong> é uma solução de comunicação e colaboração de alta performance desenvolvida para ambientes que exigem streaming de vídeo e voz com baixíssima latência (1080p a 60 FPS).</p>
       
@@ -70,7 +69,6 @@ export const projectsData: Project[] = [
       "Object Storage MinIO S3 & coleções dinâmicas NoSQL com validação Zod",
       "Telemetria de hardware (CPU/RAM) via WebSockets para painel Electron"
     ],
-    githubUrl: "https://github.com/David-Vy/lycloud-server",
     longDescriptionHtml: `
       <p class="mb-4">O <strong>LyCloud Server</strong> foi concebido como uma engine de nuvem privada e BaaS auto-hospedado voltado para desenvolvedores e infraestruturas que necessitam de soberania total sobre seus dados e microsserviços.</p>
       
@@ -103,7 +101,6 @@ export const projectsData: Project[] = [
       "Transcodificação on-demand FFmpeg com playlists HLS adaptativas (.m3u8)",
       "Cluster Fastify de baixa sobrecarga e caching de episódios em IndexedDB"
     ],
-    githubUrl: "https://github.com/David-Vy/LyVia",
     longDescriptionHtml: `
       <p class="mb-4">O <strong>LyVia</strong> é uma plataforma moderna desenvolvida para entrega contínua de conteúdo multimídia em alta definição com otimização radical de largura de banda e custos operacionais.</p>
       
@@ -199,7 +196,6 @@ export const projectsData: Project[] = [
       "OCR local com Tesseract.js WASM e comparador de textos via Myers Diff",
       "Minificação de código JavaScript via AST Terser e gerador de interfaces TypeScript"
     ],
-    githubUrl: "https://github.com/David-Vy/utilify",
     liveUrl: "https://utilify-zeta.vercel.app",
     longDescriptionHtml: `
       <p class="mb-4">O <strong>Utilify</strong> é uma suíte completa de micro-ferramentas de produtividade e engenharia de software desenvolvida para processar dados de forma estritamente local no navegador do usuário, assegurando privacidade total e latência zero.</p>
@@ -224,7 +220,6 @@ export const projectsData: Project[] = [
       "Eliminação de dependências proprietárias CUDA via Microsoft DirectML",
       "Pipeline autoregressivo com amostragem estocástica por temperatura e top-k"
     ],
-    githubUrl: "https://github.com/David-Vy/ProjetoRosa",
     longDescriptionHtml: `
       <p class="mb-4">O <strong>Projeto Rosa</strong> é uma implementação profunda e de código aberto de um modelo de linguagem autoregressivo em <strong>PyTorch</strong>, concebido para contornar limitações de compatibilidade de hardware proprietário (CUDA) e executar inferência acelerada em GPUs AMD sob Windows.</p>
       

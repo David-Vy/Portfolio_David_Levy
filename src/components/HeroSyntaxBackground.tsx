@@ -105,7 +105,7 @@ export default function HeroSyntaxBackground() {
 
     const initParticles = (width: number, height: number) => {
       const isMobile = width < 768;
-      const count = isMobile ? 11 : 50;
+      const count = isMobile ? 25 : 50;
       particles = [];
 
       const floorY = height - 20;
