@@ -34,21 +34,82 @@ function getCategoryIcon(iconName?: string) {
   }
 }
 
+interface SkillScatter {
+  tilt: number;
+  yShift: number;
+  marginLeft: number;
+  marginRight: number;
+  bgOpacity: number;
+}
+
+function getSkillScatter(skill: string, catIdx: number, itemIdx: number): SkillScatter {
+  let hash = 0;
+  for (let i = 0; i < skill.length; i++) {
+    hash = (hash * 31 + skill.charCodeAt(i)) & 0xfffff;
+  }
+  hash += catIdx * 73 + itemIdx * 19;
+
+  // Rotação orgânica sutil: entre -2.0deg e +2.0deg
+  const tilt = Number((((hash % 9) - 4) * 0.45).toFixed(2));
+  // Deslocamento vertical sutil: entre -2.5px e +2.5px
+  const yShift = Number((((hash % 7) - 3) * 0.8).toFixed(1));
+  // Margens sutis para quebrar o alinhamento retangular rígido
+  const marginLeft = (hash % 5 === 1) ? 2 : (hash % 5 === 2) ? 4 : 0;
+  const marginRight = (hash % 5 === 3) ? 3 : 0;
+  // Variação sutil de opacidade de fundo
+  const bgOpacity = Number((0.025 + (hash % 4) * 0.012).toFixed(3));
+
+  return { tilt, yShift, marginLeft, marginRight, bgOpacity };
+}
+
+function getShuffledSkills(skills: string[], categoryIndex: number): string[] {
+  const copy = [...skills];
+  let seed = (categoryIndex + 1) * 7919;
+  for (let i = copy.length - 1; i > 0; i--) {
+    seed = (seed * 9301 + 49297) % 233280;
+    const j = Math.floor((seed / 233280) * (i + 1));
+    const temp = copy[i];
+    copy[i] = copy[j];
+    copy[j] = temp;
+  }
+  return copy;
+}
+
 interface SkillPillProps {
   skill: string;
   application?: SkillApplication;
+  scatter: SkillScatter;
 }
 
-function SkillPill({ skill, application }: SkillPillProps) {
+function SkillPill({ skill, application, scatter }: SkillPillProps) {
   const [isHovered, setIsHovered] = useState(false);
 
   return (
     <div
-      className="relative"
+      className="relative transition-all duration-200"
+      style={{
+        transform: isHovered
+          ? "rotate(0deg) translateY(-2px) scale(1.05)"
+          : `rotate(${scatter.tilt}deg) translateY(${scatter.yShift}px)`,
+        marginLeft: `${scatter.marginLeft}px`,
+        marginRight: `${scatter.marginRight}px`,
+        zIndex: isHovered ? 30 : 1,
+      }}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      <div className="inline-flex items-center text-xs font-mono px-3 py-1.5 rounded-lg border transition-all duration-200 cursor-default select-none bg-white/[0.03] border-white/[0.06] text-zinc-300 hover:bg-white/[0.08] hover:text-white hover:border-white/20">
+      <div
+        className={`inline-flex items-center text-xs font-mono px-3 py-1.5 rounded-lg border transition-all duration-200 cursor-default select-none ${
+          isHovered
+            ? "bg-white/[0.12] text-white border-white/25 shadow-lg shadow-black/40"
+            : "text-zinc-300 border-white/[0.07] hover:border-white/20"
+        }`}
+        style={{
+          backgroundColor: !isHovered
+            ? `rgba(255, 255, 255, ${scatter.bgOpacity})`
+            : undefined,
+        }}
+      >
         <span>{skill}</span>
       </div>
 
@@ -151,13 +212,14 @@ function SpotlightCard({ category, index, className = "" }: SpotlightCardProps) 
           </div>
         </div>
 
-        {/* Grid de Pílulas de Habilidade */}
-        <div className="relative z-10 flex flex-wrap gap-2.5 mt-auto pt-1">
-          {category.skills.map((skill) => (
+        {/* Distribuição Orgânica das Pílulas de Habilidade */}
+        <div className="relative z-10 flex flex-wrap items-center gap-x-2.5 gap-y-3.5 mt-auto pt-2 pb-1">
+          {getShuffledSkills(category.skills, index).map((skill, itemIdx) => (
             <SkillPill
               key={skill}
               skill={skill}
               application={SKILL_APPLICATIONS[skill]}
+              scatter={getSkillScatter(skill, index, itemIdx)}
             />
           ))}
         </div>
