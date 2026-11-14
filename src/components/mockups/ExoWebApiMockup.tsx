@@ -145,10 +145,6 @@ export default function ExoWebApiMockup() {
                 .NET 8 LTS
               </span>
             </h4>
-            <p className="text-[11px] font-mono text-zinc-400 flex items-center gap-1.5">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-              <span>JWT Bearer Security • Repository Pattern • EF Core</span>
-            </p>
           </div>
         </div>
 

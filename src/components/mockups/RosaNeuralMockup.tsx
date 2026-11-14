@@ -170,10 +170,10 @@ export default function RosaNeuralMockup() {
                 msg.sender === "user" ? "justify-end" : "justify-start"
               }`}
             >
-              {/* Avatar da Rosa: Ícone de Coração Carinhoso */}
+              {/* Avatar da Rosa: Ícone de Coração com Alinhamento Óptico Perfeito */}
               {msg.sender === "rosa" && (
                 <div className="w-7 h-7 rounded-full bg-rose-950/60 border border-rose-500/30 flex items-center justify-center shrink-0 mt-0.5 text-rose-300 shadow-sm">
-                  <Heart className="w-3.5 h-3.5 fill-rose-400/40 text-rose-300" />
+                  <Heart className="w-3.5 h-3.5 fill-rose-400/40 text-rose-300 translate-y-[1.5px]" />
                 </div>
               )}
 
@@ -209,7 +209,7 @@ export default function RosaNeuralMockup() {
               className="flex items-start gap-3 justify-start"
             >
               <div className="w-7 h-7 rounded-full bg-rose-950/60 border border-rose-500/30 flex items-center justify-center shrink-0 text-rose-300">
-                <Heart className="w-3.5 h-3.5 fill-rose-400/40 text-rose-300 animate-pulse" />
+                <Heart className="w-3.5 h-3.5 fill-rose-400/40 text-rose-300 translate-y-[1.5px] animate-pulse" />
               </div>
               <div className="bg-rose-950/20 border border-rose-500/20 rounded-2xl rounded-tl-sm px-4 py-3 flex items-center gap-1.5">
                 <motion.span
@@ -242,7 +242,7 @@ export default function RosaNeuralMockup() {
               className="flex items-start gap-3 justify-start"
             >
               <div className="w-7 h-7 rounded-full bg-rose-950/60 border border-rose-500/30 flex items-center justify-center shrink-0 text-rose-300">
-                <Heart className="w-3.5 h-3.5 fill-rose-400/40 text-rose-300" />
+                <Heart className="w-3.5 h-3.5 fill-rose-400/40 text-rose-300 translate-y-[1.5px]" />
               </div>
               <div className="max-w-[85%] sm:max-w-[80%] bg-rose-950/25 border border-rose-500/25 text-rose-50 rounded-2xl rounded-tl-sm px-4 py-2.5 text-xs sm:text-sm leading-relaxed backdrop-blur-md shadow-[0_4px_24px_rgba(244,63,94,0.08)]">
                 <div className="flex items-center gap-1.5 mb-1 opacity-70 text-[10px] font-mono text-rose-300">
@@ -266,7 +266,7 @@ export default function RosaNeuralMockup() {
           <span className="truncate">Rosa conversa com você através do modelo DirectML GRU...</span>
         </div>
         <div className="w-8 h-8 rounded-xl bg-rose-500/10 border border-rose-500/20 text-rose-400 flex items-center justify-center shrink-0">
-          <Heart className="w-4 h-4 fill-rose-500/20" />
+          <Heart className="w-4 h-4 fill-rose-500/20 translate-y-[1px]" />
         </div>
       </footer>
     </div>

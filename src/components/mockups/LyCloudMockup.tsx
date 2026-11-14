@@ -83,10 +83,6 @@ export default function LyCloudMockup() {
         </div>
 
         <div className="flex items-center gap-2">
-          <span className="px-2.5 py-1 rounded-full bg-white/[0.04] border border-white/[0.08] text-[11px] font-mono text-zinc-300 flex items-center gap-1.5">
-            <Zap className="w-3 h-3 text-emerald-400" />
-            <span>0.8ms ping</span>
-          </span>
         </div>
       </div>
 
