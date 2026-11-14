@@ -2,53 +2,43 @@
 
 import React, { useEffect, useRef } from "react";
 
-interface SyntaxParticle {
+interface GiantSyntaxParticle {
   x: number;
   y: number;
   vx: number;
   vy: number;
-  gravity: number;
-  terminalVelocity: number;
-  targetFloor: number;
+  radius: number;
+  mass: number;
   rotation: number;
   angularVelocity: number;
   symbol: string;
   fontSize: number;
   baseOpacity: number;
   settled: boolean;
-  baseRestX: number;
-  baseRestY: number;
-  baseRestAngle: number;
-  currentDisplaceX: number;
-  currentDisplaceY: number;
-  currentDisplaceAngle: number;
 }
 
-const SYNTAX_SYMBOLS = [
-  "{ }",
-  "[ ]",
-  ";",
-  "( )",
-  "/>",
-  "</",
-  "=>",
-  "&&",
-  "||",
-  "*",
-  "&",
-  "!==",
-  "===",
-  "++",
-  "::",
+const GIANTS_SYMBOLS = [
   "{",
   "}",
   "[",
   "]",
   ";",
-  "()",
-  "->",
+  "/>",
+  "</",
+  "(",
+  ")",
+  "=>",
+  "&&",
+  "||",
+  "*",
+  "//",
+  "++",
   "#",
   "$",
+  "{}",
+  "[]",
+  "::",
+  "==",
 ];
 
 export default function HeroSyntaxBackground() {
@@ -63,23 +53,163 @@ export default function HeroSyntaxBackground() {
     const ctx = canvas.getContext("2d", { alpha: true });
     if (!ctx) return;
 
-    // Detect prefers-reduced-motion
     const prefersReducedMotion =
       window.matchMedia &&
       window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
     let animationFrameId: number | null = null;
     let isRunning = false;
-    let particles: SyntaxParticle[] = [];
+    let particles: GiantSyntaxParticle[] = [];
 
-    // Mouse coordinates relative to hero container
+    // Track mouse with position and velocity
     const mouse = {
       x: -9999,
       y: -9999,
+      vx: 0,
+      vy: 0,
+      lastX: -9999,
+      lastY: -9999,
       isActive: false,
     };
 
-    // Calculate canvas bounds and adapt to high DPI
+    const initParticles = (width: number, height: number) => {
+      const isMobile = width < 768;
+      const count = isMobile ? 11 : 20;
+      particles = [];
+
+      const floorY = height - 20;
+
+      for (let i = 0; i < count; i++) {
+        const symbol = GIANTS_SYMBOLS[i % GIANTS_SYMBOLS.length];
+        const minFont = isMobile ? 48 : 64;
+        const maxFont = isMobile ? 74 : 102;
+        const fontSize = Math.floor(minFont + Math.random() * (maxFont - minFont));
+        const radius = fontSize * 0.42;
+        const mass = radius * radius;
+        const baseOpacity = Number((0.09 + Math.random() * 0.11).toFixed(3));
+
+        // Distributed spawn across active width
+        const spawnX =
+          width * 0.08 + Math.random() * (width * 0.84);
+        const spawnY = prefersReducedMotion
+          ? floorY - radius - (i % 2) * (radius * 0.8)
+          : -70 - i * 45 - Math.random() * 120;
+
+        particles.push({
+          x: spawnX,
+          y: spawnY,
+          vx: (Math.random() - 0.5) * 1.6,
+          vy: prefersReducedMotion ? 0 : 2.0 + Math.random() * 3.0,
+          radius,
+          mass,
+          rotation: (Math.random() - 0.5) * 0.8,
+          angularVelocity: (Math.random() - 0.5) * 0.035,
+          symbol,
+          fontSize,
+          baseOpacity,
+          settled: prefersReducedMotion,
+        });
+      }
+
+      // If reduced motion, pre-settle them with physics solver immediately
+      if (prefersReducedMotion) {
+        settleWithPhysics(particles, width, height, 240);
+      }
+    };
+
+    // Pre-solver helper for instant settling without animation
+    const settleWithPhysics = (
+      pts: GiantSyntaxParticle[],
+      width: number,
+      height: number,
+      iterations: number
+    ) => {
+      const floorY = height - 20;
+      const dt = 0.25;
+      const grav = 0.22;
+
+      for (let iter = 0; iter < iterations; iter++) {
+        for (let i = 0; i < pts.length; i++) {
+          const p = pts[i];
+          p.vy += grav * dt;
+          p.x += p.vx * dt;
+          p.y += p.vy * dt;
+          p.rotation += p.angularVelocity * dt;
+
+          if (p.y > floorY - p.radius) {
+            p.y = floorY - p.radius;
+            p.vy = -p.vy * 0.3;
+            p.vx *= 0.85;
+            p.angularVelocity *= 0.8;
+          }
+          if (p.x < p.radius + 15) {
+            p.x = p.radius + 15;
+            p.vx = -p.vx * 0.4;
+          }
+          if (p.x > width - p.radius - 15) {
+            p.x = width - p.radius - 15;
+            p.vx = -p.vx * 0.4;
+          }
+        }
+
+        resolveCollisions(pts);
+      }
+
+      pts.forEach((p) => {
+        p.vx = 0;
+        p.vy = 0;
+        p.angularVelocity = 0;
+        p.settled = true;
+      });
+    };
+
+    // Fast particle-particle collision solver
+    const resolveCollisions = (pts: GiantSyntaxParticle[]) => {
+      for (let i = 0; i < pts.length; i++) {
+        for (let j = i + 1; j < pts.length; j++) {
+          const p1 = pts[i];
+          const p2 = pts[j];
+
+          const dx = p2.x - p1.x;
+          const dy = p2.y - p1.y;
+          const dist = Math.hypot(dx, dy);
+          const minDist = p1.radius + p2.radius;
+
+          if (dist < minDist && dist > 0.001) {
+            const nx = dx / dist;
+            const ny = dy / dist;
+            const overlap = minDist - dist;
+
+            const totalMass = p1.mass + p2.mass;
+            const m1Ratio = p2.mass / totalMass;
+            const m2Ratio = p1.mass / totalMass;
+
+            // Positional separation
+            p1.x -= nx * overlap * m1Ratio;
+            p1.y -= ny * overlap * m1Ratio;
+            p2.x += nx * overlap * m2Ratio;
+            p2.y += ny * overlap * m2Ratio;
+
+            // Relative velocity impulse
+            const kx = p1.vx - p2.vx;
+            const ky = p1.vy - p2.vy;
+            const vn = nx * kx + ny * ky;
+
+            if (vn > 0) {
+              const impulse = (1.3 * vn) / totalMass;
+              p1.vx -= impulse * p2.mass * nx;
+              p1.vy -= impulse * p2.mass * ny;
+              p2.vx += impulse * p1.mass * nx;
+              p2.vy += impulse * p1.mass * ny;
+
+              p1.angularVelocity += (Math.random() - 0.5) * 0.008;
+              p2.angularVelocity += (Math.random() - 0.5) * 0.008;
+            }
+          }
+        }
+      }
+    };
+
     const resizeCanvas = () => {
       const rect = container.getBoundingClientRect();
       const width = rect.width || window.innerWidth || 1200;
@@ -95,188 +225,108 @@ export default function HeroSyntaxBackground() {
       ctx.setTransform(1, 0, 0, 1, 0, 0);
       ctx.scale(dpr, dpr);
 
-      // Re-init or adjust particles if resizing
-      if (particles.length === 0) {
-        initParticles(width, height);
-      } else {
-        // Adjust floor for existing particles
-        particles.forEach((p) => {
-          p.targetFloor = height - 18 - (Math.abs(p.x * 17) % 36);
-          if (p.settled) {
-            p.baseRestY = p.targetFloor;
-            p.y = p.targetFloor;
-          }
-        });
-      }
-
+      initParticles(width, height);
       wakeUpLoop();
     };
 
-    // Initialize syntax particles
-    const initParticles = (width: number, height: number) => {
-      const isMobile = width < 768;
-      const count = isMobile ? 22 : 42;
-      particles = [];
-      const slotWidth = (width - 60) / count;
-
-      for (let i = 0; i < count; i++) {
-        const symbol =
-          SYNTAX_SYMBOLS[Math.floor(Math.random() * SYNTAX_SYMBOLS.length)];
-        const fontSize = Math.floor(13 + Math.random() * 7);
-        const baseOpacity = Number((0.08 + Math.random() * 0.12).toFixed(3));
-
-        // Stratified horizontal distribution prevents awkward clustering
-        const x =
-          30 + i * slotWidth + (Math.random() - 0.5) * (slotWidth * 0.7);
-
-        // Spread spawn heights above viewport so they drop progressively
-        const spawnDelayY = prefersReducedMotion
-          ? 0
-          : -20 - Math.random() * (height * 0.9);
-
-        // Target floor with organic slight unevenness across the bottom edge
-        const floorVariability = Math.random() * 26;
-        const targetFloor = height - 16 - floorVariability;
-
-        const initialY = prefersReducedMotion ? targetFloor : spawnDelayY;
-        const initialRotation = (Math.random() - 0.5) * 0.4;
-
-        particles.push({
-          x,
-          y: initialY,
-          vx: (Math.random() - 0.5) * 0.4,
-          vy: prefersReducedMotion ? 0 : 0.8 + Math.random() * 1.5,
-          gravity: 0.16 + Math.random() * 0.08,
-          terminalVelocity: 4.8 + Math.random() * 2.2,
-          targetFloor,
-          rotation: initialRotation,
-          angularVelocity: (Math.random() - 0.5) * 0.018,
-          symbol,
-          fontSize,
-          baseOpacity,
-          settled: prefersReducedMotion,
-          baseRestX: x,
-          baseRestY: targetFloor,
-          baseRestAngle: initialRotation,
-          currentDisplaceX: 0,
-          currentDisplaceY: 0,
-          currentDisplaceAngle: 0,
-        });
-      }
-    };
-
-    // Main animation loop
     const render = () => {
       const rect = container.getBoundingClientRect();
       const width = rect.width;
       const height = rect.height;
+      const floorY = height - 20;
 
       ctx.clearRect(0, 0, width, height);
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";
 
-      let allSettledAndStill = true;
-      const repelRadius = 110;
+      const subSteps = 3;
+      const dt = 1 / subSteps;
+      const gravity = 0.22;
+      let totalKineticEnergy = 0;
 
+      for (let s = 0; s < subSteps; s++) {
+        for (let i = 0; i < particles.length; i++) {
+          const p = particles[i];
+
+          // Gravity and velocity integration
+          p.vy += gravity * dt;
+          p.x += p.vx * dt;
+          p.y += p.vy * dt;
+          p.rotation += p.angularVelocity * dt;
+
+          // Floor boundary collision with restitution & rolling friction
+          if (p.y > floorY - p.radius) {
+            p.y = floorY - p.radius;
+            p.vy = -p.vy * 0.32;
+            p.vx *= 0.88;
+            p.angularVelocity *= 0.84;
+          }
+
+          // Side walls boundary collision
+          if (p.x < p.radius + 15) {
+            p.x = p.radius + 15;
+            p.vx = -p.vx * 0.35;
+          }
+          if (p.x > width - p.radius - 15) {
+            p.x = width - p.radius - 15;
+            p.vx = -p.vx * 0.35;
+          }
+
+          // Interactive Mouse Repulsion & Physical Push
+          if (mouse.isActive) {
+            const dx = p.x - mouse.x;
+            const dy = p.y - mouse.y;
+            const dist = Math.hypot(dx, dy);
+            const mouseEffectiveRadius = p.radius + 70;
+
+            if (dist < mouseEffectiveRadius && dist > 0.1) {
+              const nx = dx / dist;
+              const ny = dy / dist;
+              const pushFactor = Math.pow(1 - dist / mouseEffectiveRadius, 2);
+              const pushForce = pushFactor * 4.5;
+
+              p.vx += nx * pushForce + mouse.vx * 0.25;
+              p.vy += ny * pushForce + mouse.vy * 0.25;
+              p.angularVelocity += (nx > 0 ? 1 : -1) * pushForce * 0.015;
+            }
+          }
+
+          totalKineticEnergy += p.vx * p.vx + p.vy * p.vy;
+        }
+
+        // Particle-to-particle collision
+        resolveCollisions(particles);
+      }
+
+      // Render each giant symbol with bold typography and tactile glassy stroke
       for (let i = 0; i < particles.length; i++) {
         const p = particles[i];
 
-        // 1. Falling Phase (Initial entrance drop)
-        if (!p.settled) {
-          p.vy = Math.min(p.vy + p.gravity, p.terminalVelocity);
-          p.x += p.vx;
-          p.y += p.vy;
-          p.rotation += p.angularVelocity;
-
-          // Ground floor collision check
-          if (p.y >= p.targetFloor) {
-            p.y = p.targetFloor;
-            // Dampen bounce
-            p.vy = -p.vy * 0.26;
-            p.vx *= 0.6;
-            p.angularVelocity *= 0.5;
-
-            // Check if energy dropped low enough to settle
-            if (Math.abs(p.vy) < 0.3 && Math.abs(p.vx) < 0.08) {
-              p.settled = true;
-              p.vy = 0;
-              p.vx = 0;
-              p.angularVelocity = 0;
-              p.baseRestX = p.x;
-              p.baseRestY = p.targetFloor;
-              p.baseRestAngle = p.rotation;
-            }
-          }
-          allSettledAndStill = false;
-        }
-
-        // 2. Interactive Mouse Microphysics
-        let targetDisplaceX = 0;
-        let targetDisplaceY = 0;
-        let targetDisplaceAngle = 0;
-
-        if (mouse.isActive && p.settled) {
-          const currentPosX = p.baseRestX + p.currentDisplaceX;
-          const currentPosY = p.baseRestY + p.currentDisplaceY;
-
-          const dx = currentPosX - mouse.x;
-          const dy = currentPosY - mouse.y;
-          const dist = Math.hypot(dx, dy);
-
-          if (dist < repelRadius && dist > 0.01) {
-            // Smooth quadratic falloff
-            const factor = Math.pow(1 - dist / repelRadius, 2);
-            const repelStrength = 32;
-
-            targetDisplaceX = (dx / dist) * factor * repelStrength;
-            // Push slightly up or sideways, prevent sinking below floor
-            targetDisplaceY = Math.min(
-              (dy / dist) * factor * 22,
-              p.targetFloor - p.baseRestY
-            );
-            targetDisplaceAngle = (dx > 0 ? 1 : -1) * factor * 0.35;
-          }
-        }
-
-        // Smooth spring interpolation back to rest position
-        const springSpeed = 0.12;
-        p.currentDisplaceX +=
-          (targetDisplaceX - p.currentDisplaceX) * springSpeed;
-        p.currentDisplaceY +=
-          (targetDisplaceY - p.currentDisplaceY) * springSpeed;
-        p.currentDisplaceAngle +=
-          (targetDisplaceAngle - p.currentDisplaceAngle) * springSpeed;
-
-        // Check if particle is still moving
-        if (
-          Math.abs(targetDisplaceX - p.currentDisplaceX) > 0.08 ||
-          Math.abs(targetDisplaceY - p.currentDisplaceY) > 0.08 ||
-          Math.abs(p.currentDisplaceX) > 0.08 ||
-          Math.abs(p.currentDisplaceY) > 0.08
-        ) {
-          allSettledAndStill = false;
-        }
-
-        // 3. Render Particle
-        const renderX = p.settled ? p.baseRestX + p.currentDisplaceX : p.x;
-        const renderY = p.settled ? p.baseRestY + p.currentDisplaceY : p.y;
-        const renderAngle = p.settled
-          ? p.baseRestAngle + p.currentDisplaceAngle
-          : p.rotation;
-
         ctx.save();
-        ctx.translate(renderX, renderY);
-        ctx.rotate(renderAngle);
+        ctx.translate(p.x, p.y);
+        ctx.rotate(p.rotation);
 
-        ctx.font = `400 ${p.fontSize}px "JetBrains Mono", "Fira Code", ui-monospace, Menlo, Consolas, monospace`;
+        ctx.font = `600 ${p.fontSize}px "JetBrains Mono", "Fira Code", ui-monospace, Menlo, Consolas, monospace`;
+
+        // Subtle outer stroke for tactile depth
+        ctx.lineWidth = 1.5;
+        ctx.strokeStyle = `rgba(255, 255, 255, ${p.baseOpacity * 0.45})`;
+        ctx.strokeText(p.symbol, 0, 0);
+
+        // Main luminous fill
         ctx.fillStyle = `rgba(244, 244, 245, ${p.baseOpacity})`;
         ctx.fillText(p.symbol, 0, 0);
 
         ctx.restore();
       }
 
-      // If everything has fallen and settled and no mouse interaction is happening, sleep to save 100% CPU
-      if (allSettledAndStill && (!mouse.isActive || mouse.x < 0)) {
+      // Damping mouse velocity
+      mouse.vx *= 0.8;
+      mouse.vy *= 0.8;
+
+      // Sleep loop when fully settled and mouse is inactive (0% CPU usage)
+      const isStill = totalKineticEnergy < 0.2;
+      if (isStill && (!mouse.isActive || mouse.x < 0)) {
         isRunning = false;
         animationFrameId = null;
         return;
@@ -292,7 +342,6 @@ export default function HeroSyntaxBackground() {
       }
     };
 
-    // Track mouse events relative to hero container
     const handleMouseMove = (e: MouseEvent) => {
       const rect = container.getBoundingClientRect();
       const relativeX = e.clientX - rect.left;
@@ -304,6 +353,12 @@ export default function HeroSyntaxBackground() {
         relativeY >= 0 &&
         relativeY <= rect.height
       ) {
+        if (mouse.lastX !== -9999) {
+          mouse.vx = (relativeX - mouse.lastX) * 0.4;
+          mouse.vy = (relativeY - mouse.lastY) * 0.4;
+        }
+        mouse.lastX = relativeX;
+        mouse.lastY = relativeY;
         mouse.x = relativeX;
         mouse.y = relativeY;
         mouse.isActive = true;
@@ -316,6 +371,8 @@ export default function HeroSyntaxBackground() {
 
     const handleMouseLeave = () => {
       mouse.isActive = false;
+      mouse.lastX = -9999;
+      mouse.lastY = -9999;
       wakeUpLoop();
     };
 
@@ -325,12 +382,19 @@ export default function HeroSyntaxBackground() {
         const rect = container.getBoundingClientRect();
         const relativeX = touch.clientX - rect.left;
         const relativeY = touch.clientY - rect.top;
+
         if (
           relativeX >= 0 &&
           relativeX <= rect.width &&
           relativeY >= 0 &&
           relativeY <= rect.height
         ) {
+          if (mouse.lastX !== -9999) {
+            mouse.vx = (relativeX - mouse.lastX) * 0.4;
+            mouse.vy = (relativeY - mouse.lastY) * 0.4;
+          }
+          mouse.lastX = relativeX;
+          mouse.lastY = relativeY;
           mouse.x = relativeX;
           mouse.y = relativeY;
           mouse.isActive = true;
@@ -341,10 +405,11 @@ export default function HeroSyntaxBackground() {
 
     const handleTouchEnd = () => {
       mouse.isActive = false;
+      mouse.lastX = -9999;
+      mouse.lastY = -9999;
       wakeUpLoop();
     };
 
-    // Setup listeners
     window.addEventListener("resize", resizeCanvas, { passive: true });
     window.addEventListener("mousemove", handleMouseMove, { passive: true });
     window.addEventListener("touchmove", handleTouchMove, { passive: true });
@@ -353,7 +418,6 @@ export default function HeroSyntaxBackground() {
       passive: true,
     });
 
-    // Initial setup
     resizeCanvas();
 
     return () => {
