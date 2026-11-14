@@ -8,10 +8,7 @@ import {
   Server,
   Database,
   ShieldCheck,
-  Sparkles,
-  ExternalLink,
 } from "lucide-react";
-import Link from "next/link";
 import {
   skillsData,
   SKILL_APPLICATIONS,
@@ -51,45 +48,24 @@ function SkillPill({ skill, application }: SkillPillProps) {
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      <div
-        className={`inline-flex items-center text-xs font-mono px-3 py-1.5 rounded-lg border transition-all duration-200 cursor-default select-none ${
-          application
-            ? "bg-white/[0.05] border-white/10 text-zinc-200 hover:border-emerald-500/40 hover:bg-emerald-950/20 hover:text-white"
-            : "bg-white/[0.03] border-white/[0.06] text-zinc-400 hover:bg-white/[0.08] hover:text-white hover:border-white/20"
-        }`}
-      >
-        {application && (
-          <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.8)] mr-2 shrink-0 animate-pulse" />
-        )}
+      <div className="inline-flex items-center text-xs font-mono px-3 py-1.5 rounded-lg border transition-all duration-200 cursor-default select-none bg-white/[0.03] border-white/[0.06] text-zinc-300 hover:bg-white/[0.08] hover:text-white hover:border-white/20">
         <span>{skill}</span>
       </div>
 
-      {/* Popover flutuante detalhando aplicação real no projeto */}
+      {/* Micro-chip minimalista de 1 linha indicando o projeto */}
       <AnimatePresence>
         {isHovered && application && (
           <motion.div
-            initial={{ opacity: 0, y: 8, scale: 0.96 }}
+            initial={{ opacity: 0, y: 4, scale: 0.96 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 4, scale: 0.96 }}
-            transition={{ duration: 0.18, ease: "easeOut" }}
-            className="absolute left-1/2 -translate-x-1/2 bottom-full mb-2.5 z-40 w-64 sm:w-72 p-3 rounded-xl bg-zinc-950/95 border border-emerald-500/30 backdrop-blur-xl shadow-[0_12px_36px_rgba(0,0,0,0.8)] text-left pointer-events-auto"
+            exit={{ opacity: 0, y: 2, scale: 0.96 }}
+            transition={{ duration: 0.15, ease: "easeOut" }}
+            className="absolute left-1/2 -translate-x-1/2 bottom-full mb-2 z-40 whitespace-nowrap px-2.5 py-1 rounded-md bg-zinc-900/95 border border-white/10 shadow-xl text-[11px] font-mono text-zinc-300 pointer-events-none"
           >
-            <div className="flex items-center justify-between gap-1.5 mb-1.5">
-              <span className="inline-flex items-center gap-1 text-[11px] font-mono font-medium text-emerald-400">
-                <Sparkles className="w-3 h-3 text-emerald-400 shrink-0" />
-                <span>{application.projectName}</span>
-              </span>
-              <Link
-                href={`/projects/${application.projectSlug}`}
-                className="text-[10px] text-zinc-400 hover:text-white inline-flex items-center gap-0.5 transition-colors"
-              >
-                <span>Ver projeto</span>
-                <ExternalLink className="w-2.5 h-2.5" />
-              </Link>
-            </div>
-            <p className="text-xs text-zinc-300 leading-relaxed font-sans">
-              {application.context}
-            </p>
+            <span className="text-zinc-400">Projeto:</span>{" "}
+            <span className="text-white font-medium">
+              {application.projectName}
+            </span>
           </motion.div>
         )}
       </AnimatePresence>
@@ -202,26 +178,16 @@ export default function SkillsSection() {
       {/* Conteúdo da Seção */}
       <div className="relative z-10">
         {/* Cabeçalho Editorial da Seção */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between mb-14 gap-6">
+        <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
           <div>
-            <div className="inline-flex items-center gap-1.5 text-xs font-mono text-emerald-400 bg-emerald-950/40 border border-emerald-500/20 px-3 py-1 rounded-full mb-3">
-              <Sparkles className="w-3.5 h-3.5" />
-              <span>Stack Tecnológica & Engenharia</span>
-            </div>
             <h2 className="text-3xl sm:text-4xl md:text-5xl font-semibold tracking-tight text-white">
               Competências Técnicas
             </h2>
           </div>
 
-          <div className="max-w-md">
-            <p className="text-zinc-400 text-sm sm:text-base font-normal leading-relaxed">
-              Linguagens, frameworks e ferramentas consolidadas no desenvolvimento de sistemas web, desktop e serviços distribuídos em nuvem.
-            </p>
-            <div className="mt-2 flex items-center gap-2 text-xs font-mono text-zinc-400">
-              <span className="w-2 h-2 rounded-full bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.8)] animate-pulse" />
-              <span>Pontos verdes indicam tecnologias com estudo de caso no portfólio</span>
-            </div>
-          </div>
+          <p className="text-zinc-400 text-sm sm:text-base max-w-md font-normal leading-relaxed">
+            Linguagens, frameworks e ferramentas consolidadas no desenvolvimento de sistemas web, desktop e serviços distribuídos em nuvem.
+          </p>
         </div>
 
         {/* Grid de Cards com Efeito Spotlight */}

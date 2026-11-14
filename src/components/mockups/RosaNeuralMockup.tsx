@@ -194,7 +194,9 @@ export default function RosaNeuralMockup() {
               {/* Avatar da Rosa: Ícone de Coração Centralizado com Precisão Óptica */}
               {msg.sender === "rosa" && (
                 <div className="w-7 h-7 rounded-full bg-rose-950/60 border border-rose-500/30 flex items-center justify-center shrink-0 mt-0.5 text-rose-300 shadow-sm">
-                  <RosaAvatarHeart />
+                  <div className="translate-x-[-1px] translate-y-[0px]">
+                    <RosaAvatarHeart />
+                  </div>
                 </div>
               )}
 
@@ -230,7 +232,9 @@ export default function RosaNeuralMockup() {
               className="flex items-start gap-3 justify-start"
             >
               <div className="w-7 h-7 rounded-full bg-rose-950/60 border border-rose-500/30 flex items-center justify-center shrink-0 text-rose-300">
-                <RosaAvatarHeart className="w-3.5 h-3.5 animate-pulse" />
+                <div className="translate-x-[-1px] translate-y-[0px]">
+                  <RosaAvatarHeart className="w-3.5 h-3.5 animate-pulse" />
+                </div>
               </div>
               <div className="bg-rose-950/20 border border-rose-500/20 rounded-2xl rounded-tl-sm px-4 py-3 flex items-center gap-1.5">
                 <motion.span
@@ -263,7 +267,9 @@ export default function RosaNeuralMockup() {
               className="flex items-start gap-3 justify-start"
             >
               <div className="w-7 h-7 rounded-full bg-rose-950/60 border border-rose-500/30 flex items-center justify-center shrink-0 text-rose-300">
-                <RosaAvatarHeart />
+                <div className="translate-x-[-1px] translate-y-[0px]">
+                  <RosaAvatarHeart />
+                </div>
               </div>
               <div className="max-w-[85%] sm:max-w-[80%] bg-rose-950/25 border border-rose-500/25 text-rose-50 rounded-2xl rounded-tl-sm px-4 py-2.5 text-xs sm:text-sm leading-relaxed backdrop-blur-md shadow-[0_4px_24px_rgba(244,63,94,0.08)]">
                 <div className="flex items-center gap-1.5 mb-1 opacity-70 text-[10px] font-mono text-rose-300">
