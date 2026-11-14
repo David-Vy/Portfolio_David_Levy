@@ -1,97 +1,278 @@
 // src/app/projects/[slug]/ProjectPageClient.tsx
 "use client";
 
+import React from "react";
 import { Project } from "@/lib/projects-data";
 import Image from "next/image";
+import Link from "next/link";
 import { motion } from "framer-motion";
-import { ExternalLink, Github, HardDriveDownload } from "lucide-react";
+import {
+  ArrowLeft,
+  ExternalLink,
+  Github,
+  HardDriveDownload,
+  Sparkles,
+  Layers,
+  Activity,
+  Code2
+} from "lucide-react";
+import ProjectMediaGallery from "@/components/ProjectMediaGallery";
+import LyCloudMockup from "@/components/mockups/LyCloudMockup";
+import RosaNeuralMockup from "@/components/mockups/RosaNeuralMockup";
 
 export default function ProjectPageClient({ project }: { project: Project }) {
   const hasLongDescription = project.longDescriptionHtml && project.longDescriptionHtml.length > 0;
-  // Verifica se existe pelo menos um link para mostrar a seção de acesso
   const hasLinks = project.githubUrl || project.liveUrl || project.downloadUrl;
+  const hasMultipleImages = Boolean(project.images && project.images.length > 1);
+
+  // Renderizador Inteligente de Mídia / Mockup / Fallback
+  const renderProjectMedia = () => {
+    // 1. Mockup interativo LyCloud Server (Telemetry Dashboard)
+    if (project.mockupType === "lycloud") {
+      return (
+        <div className="w-full aspect-[16/10] md:aspect-[21/10] min-h-[460px] rounded-2xl md:rounded-3xl overflow-hidden border border-white/10 bg-zinc-950 shadow-2xl">
+          <LyCloudMockup />
+        </div>
+      );
+    }
+
+    // 2. Mockup interativo Projeto Rosa (Neural Terminal CLI)
+    if (project.mockupType === "rosa") {
+      return (
+        <div className="w-full aspect-[16/10] md:aspect-[21/10] min-h-[460px] rounded-2xl md:rounded-3xl overflow-hidden border border-white/10 bg-zinc-950 shadow-2xl">
+          <RosaNeuralMockup />
+        </div>
+      );
+    }
+
+    // 3. Galeria Multi-Imagem com Controles & Carrossel
+    if (hasMultipleImages) {
+      return (
+        <div className="w-full shadow-2xl">
+          <ProjectMediaGallery
+            images={project.images!}
+            title={project.title}
+            aspectRatio="aspect-[16/9] md:aspect-[21/9]"
+            priority
+          />
+        </div>
+      );
+    }
+
+    // 4. Imagem Única de Alta Resolução (Qualidade Original)
+    if (project.imageUrl) {
+      return (
+        <div className="relative w-full aspect-[16/9] md:aspect-[21/9] rounded-2xl md:rounded-3xl overflow-hidden border border-white/[0.08] bg-zinc-950 shadow-2xl">
+          <Image
+            src={project.imageUrl}
+            alt={`Apresentação do projeto ${project.title}`}
+            fill
+            unoptimized
+            quality={100}
+            sizes="100vw"
+            className="object-contain object-center"
+            priority
+          />
+        </div>
+      );
+    }
+
+    // 5. Fallback Arquitetural Estilizado em Código (ex: Exo WebApi)
+    return (
+      <div className="relative w-full aspect-[16/9] md:aspect-[21/9] rounded-2xl md:rounded-3xl overflow-hidden border border-white/10 bg-zinc-950/80 p-8 flex flex-col items-center justify-center text-center shadow-2xl">
+        <div className="w-14 h-14 rounded-2xl bg-white/[0.04] border border-white/10 flex items-center justify-center mb-4 text-emerald-400">
+          <Code2 className="w-7 h-7" />
+        </div>
+        <span className="text-xs font-mono uppercase tracking-[0.2em] text-emerald-400 mb-2 font-medium">
+          {project.category}
+        </span>
+        <h3 className="text-2xl font-bold text-white mb-2">{project.title}</h3>
+        <p className="text-sm font-mono text-zinc-400 max-w-md">
+          Arquitetura de microsserviços, contratos RESTful e persistência corporativa.
+        </p>
+      </div>
+    );
+  };
 
   return (
     <motion.div
-      className="container mx-auto px-4 py-24 pt-32 min-h-screen"
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.8 }}
+      className="relative min-h-screen bg-background text-text pt-28 pb-32 px-6 md:px-10 max-w-6xl mx-auto"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
     >
-      {/* Cabeçalho do Projeto */}
-      <div className="text-center mb-12">
-        <h1 className="font-title text-5xl md:text-6xl font-extrabold text-accent">{project.title}</h1>
-        <p className="text-lg text-text-muted mt-4 max-w-2xl mx-auto">{project.description}</p>
-        <div className="flex justify-center flex-wrap gap-2 mt-6">
+      {/* Botão Voltar */}
+      <div className="mb-10">
+        <Link
+          href="/#projetos"
+          className="inline-flex items-center gap-2 text-xs font-mono uppercase tracking-wider text-zinc-400 hover:text-white transition-colors py-2 px-4 rounded-full border border-white/10 bg-white/[0.03] hover:bg-white/[0.08]"
+        >
+          <ArrowLeft size={14} />
+          <span>Voltar aos Projetos</span>
+        </Link>
+      </div>
+
+      {/* Cabeçalho Editorial do Projeto */}
+      <header className="mb-14">
+        {/* Overline Dinâmico de Categoria */}
+        <div className="flex items-center gap-2 mb-4">
+          <span className="w-2 h-2 rounded-full bg-emerald-400" />
+          <span className="text-xs font-mono uppercase tracking-[0.2em] text-emerald-400 font-medium">
+            {project.category}
+          </span>
+        </div>
+
+        <h1 className="text-4xl sm:text-6xl md:text-7xl font-bold tracking-tight text-white mb-6">
+          {project.title}
+        </h1>
+
+        <p className="text-lg sm:text-xl text-zinc-300 max-w-3xl leading-relaxed font-normal">
+          {project.description}
+        </p>
+
+        {/* Tags de Tecnologias */}
+        <div className="flex flex-wrap gap-2 mt-8">
           {project.tags.map((tag) => (
-            <span key={tag} className="bg-secondary text-text-muted text-sm font-medium px-4 py-1 rounded-full">
+            <span
+              key={tag}
+              className="text-xs font-mono uppercase tracking-wider px-3 py-1.5 rounded-full bg-white/[0.04] border border-white/[0.08] text-zinc-300"
+            >
               {tag}
             </span>
           ))}
         </div>
-      </div>
+      </header>
 
-      {/* Imagem Principal */}
+      {/* Contêiner de Mídia Principal (Galeria Multi-Imagem, Mockup Interativo ou Fallback) */}
       <motion.div
-        className="relative w-full h-auto max-w-4xl mx-auto rounded-lg overflow-hidden shadow-glow mb-16"
-        initial={{ opacity: 0, scale: 0.9 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.6, delay: 0.2 }}
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
+        className="mb-16"
       >
-        <Image
-          src={project.imageUrl}
-          alt={`Imagem principal do projeto ${project.title}`}
-          width={1200}
-          height={675}
-          className="w-full h-auto"
-        />
+        {renderProjectMedia()}
       </motion.div>
 
-      {/* Seção de Descrição Detalhada e Links */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 max-w-5xl mx-auto">
-        <div className="lg:col-span-2 space-y-6 text-text-muted text-lg leading-relaxed">
-          <h2 className="font-title text-3xl font-bold text-text border-b-2 border-accent pb-2">Visão Geral do Projeto</h2>
+      {/* Grid de Conteúdo Detalhado e Barra Lateral */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
+        {/* Coluna Principal: Detalhes, Arquitetura e Engenharia */}
+        <div className="lg:col-span-8 space-y-8">
+          <div className="flex items-center gap-2 pb-4 border-b border-white/[0.06]">
+            <Layers className="w-5 h-5 text-emerald-400" />
+            <h2 className="text-xl font-bold text-white tracking-tight">
+              Visão Geral & Arquitetura
+            </h2>
+          </div>
+
           {hasLongDescription ? (
-            <div dangerouslySetInnerHTML={{ __html: project.longDescriptionHtml! }} />
+            <div
+              className="prose prose-invert max-w-none text-zinc-300 text-base sm:text-lg leading-relaxed [&>h3]:text-white [&>h3]:text-2xl [&>h3]:font-bold [&>h3]:tracking-tight [&>h3]:mt-10 [&>h3]:mb-4 [&>h3]:border-b [&>h3]:border-white/[0.06] [&>h3]:pb-2 [&>p]:mb-6 [&>p]:text-zinc-400 [&>p>strong]:text-white [&>p>strong]:font-medium [&>ul]:space-y-2 [&>ul]:mb-6 [&>ul>li]:text-zinc-400 [&>code]:text-emerald-300 [&>code]:bg-white/[0.06] [&>code]:px-1.5 [&>code]:py-0.5 [&>code]:rounded"
+              dangerouslySetInnerHTML={{ __html: project.longDescriptionHtml! }}
+            />
           ) : (
-            <p>A descrição detalhada deste projeto está sendo preparada. Volte em breve!</p>
+            <p className="text-zinc-400">
+              A documentação detalhada deste projeto está sendo preparada.
+            </p>
           )}
         </div>
-        
-        {/* Barra Lateral com Links (Renderizada condicionalmente) */}
-        {hasLinks && (
-          <aside className="lg:col-span-1">
-            <div className="bg-primary p-6 rounded-lg sticky top-28">
-              <h3 className="font-title text-2xl font-bold mb-4">Acesse o Projeto</h3>
-              <div className="space-y-4">
 
-                {/* Botão GitHub condicional */}
+        {/* Barra Lateral: Links de Acesso Direto e Ficha Técnica */}
+        <aside className="lg:col-span-4 sticky top-28 space-y-6">
+          {hasLinks && (
+            <div className="p-6 rounded-2xl md:rounded-3xl border border-white/[0.08] bg-zinc-950/60 backdrop-blur-xl">
+              <h3 className="text-base font-semibold text-white tracking-tight mb-4 flex items-center gap-2">
+                <Sparkles className="w-4 h-4 text-emerald-400" />
+                Acesse o Projeto
+              </h3>
+
+              <div className="space-y-3">
                 {project.githubUrl && (
-                  <a href={project.githubUrl} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 bg-secondary hover:bg-accent hover:text-background transition-colors duration-300 w-full text-left p-4 rounded-md">
-                    <Github size={24} />
-                    <span className="font-semibold">Ver no GitHub</span>
+                  <a
+                    href={project.githubUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center justify-between p-3.5 rounded-xl border border-white/10 bg-white/[0.04] hover:bg-white/[0.08] hover:border-white/25 text-zinc-200 hover:text-white transition-all text-sm font-medium"
+                  >
+                    <div className="flex items-center gap-3">
+                      <Github size={18} />
+                      <span>Ver no GitHub</span>
+                    </div>
+                    <ExternalLink size={14} className="opacity-60" />
                   </a>
                 )}
 
-                {/* Botão Ver Online condicional */}
                 {project.liveUrl && (
-                  <a href={project.liveUrl} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 bg-secondary hover:bg-accent hover:text-background transition-colors duration-300 w-full text-left p-4 rounded-md">
-                    <ExternalLink size={24} />
-                    <span className="font-semibold">Ver Online</span>
+                  <a
+                    href={project.liveUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center justify-between p-3.5 rounded-xl border border-white/20 bg-white text-black hover:bg-zinc-200 transition-all text-sm font-semibold shadow-lg"
+                  >
+                    <div className="flex items-center gap-3">
+                      <ExternalLink size={18} />
+                      <span>Acessar Demo Online</span>
+                    </div>
+                    <ExternalLink size={14} />
                   </a>
                 )}
 
-                {/* Botão Download condicional */}
                 {project.downloadUrl && (
-                  <a href={project.downloadUrl} download className="flex items-center gap-3 bg-secondary hover:bg-accent hover:text-background transition-colors duration-300 w-full text-left p-4 rounded-md">
-                    <HardDriveDownload size={24} />
-                    <span className="font-semibold">Fazer Download</span>
+                  <a
+                    href={project.downloadUrl}
+                    download
+                    className="flex items-center justify-between p-3.5 rounded-xl border border-white/10 bg-white/[0.04] hover:bg-white/[0.08] hover:border-white/25 text-zinc-200 hover:text-white transition-all text-sm font-medium"
+                  >
+                    <div className="flex items-center gap-3">
+                      <HardDriveDownload size={18} />
+                      <span>Fazer Download da Build</span>
+                    </div>
+                    <ExternalLink size={14} className="opacity-60" />
                   </a>
                 )}
               </div>
             </div>
-          </aside>
-        )}
+          )}
+
+          {/* Destaques de Arquitetura na Barra Lateral (se presentes) */}
+          {project.architectureHighlights && project.architectureHighlights.length > 0 && (
+            <div className="p-6 rounded-2xl md:rounded-3xl border border-white/[0.08] bg-zinc-950/40">
+              <h3 className="text-xs font-mono uppercase tracking-wider text-emerald-400 mb-3 flex items-center gap-2">
+                <Activity size={14} />
+                Destaques Arquiteturais
+              </h3>
+              <ul className="space-y-2 text-xs font-mono text-zinc-300">
+                {project.architectureHighlights.map((highlight, idx) => (
+                  <li key={idx} className="flex items-start gap-2">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400/80 shrink-0 mt-1.5" />
+                    <span className="leading-relaxed">{highlight}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+
+          {/* Ficha Técnica Rápida */}
+          <div className="p-6 rounded-2xl md:rounded-3xl border border-white/[0.08] bg-zinc-950/40 text-xs font-mono space-y-3">
+            <div className="flex justify-between items-center py-1.5 border-b border-white/[0.04]">
+              <span className="text-zinc-500 uppercase tracking-wider">Desenvolvedor</span>
+              <span className="text-zinc-300">David Levy</span>
+            </div>
+            <div className="flex justify-between items-center py-1.5 border-b border-white/[0.04]">
+              <span className="text-zinc-500 uppercase tracking-wider">Categoria</span>
+              <span className="text-zinc-300 text-right max-w-[160px] truncate" title={project.category}>
+                {project.category}
+              </span>
+            </div>
+            <div className="flex justify-between items-center py-1.5 border-b border-white/[0.04]">
+              <span className="text-zinc-500 uppercase tracking-wider">Status</span>
+              <span className="text-emerald-400">Completo</span>
+            </div>
+            <div className="flex justify-between items-center py-1.5">
+              <span className="text-zinc-500 uppercase tracking-wider">Tags Principais</span>
+              <span className="text-zinc-300">{project.tags.slice(0, 3).join(", ")}</span>
+            </div>
+          </div>
+        </aside>
       </div>
     </motion.div>
   );

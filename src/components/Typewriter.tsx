@@ -1,11 +1,14 @@
 // src/components/Typewriter.tsx
-
-"use client"; // Diretiva essencial para componentes com interatividade
+"use client";
 
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 
-const texts = ["Programador de Jogos", "Desenvolvedor Full-Stack", "Entusiasta de Tecnologia"];
+const roles = [
+  "Engenheiro de Software & Sistemas",
+  "Desenvolvedor Full-Stack (Web & Desktop)",
+  "Especialista em Cloud, APIs & Real-Time"
+];
 
 export default function Typewriter() {
   const [textIndex, setTextIndex] = useState(0);
@@ -14,9 +17,9 @@ export default function Typewriter() {
   const [currentText, setCurrentText] = useState('');
 
   useEffect(() => {
-    const typeSpeed = isDeleting ? 75 : 150;
+    const typeSpeed = isDeleting ? 40 : 80;
     const handleTyping = () => {
-      const fullText = texts[textIndex];
+      const fullText = roles[textIndex];
       if (isDeleting) {
         setCurrentText(fullText.substring(0, charIndex - 1));
         setCharIndex(charIndex - 1);
@@ -26,10 +29,10 @@ export default function Typewriter() {
       }
 
       if (!isDeleting && charIndex === fullText.length) {
-        setTimeout(() => setIsDeleting(true), 2000);
+        setTimeout(() => setIsDeleting(true), 2400);
       } else if (isDeleting && charIndex === 0) {
         setIsDeleting(false);
-        setTextIndex((prev) => (prev + 1) % texts.length);
+        setTextIndex((prev) => (prev + 1) % roles.length);
       }
     };
 
@@ -38,16 +41,15 @@ export default function Typewriter() {
   }, [charIndex, isDeleting, textIndex]);
 
   return (
-    <span className="text-xl md:text-2xl text-accent h-8">
-      {currentText}
+    <span className="inline-flex items-center text-lg sm:text-xl md:text-2xl font-medium text-zinc-300 min-h-[36px]">
+      <span className="tracking-tight">{currentText}</span>
       <motion.span
         initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ repeat: Infinity, duration: 0.8, ease: "easeInOut" }}
-        className="ml-1"
-      >
-        |
-      </motion.span>
+        animate={{ opacity: [0, 1, 0] }}
+        transition={{ repeat: Infinity, duration: 1, ease: "linear" }}
+        className="w-[2px] h-5 md:h-6 bg-white ml-1.5 inline-block"
+        aria-hidden="true"
+      />
     </span>
   );
 }

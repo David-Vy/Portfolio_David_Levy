@@ -1,52 +1,36 @@
 // src/app/layout.tsx
-"use client"; // Necessário para usar o hook usePathname
+"use client";
 
-import { Exo_2, Plus_Jakarta_Sans } from "next/font/google";
+import { Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
 
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { usePathname } from "next/navigation";
-import { Analytics } from "@vercel/analytics/next"
+import { Analytics } from "@vercel/analytics/next";
 
 const plusJakartaSans = Plus_Jakarta_Sans({
   subsets: ["latin"],
-  weight: ['400', '500', '700'],
+  weight: ['400', '500', '600', '700', '800'],
   variable: "--font-sans",
+  display: 'swap',
 });
-
-const exo2 = Exo_2({
-  subsets: ["latin"],
-  weight: ['700', '800'],
-  variable: "--font-title",
-});
-
-// A exportação de metadata pode ser mantida em um componente cliente,
-// mas para seguir as melhores práticas, a manteríamos em um `page.tsx` ou
-// no layout do servidor. Por agora, esta estrutura funciona.
-// export const metadata: Metadata = { ... }; -> Você pode remover ou comentar isso por enquanto.
-
 
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  // 2. Usar o hook para pegar a URL atual
   const pathname = usePathname();
-  
-  // 3. Verificar se estamos na rota do chat
   const isChatPage = pathname.startsWith('/chat');
 
   return (
-    <html lang="pt-BR" className={`${plusJakartaSans.variable} ${exo2.variable}`}>
-      <body className="bg-background text-text font-sans">
-        {/* 4. Renderizar o Header e Footer condicionalmente */}
+    <html lang="pt-BR" className={`${plusJakartaSans.variable}`}>
+      <body className="bg-background text-text font-sans antialiased selection:bg-white selection:text-black">
         {!isChatPage && <Header />}
-        
         <main>{children}</main>
-        
         {!isChatPage && <Footer />}
+        <Analytics />
       </body>
     </html>
   );
