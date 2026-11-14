@@ -25,9 +25,9 @@ export interface ProjectThemeConfig {
 
 export const PROJECT_THEMES: Record<string, ProjectThemeConfig> = {
   lymadhouse: {
-    // Roxo elétrico e vibrante fiel à identidade visual do logo (Ly em roxo vibrante)
-    titleGradient: "from-purple-200 via-violet-400 to-purple-500",
-    accentColor: "rgba(168, 85, 247, 0.5)",
+    // Roxo forte, escuro e marcante fiel ao logo (sem tons pasteis ou rosados)
+    titleGradient: "from-purple-500 via-purple-700 to-indigo-950",
+    accentColor: "rgba(126, 34, 206, 0.6)",
     shapes: [
       {
         id: "lm-1",
@@ -36,7 +36,7 @@ export const PROJECT_THEMES: Record<string, ProjectThemeConfig> = {
         height: 320,
         top: "8%",
         left: "4%",
-        color: "linear-gradient(135deg, rgba(168, 85, 247, 0.7), rgba(126, 34, 206, 0.45))",
+        color: "linear-gradient(135deg, rgba(126, 34, 206, 0.85), rgba(88, 28, 135, 0.6))",
         blur: "blur-xl",
         duration: 16,
         floatX: 25,
@@ -50,7 +50,7 @@ export const PROJECT_THEMES: Record<string, ProjectThemeConfig> = {
         height: 360,
         top: "35%",
         left: "62%",
-        color: "radial-gradient(circle, rgba(192, 132, 252, 0.65), rgba(107, 33, 168, 0.35))",
+        color: "radial-gradient(circle, rgba(109, 40, 217, 0.8), rgba(59, 7, 100, 0.6))",
         blur: "blur-2xl",
         duration: 18,
         floatX: -30,
@@ -64,7 +64,7 @@ export const PROJECT_THEMES: Record<string, ProjectThemeConfig> = {
         height: 250,
         top: "60%",
         left: "22%",
-        color: "linear-gradient(45deg, rgba(147, 51, 234, 0.6), rgba(168, 85, 247, 0.35))",
+        color: "linear-gradient(45deg, rgba(124, 58, 237, 0.75), rgba(76, 29, 149, 0.6))",
         blur: "blur-xl",
         duration: 14,
         floatX: 20,

@@ -7,7 +7,7 @@ export interface Project {
   category: string;
   imageUrl: string;
   images?: string[];
-  mockupType?: "lycloud" | "rosa" | "lyvia" | "s3scanner" | string;
+  mockupType?: "lycloud" | "rosa" | "lyvia" | "s3scanner" | "exo" | string;
   tags: string[];
   architectureHighlights?: string[];
   githubUrl?: string;
@@ -241,6 +241,7 @@ export const projectsData: Project[] = [
     category: "Backend & API RESTful Corporativa",
     description: "API RESTful corporativa desenvolvida em ASP.NET Core (.NET 8) aplicando Repository Pattern, injeção de dependência nativa, autenticação perimetral com JWT Bearer Token e ORM Entity Framework Core.",
     imageUrl: "/images/projects/exo-webapi.png",
+    mockupType: "exo",
     tags: ["C#", ".NET Core 8", "ASP.NET Core", "Entity Framework Core", "JWT Bearer", "SQL Server", "Repository Pattern", "Swagger / OpenAPI"],
     architectureHighlights: [
       "Arquitetura corporativa em camadas com Repository Pattern no ASP.NET Core",

@@ -12,6 +12,7 @@ import ProjectAmbientBackground, { PROJECT_THEMES } from "./ProjectAmbientBackgr
 import LyCloudMockup from "./mockups/LyCloudMockup";
 import RosaNeuralMockup from "./mockups/RosaNeuralMockup";
 import LyMadhouseMockup from "./mockups/LyMadhouseMockup";
+import ExoWebApiMockup from "./mockups/ExoWebApiMockup";
 
 /**
  * Interface estendida retrocompatível com a base atual e aberta
@@ -83,6 +84,8 @@ export default function ProjectEditorialRow({ project, index, isFocused = false 
               <RosaNeuralMockup />
             ) : project.mockupType === "lymadhouse" ? (
               <LyMadhouseMockup />
+            ) : project.mockupType === "exo" ? (
+              <ExoWebApiMockup />
             ) : hasMultipleImages ? (
               <ProjectMediaGallery
                 images={project.images!}

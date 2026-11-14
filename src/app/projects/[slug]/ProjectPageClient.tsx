@@ -18,6 +18,7 @@ import ProjectMediaGallery from "@/components/ProjectMediaGallery";
 import { PROJECT_THEMES } from "@/components/ProjectAmbientBackground";
 import LyCloudMockup from "@/components/mockups/LyCloudMockup";
 import RosaNeuralMockup from "@/components/mockups/RosaNeuralMockup";
+import ExoWebApiMockup from "@/components/mockups/ExoWebApiMockup";
 
 export default function ProjectPageClient({ project }: { project: Project }) {
   const hasLongDescription = project.longDescriptionHtml && project.longDescriptionHtml.length > 0;
@@ -41,6 +42,15 @@ export default function ProjectPageClient({ project }: { project: Project }) {
       return (
         <div className="w-full aspect-[16/10] md:aspect-[21/10] min-h-[460px] rounded-2xl md:rounded-3xl overflow-hidden border border-white/10 bg-zinc-950 shadow-2xl">
           <RosaNeuralMockup />
+        </div>
+      );
+    }
+
+    // 2.1 Mockup interativo Exo WebApi (.NET Core 8 Gateway)
+    if (project.mockupType === "exo") {
+      return (
+        <div className="w-full aspect-[16/10] md:aspect-[21/10] min-h-[460px] rounded-2xl md:rounded-3xl overflow-hidden border border-white/10 bg-zinc-950 shadow-2xl">
+          <ExoWebApiMockup />
         </div>
       );
     }

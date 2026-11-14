@@ -178,7 +178,7 @@ describe('Feature 3 Boundaries: Multi-Image Media Gallery', () => {
 describe('Feature 4 Boundaries: Interactive Code Mockups', () => {
   test('T2.4.1: Mockup type safety: mockupType must be one of the permitted union types', () => {
     const projects = helpers.getProjectsData();
-    const allowedMockupTypes = ['lymadhouse', 'lycloud', 'lyvia', 'rosa', 's3scanner', 'lyponto', undefined];
+    const allowedMockupTypes = ['lymadhouse', 'lycloud', 'lyvia', 'rosa', 's3scanner', 'lyponto', 'exo', undefined];
     for (const p of projects) {
       if (p.mockupType) {
         expect(allowedMockupTypes.includes(p.mockupType)).toBe(true);
