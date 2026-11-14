@@ -11,9 +11,7 @@ import {
   ExternalLink,
   Github,
   HardDriveDownload,
-  Sparkles,
   Layers,
-  Activity,
   Code2
 } from "lucide-react";
 import ProjectMediaGallery from "@/components/ProjectMediaGallery";
@@ -113,20 +111,16 @@ export default function ProjectPageClient({ project }: { project: Project }) {
       </div>
 
       {/* Cabeçalho Editorial do Projeto */}
-      <header className="mb-14">
-        {/* Overline Dinâmico de Categoria */}
-        <div className="flex items-center gap-2 mb-4">
-          <span className="w-2 h-2 rounded-full bg-emerald-400" />
-          <span className="text-xs font-mono uppercase tracking-[0.2em] text-emerald-400 font-medium">
-            {project.category}
-          </span>
-        </div>
+      <header className="mb-12">
+        <span className="text-xs font-mono uppercase tracking-wider text-zinc-400 font-medium block mb-4">
+          {project.category}
+        </span>
 
-        <h1 className="text-4xl sm:text-6xl md:text-7xl font-bold tracking-tight text-white mb-6">
+        <h1 className="text-4xl sm:text-6xl md:text-7xl font-semibold tracking-tight text-white mb-6">
           {project.title}
         </h1>
 
-        <p className="text-lg sm:text-xl text-zinc-300 max-w-3xl leading-relaxed font-normal">
+        <p className="text-lg sm:text-xl text-zinc-400 max-w-3xl leading-relaxed font-normal">
           {project.description}
         </p>
 
@@ -135,7 +129,7 @@ export default function ProjectPageClient({ project }: { project: Project }) {
           {project.tags.map((tag) => (
             <span
               key={tag}
-              className="text-xs font-mono uppercase tracking-wider px-3 py-1.5 rounded-full bg-white/[0.04] border border-white/[0.08] text-zinc-300"
+              className="text-xs font-mono text-zinc-300 px-2.5 py-1 rounded bg-white/[0.03] border border-white/[0.06]"
             >
               {tag}
             </span>
@@ -179,25 +173,24 @@ export default function ProjectPageClient({ project }: { project: Project }) {
         {/* Barra Lateral: Links de Acesso Direto e Ficha Técnica */}
         <aside className="lg:col-span-4 sticky top-28 space-y-6">
           {hasLinks && (
-            <div className="p-6 rounded-2xl md:rounded-3xl border border-white/[0.08] bg-zinc-950/60 backdrop-blur-xl">
-              <h3 className="text-base font-semibold text-white tracking-tight mb-4 flex items-center gap-2">
-                <Sparkles className="w-4 h-4 text-emerald-400" />
-                Acesse o Projeto
+            <div className="p-6 rounded-2xl border border-white/[0.08] bg-zinc-950">
+              <h3 className="text-sm font-medium text-white tracking-tight mb-4">
+                Links do Projeto
               </h3>
 
-              <div className="space-y-3">
+              <div className="space-y-2.5">
                 {project.githubUrl && (
                   <a
                     href={project.githubUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center justify-between p-3.5 rounded-xl border border-white/10 bg-white/[0.04] hover:bg-white/[0.08] hover:border-white/25 text-zinc-200 hover:text-white transition-all text-sm font-medium"
+                    className="flex items-center justify-between p-3 rounded-lg border border-white/[0.06] bg-white/[0.02] hover:bg-white/[0.06] text-zinc-300 hover:text-white transition-colors text-sm"
                   >
-                    <div className="flex items-center gap-3">
-                      <Github size={18} />
+                    <div className="flex items-center gap-2.5">
+                      <Github size={16} />
                       <span>Ver no GitHub</span>
                     </div>
-                    <ExternalLink size={14} className="opacity-60" />
+                    <ExternalLink size={13} className="opacity-50" />
                   </a>
                 )}
 
@@ -206,13 +199,13 @@ export default function ProjectPageClient({ project }: { project: Project }) {
                     href={project.liveUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center justify-between p-3.5 rounded-xl border border-white/20 bg-white text-black hover:bg-zinc-200 transition-all text-sm font-semibold shadow-lg"
+                    className="flex items-center justify-between p-3 rounded-lg bg-white text-black hover:bg-zinc-200 transition-colors text-sm font-medium"
                   >
-                    <div className="flex items-center gap-3">
-                      <ExternalLink size={18} />
+                    <div className="flex items-center gap-2.5">
+                      <ExternalLink size={16} />
                       <span>Acessar Demo Online</span>
                     </div>
-                    <ExternalLink size={14} />
+                    <ExternalLink size={13} />
                   </a>
                 )}
 
@@ -220,13 +213,13 @@ export default function ProjectPageClient({ project }: { project: Project }) {
                   <a
                     href={project.downloadUrl}
                     download
-                    className="flex items-center justify-between p-3.5 rounded-xl border border-white/10 bg-white/[0.04] hover:bg-white/[0.08] hover:border-white/25 text-zinc-200 hover:text-white transition-all text-sm font-medium"
+                    className="flex items-center justify-between p-3 rounded-lg border border-white/[0.06] bg-white/[0.02] hover:bg-white/[0.06] text-zinc-300 hover:text-white transition-colors text-sm"
                   >
-                    <div className="flex items-center gap-3">
-                      <HardDriveDownload size={18} />
-                      <span>Fazer Download da Build</span>
+                    <div className="flex items-center gap-2.5">
+                      <HardDriveDownload size={16} />
+                      <span>Download da Build</span>
                     </div>
-                    <ExternalLink size={14} className="opacity-60" />
+                    <ExternalLink size={13} className="opacity-50" />
                   </a>
                 )}
               </div>
@@ -235,16 +228,15 @@ export default function ProjectPageClient({ project }: { project: Project }) {
 
           {/* Destaques de Arquitetura na Barra Lateral (se presentes) */}
           {project.architectureHighlights && project.architectureHighlights.length > 0 && (
-            <div className="p-6 rounded-2xl md:rounded-3xl border border-white/[0.08] bg-zinc-950/40">
-              <h3 className="text-xs font-mono uppercase tracking-wider text-emerald-400 mb-3 flex items-center gap-2">
-                <Activity size={14} />
+            <div className="p-6 rounded-2xl border border-white/[0.08] bg-zinc-950">
+              <h3 className="text-xs font-mono uppercase tracking-wider text-zinc-400 mb-3">
                 Destaques Arquiteturais
               </h3>
-              <ul className="space-y-2 text-xs font-mono text-zinc-300">
+              <ul className="space-y-2 text-xs font-mono text-zinc-400">
                 {project.architectureHighlights.map((highlight, idx) => (
                   <li key={idx} className="flex items-start gap-2">
-                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400/80 shrink-0 mt-1.5" />
-                    <span className="leading-relaxed">{highlight}</span>
+                    <span className="text-zinc-600 select-none">•</span>
+                    <span className="leading-relaxed text-zinc-300">{highlight}</span>
                   </li>
                 ))}
               </ul>
@@ -252,7 +244,7 @@ export default function ProjectPageClient({ project }: { project: Project }) {
           )}
 
           {/* Ficha Técnica Rápida */}
-          <div className="p-6 rounded-2xl md:rounded-3xl border border-white/[0.08] bg-zinc-950/40 text-xs font-mono space-y-3">
+          <div className="p-6 rounded-2xl border border-white/[0.08] bg-zinc-950 text-xs font-mono space-y-3">
             <div className="flex justify-between items-center py-1.5 border-b border-white/[0.04]">
               <span className="text-zinc-500 uppercase tracking-wider">Desenvolvedor</span>
               <span className="text-zinc-300">David Levy</span>
@@ -265,7 +257,7 @@ export default function ProjectPageClient({ project }: { project: Project }) {
             </div>
             <div className="flex justify-between items-center py-1.5 border-b border-white/[0.04]">
               <span className="text-zinc-500 uppercase tracking-wider">Status</span>
-              <span className="text-emerald-400">Completo</span>
+              <span className="text-zinc-300">Completo</span>
             </div>
             <div className="flex justify-between items-center py-1.5">
               <span className="text-zinc-500 uppercase tracking-wider">Tags Principais</span>

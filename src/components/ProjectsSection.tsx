@@ -207,22 +207,16 @@ export default function ProjectsSection() {
 
   return (
     <section id="projetos" className="relative py-24 md:py-32 px-6 md:px-10 max-w-7xl mx-auto">
-      {/* Cabeçalho Editorial da Seção */}
-      <div className="flex flex-col md:flex-row md:items-end justify-between mb-8 md:mb-12 gap-6 border-b border-white/[0.08] pb-10">
+      {/* Cabeçalho da Seção */}
+      <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 md:mb-16 gap-6">
         <div>
-          <div className="flex items-center gap-2 mb-3">
-            <span className="w-2 h-2 rounded-full bg-emerald-400" />
-            <span className="text-[11px] font-mono uppercase tracking-[0.2em] text-zinc-400">
-              01 — Engenharia & Sistemas
-            </span>
-          </div>
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-white">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-semibold tracking-tight text-white">
             Projetos Selecionados
           </h2>
         </div>
 
         <p className="text-zinc-400 text-sm sm:text-base max-w-lg font-normal leading-relaxed">
-          Sistemas distribuídos em tempo real, plataformas de streaming de baixa latência, arquiteturas em nuvem e aplicações web e desktop de alta performance.
+          Sistemas distribuídos em tempo real, plataformas de streaming de baixa latência, arquiteturas em nuvem e aplicações de alto desempenho.
         </p>
       </div>
 
@@ -248,20 +242,20 @@ export default function ProjectsSection() {
       {/* Indicador Flutuante de Feed / Câmera (Desktop) */}
       {isSectionActive && focusedIndex >= 0 && (
         <aside
-          aria-label="Controle de Câmera do Feed de Projetos"
-          className="fixed right-6 bottom-8 z-40 hidden xl:flex flex-col items-center gap-2 px-3 py-3 rounded-full bg-black/75 backdrop-blur-xl border border-white/10 shadow-2xl transition-all duration-500 animate-fade-in"
+          aria-label="Navegação do Feed de Projetos"
+          className="fixed right-6 bottom-8 z-40 hidden xl:flex flex-col items-center gap-1.5 px-2.5 py-2.5 rounded-full bg-zinc-950/80 backdrop-blur-md border border-white/[0.08] transition-opacity duration-300"
         >
           <button
             type="button"
             onClick={() => scrollToProject(focusedIndex - 1)}
             disabled={focusedIndex === 0}
             aria-label="Projeto anterior"
-            className="p-1.5 rounded-full text-zinc-400 hover:text-white hover:bg-white/10 disabled:opacity-30 disabled:hover:bg-transparent transition-all"
+            className="p-1 rounded-full text-zinc-400 hover:text-white hover:bg-white/10 disabled:opacity-20 disabled:hover:bg-transparent transition-colors"
           >
-            <ChevronUp size={16} />
+            <ChevronUp size={15} />
           </button>
 
-          <span className="text-[10px] font-mono tracking-widest text-emerald-400 font-semibold py-1">
+          <span className="text-[10px] font-mono tracking-wider text-zinc-300 py-0.5">
             {String(focusedIndex + 1).padStart(2, "0")}
             <span className="text-zinc-600 block text-center">/</span>
             <span className="text-zinc-500">{String(projectsData.length).padStart(2, "0")}</span>
@@ -272,9 +266,9 @@ export default function ProjectsSection() {
             onClick={() => scrollToProject(focusedIndex + 1)}
             disabled={focusedIndex === projectsData.length - 1}
             aria-label="Próximo projeto"
-            className="p-1.5 rounded-full text-zinc-400 hover:text-white hover:bg-white/10 disabled:opacity-30 disabled:hover:bg-transparent transition-all"
+            className="p-1 rounded-full text-zinc-400 hover:text-white hover:bg-white/10 disabled:opacity-20 disabled:hover:bg-transparent transition-colors"
           >
-            <ChevronDown size={16} />
+            <ChevronDown size={15} />
           </button>
         </aside>
       )}

@@ -1,7 +1,6 @@
 // src/components/SocialIcons.tsx
 "use client";
 
-import { motion } from 'framer-motion';
 import { Mail } from 'lucide-react';
 
 const GitHubIcon = () => (
@@ -36,20 +35,18 @@ export default function SocialIcons() {
   ];
 
   return (
-    <div className="flex items-center gap-3">
+    <div className="flex items-center gap-2">
       {socials.map((item) => (
-        <motion.a
+        <a
           key={item.name}
           href={item.href}
           target={item.href.startsWith('mailto') ? undefined : '_blank'}
           rel="noopener noreferrer"
-          whileHover={{ y: -2, scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
           aria-label={item.name}
-          className="w-10 h-10 rounded-full border border-white/10 bg-white/[0.04] text-zinc-400 hover:text-white hover:border-white/30 hover:bg-white/[0.08] transition-all flex items-center justify-center"
+          className="w-9 h-9 rounded-full text-zinc-400 hover:text-white hover:bg-white/[0.08] transition-colors duration-200 flex items-center justify-center"
         >
           {item.icon}
-        </motion.a>
+        </a>
       ))}
     </div>
   );

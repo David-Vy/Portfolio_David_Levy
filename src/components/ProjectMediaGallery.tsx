@@ -345,10 +345,10 @@ export default function ProjectMediaGallery({
               className="group/dot relative p-1 transition-transform duration-200 focus:outline-none focus-visible:scale-125"
             >
               <span
-                className={`block rounded-full transition-all duration-300 ${
+                className={`block rounded-full transition-all duration-200 ${
                   isActive
-                    ? 'w-2.5 h-2.5 bg-white shadow-[0_0_8px_rgba(255,255,255,0.85)] scale-110'
-                    : 'w-2 h-2 border border-white/50 bg-transparent group-hover/dot:border-white group-hover/dot:bg-white/20'
+                    ? 'w-2 h-2 bg-white'
+                    : 'w-2 h-2 bg-white/30 hover:bg-white/60'
                 }`}
               />
             </button>

@@ -2,13 +2,7 @@
 "use client";
 
 import React, { useState, useEffect, useRef, useCallback } from "react";
-import { motion } from "framer-motion";
 import {
-  Activity,
-  Cpu,
-  Database,
-  HardDrive,
-  Server,
   Terminal,
   Play,
   Pause,
@@ -16,7 +10,6 @@ import {
   UploadCloud,
   Search,
   Zap,
-  Wifi,
 } from "lucide-react";
 
 interface LogEntry {
@@ -219,8 +212,6 @@ export default function LyCloudMockup() {
     }
   };
 
-  const ramPercent = Math.round((ramUsage / 2048) * 100);
-
   return (
     <div className="relative w-full h-full flex flex-col bg-zinc-950 text-zinc-100 select-none overflow-hidden font-sans">
       {/* Background Decorativo e Glow Sutil */}
@@ -287,162 +278,50 @@ export default function LyCloudMockup() {
         </div>
       </header>
 
-      {/* 2. Medidores em Tempo Real: CPU, RAM e Latência de Rede */}
-      <section className="relative z-10 shrink-0 px-3 py-2 sm:px-4 sm:py-2.5 border-b border-white/[0.06] bg-zinc-950/60">
-        <div className="grid grid-cols-3 gap-2 sm:gap-3">
-          {/* Gauge 1: CPU */}
-          <div className="p-2 sm:p-2.5 rounded-xl border border-white/[0.06] bg-white/[0.02]">
-            <div className="flex items-center justify-between mb-1">
-              <span className="flex items-center gap-1 text-[10px] font-mono uppercase tracking-wider text-zinc-400">
-                <Cpu size={12} className="text-emerald-400 shrink-0" />
-                <span className="truncate">CPU</span>
-              </span>
-              <span
-                className={`text-xs font-mono font-bold ${
-                  cpuUsage > 60 ? "text-amber-400" : "text-emerald-400"
-                }`}
-              >
-                {mounted ? `${cpuUsage.toFixed(1)}%` : "24.5%"}
-              </span>
-            </div>
-            <div className="w-full bg-white/[0.08] rounded-full h-1.5 overflow-hidden">
-              <motion.div
-                className={`h-full rounded-full ${
-                  cpuUsage > 60
-                    ? "bg-gradient-to-r from-amber-500 to-red-500"
-                    : "bg-gradient-to-r from-emerald-500 to-cyan-400"
-                }`}
-                animate={{ width: `${mounted ? cpuUsage : 24.5}%` }}
-                transition={{ duration: 0.5, ease: "easeOut" }}
-              />
-            </div>
-          </div>
-
-          {/* Gauge 2: Memória RAM */}
-          <div className="p-2 sm:p-2.5 rounded-xl border border-white/[0.06] bg-white/[0.02]">
-            <div className="flex items-center justify-between mb-1">
-              <span className="flex items-center gap-1 text-[10px] font-mono uppercase tracking-wider text-zinc-400">
-                <Activity size={12} className="text-cyan-400 shrink-0" />
-                <span className="truncate">RAM</span>
-              </span>
-              <span className="text-xs font-mono font-bold text-cyan-400">
-                {mounted ? `${ramUsage}MB` : "584MB"}
-              </span>
-            </div>
-            <div className="w-full bg-white/[0.08] rounded-full h-1.5 overflow-hidden">
-              <motion.div
-                className="h-full rounded-full bg-gradient-to-r from-cyan-500 to-blue-500"
-                animate={{ width: `${mounted ? ramPercent : 28}%` }}
-                transition={{ duration: 0.5, ease: "easeOut" }}
-              />
-            </div>
-          </div>
-
-          {/* Gauge 3: Rede / Latência */}
-          <div className="p-2 sm:p-2.5 rounded-xl border border-white/[0.06] bg-white/[0.02]">
-            <div className="flex items-center justify-between mb-1">
-              <span className="flex items-center gap-1 text-[10px] font-mono uppercase tracking-wider text-zinc-400">
-                <Wifi size={12} className="text-emerald-400 shrink-0" />
-                <span className="truncate">PING</span>
-              </span>
-              <span className="text-xs font-mono font-bold text-emerald-400">
-                {mounted ? `${networkPing}ms` : "4.2ms"}
-              </span>
-            </div>
-            <div className="w-full bg-white/[0.08] rounded-full h-1.5 overflow-hidden">
-              <motion.div
-                className="h-full rounded-full bg-gradient-to-r from-emerald-400 to-teal-400"
-                animate={{ width: `${mounted ? Math.min(100, networkPing * 10) : 42}%` }}
-                transition={{ duration: 0.5, ease: "easeOut" }}
-              />
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* 3. Badges de Saúde dos Serviços (MongoDB, MinIO, Node.js) */}
-      <section className="relative z-10 shrink-0 px-3 py-1.5 sm:px-4 sm:py-2 border-b border-white/[0.06] bg-black/40">
-        <div className="grid grid-cols-3 gap-2">
-          {/* Serviço 1: MongoDB */}
-          <div className="flex items-center justify-between px-2.5 py-1 rounded-lg border border-white/[0.05] bg-white/[0.01]">
-            <div className="flex items-center gap-1.5 min-w-0">
-              <Database size={12} className="text-emerald-400 shrink-0" />
-              <div className="truncate">
-                <p className="text-[10px] font-mono font-medium text-white truncate">MongoDB</p>
-                <p className="text-[9px] font-mono text-zinc-400 truncate">14 col · 4.2ms</p>
-              </div>
-            </div>
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 shrink-0" title="Online" />
-          </div>
-
-          {/* Serviço 2: MinIO S3 */}
-          <div className="flex items-center justify-between px-2.5 py-1 rounded-lg border border-white/[0.05] bg-white/[0.01]">
-            <div className="flex items-center gap-1.5 min-w-0">
-              <HardDrive size={12} className="text-amber-400 shrink-0" />
-              <div className="truncate">
-                <p className="text-[10px] font-mono font-medium text-white truncate">MinIO S3</p>
-                <p className="text-[9px] font-mono text-zinc-400 truncate">3 bkt · 1.8GB</p>
-              </div>
-            </div>
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 shrink-0" title="Active" />
-          </div>
-
-          {/* Serviço 3: Node.js Engine */}
-          <div className="flex items-center justify-between px-2.5 py-1 rounded-lg border border-white/[0.05] bg-white/[0.01]">
-            <div className="flex items-center gap-1.5 min-w-0">
-              <Server size={12} className="text-cyan-400 shrink-0" />
-              <div className="truncate">
-                <p className="text-[10px] font-mono font-medium text-white truncate">Node PID</p>
-                <p className="text-[9px] font-mono text-zinc-400 truncate">PID 4092 · UP</p>
-              </div>
-            </div>
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 shrink-0" title="Running" />
-          </div>
-        </div>
-      </section>
-
-      {/* 4. Barra de Ações Rápidas do SDK Oficial */}
-      <section className="relative z-10 shrink-0 px-3 py-2 sm:px-4 sm:py-2 border-b border-white/[0.06] bg-zinc-950/80">
-        <div className="flex items-center justify-between gap-2">
-          <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-0.5">
-            <span className="text-[10px] font-mono uppercase tracking-wider text-zinc-500 mr-1 hidden sm:inline">
-              SDK Ops:
-            </span>
-
-            {/* Ação 1: Upload MinIO S3 */}
-            <button
-              type="button"
-              onClick={triggerStorageUpload}
-              className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-[10px] font-mono bg-white/[0.04] hover:bg-white/[0.09] border border-white/10 text-amber-300 hover:text-white transition-all active:scale-95"
-            >
-              <UploadCloud size={11} className="text-amber-400" />
-              <span>upload()</span>
-            </button>
-
-            {/* Ação 2: Query MongoDB */}
-            <button
-              type="button"
-              onClick={triggerDatabaseQuery}
-              className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-[10px] font-mono bg-white/[0.04] hover:bg-white/[0.09] border border-white/10 text-emerald-300 hover:text-white transition-all active:scale-95"
-            >
-              <Search size={11} className="text-emerald-400" />
-              <span>query()</span>
-            </button>
-
-            {/* Ação 3: Invocação de Cloud Function */}
-            <button
-              type="button"
-              onClick={triggerFunctionInvoke}
-              className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-[10px] font-mono bg-white/[0.04] hover:bg-white/[0.09] border border-white/10 text-cyan-300 hover:text-white transition-all active:scale-95"
-            >
-              <Zap size={11} className="text-cyan-400" />
-              <span>invoke()</span>
-            </button>
-          </div>
-
-          <span className="text-[9px] font-mono text-zinc-500 whitespace-nowrap hidden md:inline">
-            Clique para disparar eventos
+      {/* 2. Barra de Controle e Ações do SDK */}
+      <section className="relative z-10 shrink-0 px-3 py-2 sm:px-4 sm:py-2.5 border-b border-white/[0.06] bg-zinc-950 flex flex-wrap items-center justify-between gap-3">
+        <div className="flex items-center gap-2 overflow-x-auto no-scrollbar">
+          <span className="text-[11px] font-mono text-zinc-400 mr-1 hidden sm:inline">
+            SDK:
           </span>
+
+          {/* Ação 1: Upload MinIO S3 */}
+          <button
+            type="button"
+            onClick={triggerStorageUpload}
+            className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded text-[11px] font-mono bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.08] text-zinc-300 hover:text-white transition-colors"
+          >
+            <UploadCloud size={12} className="text-zinc-400" />
+            <span>upload()</span>
+          </button>
+
+          {/* Ação 2: Query MongoDB */}
+          <button
+            type="button"
+            onClick={triggerDatabaseQuery}
+            className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded text-[11px] font-mono bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.08] text-zinc-300 hover:text-white transition-colors"
+          >
+            <Search size={12} className="text-zinc-400" />
+            <span>query()</span>
+          </button>
+
+          {/* Ação 3: Invocação de Cloud Function */}
+          <button
+            type="button"
+            onClick={triggerFunctionInvoke}
+            className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded text-[11px] font-mono bg-white/[0.04] hover:bg-white/[0.08] border border-white/[0.08] text-zinc-300 hover:text-white transition-colors"
+          >
+            <Zap size={12} className="text-zinc-400" />
+            <span>invoke()</span>
+          </button>
+        </div>
+
+        <div className="flex items-center gap-3 text-[11px] font-mono text-zinc-400">
+          <span>CPU <strong className="text-zinc-300 font-normal">{mounted ? `${cpuUsage.toFixed(1)}%` : "24.5%"}</strong></span>
+          <span className="text-zinc-700">/</span>
+          <span>RAM <strong className="text-zinc-300 font-normal">{ramUsage}MB</strong></span>
+          <span className="text-zinc-700">/</span>
+          <span>Ping <strong className="text-zinc-300 font-normal">{mounted ? `${networkPing}ms` : "4.2ms"}</strong></span>
         </div>
       </section>
 
