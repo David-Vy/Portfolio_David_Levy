@@ -28,6 +28,7 @@ export async function generateMetadata({ params }: ProjectPageProps): Promise<Me
   }
 
   return {
+    metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://portfolio-david-levy.vercel.app'),
     title: `${project.title} — ${project.category} | David Levy`,
     description: project.description,
     openGraph: {

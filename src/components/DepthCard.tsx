@@ -84,7 +84,7 @@ export default function DepthCard({
       }
       className={`relative group rounded-2xl md:rounded-3xl border border-white/[0.08] bg-zinc-950/80 transition-shadow duration-700 ${
         isHovered ? "shadow-2xl shadow-black/90 border-white/25" : ""
-      } ${className}`}
+      } ${featured ? "ring-1 ring-emerald-500/20" : ""} ${className}`}
     >
       {/* Feixe de luz reflexivo que acompanha o cursor (Spotlight Sheen) */}
       {!prefersReducedMotion && (

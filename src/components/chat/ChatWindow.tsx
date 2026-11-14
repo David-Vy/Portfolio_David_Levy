@@ -2,7 +2,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from 'react';
-import { collection, query, orderBy, onSnapshot, addDoc, serverTimestamp, writeBatch, where, getDocs, Timestamp, doc, setDoc, increment, getDoc } from 'firebase/firestore';
+import { collection, query, orderBy, onSnapshot, serverTimestamp, writeBatch, where, getDocs, Timestamp, doc, setDoc, increment, getDoc } from 'firebase/firestore';
 import { ref, onValue, set, onDisconnect, serverTimestamp as rtdbServerTimestamp } from "firebase/database";
 import { db, rtdb, auth } from '@/lib/firebase';
 import { useAuth } from '@/context/AuthContext';
