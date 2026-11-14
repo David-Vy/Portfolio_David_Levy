@@ -13,7 +13,7 @@ export default function ProjectsSection() {
   const isTransitioningRef = useRef<boolean>(false);
   const focusedIndexRef = useRef<number>(0);
 
-  // Manter ref sincronizada para acesso imediato dentro dos listeners
+  // Sincronização atômica da ref para acesso sem atraso dentro dos event listeners
   useEffect(() => {
     focusedIndexRef.current = focusedIndex;
   }, [focusedIndex]);
@@ -32,23 +32,22 @@ export default function ProjectsSection() {
     const rect = el.getBoundingClientRect();
     const absoluteTop = window.scrollY + rect.top;
 
-    // Calcula o offset exato para centralizar perfeitamente o projeto na visão do usuário
-    const headerHeight = 72;
+    // Calcula a posição de rolagem para centralizar perfeitamente o card do projeto na tela
     const centerOffset = (window.innerHeight - rect.height) / 2;
-    const targetY = absoluteTop - Math.max(headerHeight, centerOffset);
+    const targetY = absoluteTop - Math.max(36, centerOffset);
 
     window.scrollTo({
       top: Math.max(0, targetY),
       behavior: "smooth",
     });
 
-    // Desbloqueia novas transições após o término suave do movimento da câmera
+    // Desbloqueia novas transições após o término do deslocamento suave da câmera
     setTimeout(() => {
       isTransitioningRef.current = false;
     }, 700);
   }, []);
 
-  // Monitorar rolagem para identificar qual projeto a câmera está enquadrando
+  // Monitorar rolagem livre para identificar qual projeto a câmera está enquadrando
   useEffect(() => {
     let ticking = false;
 
@@ -70,23 +69,44 @@ export default function ProjectsSection() {
           return;
         }
 
+        // Se uma transição induzida pela câmera já estiver em andamento, respeita seu target
         if (isTransitioningRef.current) return;
 
-        const viewportCenter = window.innerHeight / 2;
+        const total = projectsData.length;
+        const lastIdx = total - 1;
+
+        // Se o usuário está na entrada superior da seção (cabeçalho visível), fixa o primeiro projeto
+        if (sectionRect.top >= 0 && rowRefs.current[0]) {
+          const rect0 = rowRefs.current[0].getBoundingClientRect();
+          if (rect0.top < window.innerHeight && rect0.bottom > 0) {
+            setFocusedIndex(0);
+            return;
+          }
+        }
+
+        // Se o usuário está no rodapé da seção (entrando por baixo), fixa o último projeto
+        if (sectionRect.bottom <= window.innerHeight + 150 && rowRefs.current[lastIdx]) {
+          const rectLast = rowRefs.current[lastIdx].getBoundingClientRect();
+          if (rectLast.top < window.innerHeight && rectLast.bottom > 0) {
+            setFocusedIndex(lastIdx);
+            return;
+          }
+        }
+
+        // Algoritmo de Visibilidade Dominante: identifica o projeto com maior área visível na tela
         let bestIndex = 0;
-        let minDistance = Infinity;
+        let maxVisibleHeight = 0;
 
         rowRefs.current.forEach((el, idx) => {
           if (!el) return;
           const rect = el.getBoundingClientRect();
-          const elementCenter = rect.top + rect.height / 2;
-          const dist = Math.abs(elementCenter - viewportCenter);
+          const visibleTop = Math.max(0, rect.top);
+          const visibleBottom = Math.min(window.innerHeight, rect.bottom);
+          const visibleHeight = Math.max(0, visibleBottom - visibleTop);
 
-          if (rect.bottom > 80 && rect.top < window.innerHeight - 80) {
-            if (dist < minDistance) {
-              minDistance = dist;
-              bestIndex = idx;
-            }
+          if (visibleHeight > maxVisibleHeight) {
+            maxVisibleHeight = visibleHeight;
+            bestIndex = idx;
           }
         });
 
@@ -104,46 +124,74 @@ export default function ProjectsSection() {
     };
   }, []);
 
-  // Controle de Câmera estilo Feed via Mouse Wheel, Touch Swipe e Teclado
+  // Controle de Câmera estilo Feed via Mouse Wheel, Touch Gestures e Teclado
   useEffect(() => {
-    // 1. Mouse Wheel — Rolar para cima ou baixo move a visão (câmera) de projeto em projeto
+    // 1. Mouse Wheel — Rolar para cima ou baixo move a visão (câmera) projeto a projeto sem pular o 1º ou último
     const onWheel = (e: WheelEvent) => {
       const sectionEl = document.getElementById("projetos");
       if (!sectionEl) return;
 
       const sectionRect = sectionEl.getBoundingClientRect();
-      // Ativa o controle de câmera quando o usuário estiver no campo da seção de projetos
-      const inProjectsZone = sectionRect.top <= 140 && sectionRect.bottom >= window.innerHeight - 100;
-
+      // Ativa o controle de câmera exclusivamente dentro da área da seção de projetos
+      const inProjectsZone = sectionRect.top <= 120 && sectionRect.bottom >= window.innerHeight - 100;
       if (!inProjectsZone) return;
 
-      const currentIdx = focusedIndexRef.current;
-      const isScrollingDown = e.deltaY > 30;
-      const isScrollingUp = e.deltaY < -30;
-
       if (isTransitioningRef.current) {
-        if (Math.abs(e.deltaY) > 10) {
+        if (Math.abs(e.deltaY) > 8) {
           e.preventDefault();
         }
         return;
       }
 
+      const total = projectsData.length;
+      const currentIdx = focusedIndexRef.current;
+      const safeCurrentIdx = currentIdx < 0 ? 0 : Math.min(total - 1, currentIdx);
+      const currentEl = rowRefs.current[safeCurrentIdx];
+
+      let isCurrentCentered = false;
+      let isCurrentBelowCenter = false;
+      let isCurrentAboveCenter = false;
+
+      if (currentEl) {
+        const rect = currentEl.getBoundingClientRect();
+        const elementCenter = rect.top + rect.height / 2;
+        const viewportCenter = window.innerHeight / 2;
+        const centerDiff = elementCenter - viewportCenter;
+
+        isCurrentCentered = Math.abs(centerDiff) < 110;
+        isCurrentBelowCenter = centerDiff > 110;
+        isCurrentAboveCenter = centerDiff < -110;
+      }
+
+      const isScrollingDown = e.deltaY > 30;
+      const isScrollingUp = e.deltaY < -30;
+
       if (isScrollingDown) {
-        if (currentIdx < projectsData.length - 1) {
+        // Se o projeto atual ainda não estiver centralizado (ex: entrando na seção de cima), primeiro centraliza o projeto 0
+        if (!isCurrentCentered && (isCurrentBelowCenter || safeCurrentIdx === 0)) {
           e.preventDefault();
-          scrollToProject(currentIdx + 1);
+          scrollToProject(safeCurrentIdx);
+        } else if (safeCurrentIdx < total - 1) {
+          // Projeto atual já está centralizado: avança para o próximo
+          e.preventDefault();
+          scrollToProject(safeCurrentIdx + 1);
         }
-        // No último projeto, permite que o scroll natural prossiga para as seções seguintes
+        // No último projeto já centralizado, permite que o scroll natural desça suavemente para a próxima seção
       } else if (isScrollingUp) {
-        if (currentIdx > 0) {
+        // Se o projeto atual ainda não estiver centralizado (ex: entrando na seção por baixo), primeiro centraliza o projeto 7
+        if (!isCurrentCentered && (isCurrentAboveCenter || safeCurrentIdx === total - 1)) {
           e.preventDefault();
-          scrollToProject(currentIdx - 1);
+          scrollToProject(safeCurrentIdx);
+        } else if (safeCurrentIdx > 0) {
+          // Projeto atual já está centralizado: recua para o anterior
+          e.preventDefault();
+          scrollToProject(safeCurrentIdx - 1);
         }
-        // No primeiro projeto, permite que o scroll natural suba de volta para a Hero
+        // No primeiro projeto já centralizado, permite que o scroll natural suba suavemente para a seção anterior
       }
     };
 
-    // 2. Touch Gestures para Mobile e Tablets
+    // 2. Touch Gestures para Dispositivos Móveis e Tablets
     let touchStartY = 0;
     const onTouchStart = (e: TouchEvent) => {
       touchStartY = e.touches[0].clientY;
@@ -154,17 +202,47 @@ export default function ProjectsSection() {
       if (!sectionEl || isTransitioningRef.current) return;
 
       const sectionRect = sectionEl.getBoundingClientRect();
-      const inProjectsZone = sectionRect.top <= 140 && sectionRect.bottom >= window.innerHeight - 100;
+      const inProjectsZone = sectionRect.top <= 120 && sectionRect.bottom >= window.innerHeight - 100;
       if (!inProjectsZone) return;
 
       const touchEndY = e.changedTouches[0].clientY;
       const deltaY = touchStartY - touchEndY;
-      const currentIdx = focusedIndexRef.current;
+      if (Math.abs(deltaY) < 45) return;
 
-      if (deltaY > 50 && currentIdx < projectsData.length - 1) {
-        scrollToProject(currentIdx + 1);
-      } else if (deltaY < -50 && currentIdx > 0) {
-        scrollToProject(currentIdx - 1);
+      const total = projectsData.length;
+      const currentIdx = focusedIndexRef.current;
+      const safeCurrentIdx = currentIdx < 0 ? 0 : Math.min(total - 1, currentIdx);
+      const currentEl = rowRefs.current[safeCurrentIdx];
+
+      let isCurrentCentered = false;
+      let isCurrentBelowCenter = false;
+      let isCurrentAboveCenter = false;
+
+      if (currentEl) {
+        const rect = currentEl.getBoundingClientRect();
+        const elementCenter = rect.top + rect.height / 2;
+        const viewportCenter = window.innerHeight / 2;
+        const centerDiff = elementCenter - viewportCenter;
+
+        isCurrentCentered = Math.abs(centerDiff) < 110;
+        isCurrentBelowCenter = centerDiff > 110;
+        isCurrentAboveCenter = centerDiff < -110;
+      }
+
+      if (deltaY > 45) {
+        // Swipe para cima (desce a visão)
+        if (!isCurrentCentered && (isCurrentBelowCenter || safeCurrentIdx === 0)) {
+          scrollToProject(safeCurrentIdx);
+        } else if (safeCurrentIdx < total - 1) {
+          scrollToProject(safeCurrentIdx + 1);
+        }
+      } else if (deltaY < -45) {
+        // Swipe para baixo (sobe a visão)
+        if (!isCurrentCentered && (isCurrentAboveCenter || safeCurrentIdx === total - 1)) {
+          scrollToProject(safeCurrentIdx);
+        } else if (safeCurrentIdx > 0) {
+          scrollToProject(safeCurrentIdx - 1);
+        }
       }
     };
 
@@ -174,20 +252,22 @@ export default function ProjectsSection() {
       if (!sectionEl || isTransitioningRef.current) return;
 
       const sectionRect = sectionEl.getBoundingClientRect();
-      const inProjectsZone = sectionRect.top <= 140 && sectionRect.bottom >= window.innerHeight - 100;
+      const inProjectsZone = sectionRect.top <= 120 && sectionRect.bottom >= window.innerHeight - 100;
       if (!inProjectsZone) return;
 
+      const total = projectsData.length;
       const currentIdx = focusedIndexRef.current;
+      const safeCurrentIdx = currentIdx < 0 ? 0 : Math.min(total - 1, currentIdx);
 
       if (e.key === "ArrowDown" || e.key === "PageDown") {
-        if (currentIdx < projectsData.length - 1) {
+        if (safeCurrentIdx < total - 1) {
           e.preventDefault();
-          scrollToProject(currentIdx + 1);
+          scrollToProject(safeCurrentIdx + 1);
         }
       } else if (e.key === "ArrowUp" || e.key === "PageUp") {
-        if (currentIdx > 0) {
+        if (safeCurrentIdx > 0) {
           e.preventDefault();
-          scrollToProject(currentIdx - 1);
+          scrollToProject(safeCurrentIdx - 1);
         }
       }
     };
@@ -243,7 +323,7 @@ export default function ProjectsSection() {
       {isSectionActive && focusedIndex >= 0 && (
         <aside
           aria-label="Navegação do Feed de Projetos"
-          className="fixed right-6 bottom-8 z-40 hidden xl:flex flex-col items-center gap-1.5 px-2.5 py-2.5 rounded-full bg-zinc-950/80 backdrop-blur-md border border-white/[0.08] transition-opacity duration-300"
+          className="fixed right-6 bottom-8 z-40 hidden xl:flex flex-col items-center gap-1.5 px-2.5 py-2.5 rounded-full bg-zinc-950/80 backdrop-blur-md border border-white/[0.08] transition-opacity duration-300 shadow-2xl"
         >
           <button
             type="button"

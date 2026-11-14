@@ -1,7 +1,7 @@
 // src/components/ProjectEditorialRow.tsx
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
@@ -31,18 +31,41 @@ export default function ProjectEditorialRow({ project, index, isFocused = false 
   const isEven = index % 2 === 0;
   const theme = PROJECT_THEMES[project.slug] || PROJECT_THEMES["lymadhouse"];
 
+  // Rastreamento de coordenadas relativas do cursor (-0.5 a 0.5) para parallax e spotlight interativo
+  const [mousePos, setMousePos] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    if (rect.width > 0 && rect.height > 0) {
+      const relX = (e.clientX - rect.left) / rect.width - 0.5;
+      const relY = (e.clientY - rect.top) / rect.height - 0.5;
+      setMousePos({ x: relX, y: relY });
+    }
+  };
+
+  const handleMouseLeave = () => {
+    setMousePos({ x: 0, y: 0 });
+  };
+
   return (
     <motion.article
       initial={{ opacity: 0, y: 24 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, amount: 0.15 }}
       transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-      className={`relative py-12 md:py-20 px-6 sm:px-8 lg:px-12 my-6 sm:my-8 rounded-3xl min-h-[70vh] md:min-h-[82vh] flex items-center justify-center transition-opacity duration-500 ${
-        isFocused ? "opacity-100" : "opacity-75 hover:opacity-95"
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+      className={`relative py-12 md:py-20 px-6 sm:px-8 lg:px-12 my-6 sm:my-8 rounded-3xl min-h-[70vh] md:min-h-[82vh] flex items-center justify-center transition-all duration-500 border border-white/[0.08] shadow-2xl ${
+        isFocused ? "opacity-100 ring-1 ring-white/10" : "opacity-80 hover:opacity-100"
       }`}
     >
       {/* Fundo de Vidro Fosco Escuro com Formas Geométricas em Movimento & Interatividade Dinâmica */}
-      <ProjectAmbientBackground slug={project.slug} isFocused={isFocused} />
+      <ProjectAmbientBackground
+        slug={project.slug}
+        isFocused={isFocused}
+        mouseRelativeX={mousePos.x}
+        mouseRelativeY={mousePos.y}
+      />
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 xl:gap-16 items-center w-full relative z-10">
         {/* Coluna de Mídia (Desktop lg:col-span-7) — Alterna lado de forma limpa (par=esq, ímpar=dir) */}
@@ -105,7 +128,7 @@ export default function ProjectEditorialRow({ project, index, isFocused = false 
             {project.category || "Engenharia de Software"}
           </span>
 
-          {/* Título Display Editorial com Fonte Ampliada e Degradê Inspirado no Gemini */}
+          {/* Título Display Editorial com Fonte Ampliada e Degradê Exclusivo Inspirado no Gemini */}
           <Link href={`/projects/${project.slug}`} className="block group/title">
             <h3 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight transition-opacity duration-200 group-hover/title:opacity-90">
               <span className={`bg-gradient-to-r ${theme.titleGradient} bg-clip-text text-transparent`}>

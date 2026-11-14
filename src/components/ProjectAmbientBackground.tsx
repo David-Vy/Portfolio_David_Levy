@@ -1,75 +1,75 @@
 // src/components/ProjectAmbientBackground.tsx
 "use client";
 
-import React, { useRef, useEffect, useState } from "react";
-import { motion, useMotionValue, useSpring } from "framer-motion";
+import React, { useEffect, useState } from "react";
+import { motion, MotionValue, useMotionValue, useSpring, useTransform } from "framer-motion";
 
 export interface ProjectThemeConfig {
   titleGradient: string;
-  accentGlow: string;
+  accentColor: string;
   shapes: {
     id: string;
-    type: "circle" | "rect" | "diamond" | "ring" | "pill" | "hexagon";
+    type: "diamond" | "circle" | "rect" | "pill" | "hexagon";
     width: number;
     height: number;
     top: string;
     left: string;
     color: string;
     blur: string;
-    opacity: number;
     duration: number;
-    floatDistance: number;
-    parallaxFactor: number;
+    floatX: number;
+    floatY: number;
+    parallaxMultiplier: number;
   }[];
 }
 
 export const PROJECT_THEMES: Record<string, ProjectThemeConfig> = {
   lymadhouse: {
-    // Electric Gemini Cyan & Indigo (Streaming / C++ / WebRTC)
-    titleGradient: "from-cyan-300 via-sky-400 to-indigo-400",
-    accentGlow: "rgba(56, 189, 248, 0.15)",
+    // Roxo elétrico e vibrante fiel à identidade visual do logo (Ly em roxo vibrante)
+    titleGradient: "from-purple-200 via-violet-400 to-purple-500",
+    accentColor: "rgba(168, 85, 247, 0.5)",
     shapes: [
       {
         id: "lm-1",
         type: "diamond",
         width: 320,
         height: 320,
-        top: "10%",
-        left: "5%",
-        color: "linear-gradient(135deg, rgba(6, 182, 212, 0.28), rgba(59, 130, 246, 0.12))",
-        blur: "blur-3xl",
-        opacity: 0.35,
+        top: "8%",
+        left: "4%",
+        color: "linear-gradient(135deg, rgba(168, 85, 247, 0.7), rgba(126, 34, 206, 0.45))",
+        blur: "blur-xl",
         duration: 16,
-        floatDistance: 35,
-        parallaxFactor: 30,
+        floatX: 25,
+        floatY: 30,
+        parallaxMultiplier: 35,
       },
       {
         id: "lm-2",
         type: "circle",
-        width: 380,
-        height: 380,
-        top: "40%",
-        left: "65%",
-        color: "radial-gradient(circle, rgba(99, 102, 241, 0.25), rgba(14, 165, 233, 0.05))",
-        blur: "blur-3xl",
-        opacity: 0.3,
+        width: 360,
+        height: 360,
+        top: "35%",
+        left: "62%",
+        color: "radial-gradient(circle, rgba(192, 132, 252, 0.65), rgba(107, 33, 168, 0.35))",
+        blur: "blur-2xl",
         duration: 18,
-        floatDistance: 40,
-        parallaxFactor: -35,
+        floatX: -30,
+        floatY: 35,
+        parallaxMultiplier: -40,
       },
       {
         id: "lm-3",
         type: "hexagon",
-        width: 240,
-        height: 240,
+        width: 250,
+        height: 250,
         top: "60%",
-        left: "25%",
-        color: "linear-gradient(45deg, rgba(14, 165, 233, 0.22), rgba(99, 102, 241, 0.15))",
-        blur: "blur-2xl",
-        opacity: 0.25,
+        left: "22%",
+        color: "linear-gradient(45deg, rgba(147, 51, 234, 0.6), rgba(168, 85, 247, 0.35))",
+        blur: "blur-xl",
         duration: 14,
-        floatDistance: 25,
-        parallaxFactor: 20,
+        floatX: 20,
+        floatY: -25,
+        parallaxMultiplier: 25,
       },
     ],
   },
@@ -77,85 +77,85 @@ export const PROJECT_THEMES: Record<string, ProjectThemeConfig> = {
   "lycloud-server": {
     // Mint Emerald, Teal & Cyan (Cloud / BaaS / Docker)
     titleGradient: "from-emerald-300 via-teal-300 to-cyan-400",
-    accentGlow: "rgba(20, 184, 166, 0.15)",
+    accentColor: "rgba(20, 184, 166, 0.5)",
     shapes: [
       {
         id: "lc-1",
         type: "rect",
         width: 340,
         height: 300,
-        top: "15%",
+        top: "12%",
         left: "60%",
-        color: "linear-gradient(135deg, rgba(16, 185, 129, 0.28), rgba(20, 184, 166, 0.12))",
-        blur: "blur-3xl",
-        opacity: 0.35,
+        color: "linear-gradient(135deg, rgba(16, 185, 129, 0.65), rgba(20, 184, 166, 0.4))",
+        blur: "blur-xl",
         duration: 17,
-        floatDistance: 30,
-        parallaxFactor: -28,
+        floatX: -25,
+        floatY: 30,
+        parallaxMultiplier: -32,
       },
       {
         id: "lc-2",
         type: "circle",
-        width: 360,
-        height: 360,
-        top: "45%",
-        left: "10%",
-        color: "radial-gradient(circle, rgba(6, 182, 212, 0.25), rgba(16, 185, 129, 0.05))",
-        blur: "blur-3xl",
-        opacity: 0.3,
+        width: 350,
+        height: 350,
+        top: "40%",
+        left: "8%",
+        color: "radial-gradient(circle, rgba(34, 211, 238, 0.6), rgba(13, 148, 136, 0.3))",
+        blur: "blur-2xl",
         duration: 19,
-        floatDistance: 40,
-        parallaxFactor: 35,
+        floatX: 30,
+        floatY: -30,
+        parallaxMultiplier: 36,
       },
       {
         id: "lc-3",
         type: "pill",
         width: 280,
-        height: 180,
-        top: "70%",
-        left: "55%",
-        color: "linear-gradient(45deg, rgba(20, 184, 166, 0.22), rgba(16, 185, 129, 0.1))",
-        blur: "blur-2xl",
-        opacity: 0.25,
+        height: 160,
+        top: "68%",
+        left: "40%",
+        color: "linear-gradient(45deg, rgba(20, 184, 166, 0.55), rgba(16, 185, 129, 0.3))",
+        blur: "blur-xl",
         duration: 15,
-        floatDistance: 25,
-        parallaxFactor: -20,
+        floatX: -20,
+        floatY: 20,
+        parallaxMultiplier: -22,
       },
     ],
   },
 
   lyvia: {
-    // Electric Violet, Fuchsia & Rose (Distributed HLS Media Streaming)
-    titleGradient: "from-violet-300 via-fuchsia-400 to-rose-400",
-    accentGlow: "rgba(217, 70, 239, 0.15)",
+    // Escala Monocromática: degradê cinza e branco minimalista e elegante
+    titleGradient: "from-white via-zinc-200 to-zinc-400",
+    accentColor: "rgba(255, 255, 255, 0.45)",
     shapes: [
       {
         id: "lv-1",
-        type: "ring",
-        width: 360,
-        height: 360,
-        top: "15%",
-        left: "10%",
-        color: "radial-gradient(circle, rgba(139, 92, 246, 0.3), rgba(217, 70, 239, 0.08))",
-        blur: "blur-3xl",
-        opacity: 0.35,
-        duration: 18,
-        floatDistance: 35,
-        parallaxFactor: 32,
+        type: "pill",
+        width: 350,
+        height: 220,
+        top: "12%",
+        left: "8%",
+        color: "linear-gradient(135deg, rgba(255, 255, 255, 0.65), rgba(212, 212, 216, 0.35))",
+        blur: "blur-xl",
+        duration: 17,
+        floatX: 25,
+        floatY: 30,
+        parallaxMultiplier: 30,
       },
       {
         id: "lv-2",
         type: "circle",
-        width: 380,
-        height: 380,
-        top: "45%",
+        width: 370,
+        height: 370,
+        top: "38%",
         left: "60%",
-        color: "radial-gradient(circle, rgba(244, 63, 94, 0.24), rgba(139, 92, 246, 0.06))",
-        blur: "blur-3xl",
-        opacity: 0.3,
+        color: "radial-gradient(circle, rgba(244, 244, 245, 0.55), rgba(113, 113, 122, 0.25))",
+        blur: "blur-2xl",
         duration: 20,
-        floatDistance: 45,
-        parallaxFactor: -38,
+        floatX: -35,
+        floatY: -35,
+        parallaxMultiplier: -38,
       },
       {
         id: "lv-3",
@@ -164,70 +164,70 @@ export const PROJECT_THEMES: Record<string, ProjectThemeConfig> = {
         height: 260,
         top: "65%",
         left: "25%",
-        color: "linear-gradient(135deg, rgba(217, 70, 239, 0.22), rgba(244, 63, 94, 0.12))",
-        blur: "blur-2xl",
-        opacity: 0.25,
+        color: "linear-gradient(45deg, rgba(228, 228, 231, 0.5), rgba(82, 82, 91, 0.25))",
+        blur: "blur-xl",
         duration: 15,
-        floatDistance: 25,
-        parallaxFactor: 22,
+        floatX: 20,
+        floatY: 20,
+        parallaxMultiplier: 22,
       },
     ],
   },
 
   "icre-web": {
-    // Warm Sunset Amber, Coral & Gold (Fintech / PIX / Accounting)
-    titleGradient: "from-amber-300 via-orange-400 to-rose-400",
-    accentGlow: "rgba(245, 158, 11, 0.15)",
+    // Tom de azul equilibrado: nem muito escuro nem muito claro
+    titleGradient: "from-sky-300 via-blue-400 to-blue-600",
+    accentColor: "rgba(59, 130, 246, 0.5)",
     shapes: [
       {
         id: "ic-1",
         type: "diamond",
-        width: 320,
-        height: 320,
-        top: "15%",
-        left: "65%",
-        color: "linear-gradient(135deg, rgba(245, 158, 11, 0.28), rgba(249, 115, 22, 0.12))",
-        blur: "blur-3xl",
-        opacity: 0.35,
-        duration: 17,
-        floatDistance: 30,
-        parallaxFactor: -30,
+        width: 330,
+        height: 330,
+        top: "12%",
+        left: "62%",
+        color: "linear-gradient(135deg, rgba(59, 130, 246, 0.7), rgba(37, 99, 235, 0.4))",
+        blur: "blur-xl",
+        duration: 16,
+        floatX: -28,
+        floatY: 32,
+        parallaxMultiplier: -32,
       },
       {
         id: "ic-2",
         type: "circle",
         width: 360,
         height: 360,
-        top: "40%",
-        left: "5%",
-        color: "radial-gradient(circle, rgba(251, 113, 133, 0.25), rgba(245, 158, 11, 0.06))",
-        blur: "blur-3xl",
-        opacity: 0.3,
+        top: "38%",
+        left: "6%",
+        color: "radial-gradient(circle, rgba(96, 165, 250, 0.65), rgba(29, 78, 216, 0.3))",
+        blur: "blur-2xl",
         duration: 19,
-        floatDistance: 35,
-        parallaxFactor: 32,
+        floatX: 30,
+        floatY: -35,
+        parallaxMultiplier: 36,
       },
       {
         id: "ic-3",
         type: "rect",
         width: 280,
-        height: 200,
+        height: 210,
         top: "65%",
-        left: "50%",
-        color: "linear-gradient(45deg, rgba(249, 115, 22, 0.2), rgba(251, 113, 133, 0.1))",
-        blur: "blur-2xl",
-        opacity: 0.25,
+        left: "48%",
+        color: "linear-gradient(45deg, rgba(37, 99, 235, 0.55), rgba(96, 165, 250, 0.3))",
+        blur: "blur-xl",
         duration: 15,
-        floatDistance: 25,
-        parallaxFactor: -20,
+        floatX: -20,
+        floatY: 20,
+        parallaxMultiplier: -22,
       },
     ],
   },
 
   intellistock: {
-    // Electric Lime, Emerald & Mint (Logistics & Inventory)
+    // Electric Lime & Emerald (Logística & Estoque Inteligente)
     titleGradient: "from-lime-300 via-emerald-400 to-teal-400",
-    accentGlow: "rgba(132, 204, 22, 0.15)",
+    accentColor: "rgba(132, 204, 22, 0.5)",
     shapes: [
       {
         id: "is-1",
@@ -235,27 +235,27 @@ export const PROJECT_THEMES: Record<string, ProjectThemeConfig> = {
         width: 340,
         height: 280,
         top: "10%",
-        left: "15%",
-        color: "linear-gradient(135deg, rgba(132, 204, 22, 0.26), rgba(16, 185, 129, 0.14))",
-        blur: "blur-3xl",
-        opacity: 0.35,
+        left: "12%",
+        color: "linear-gradient(135deg, rgba(132, 204, 22, 0.65), rgba(16, 185, 129, 0.35))",
+        blur: "blur-xl",
         duration: 16,
-        floatDistance: 30,
-        parallaxFactor: 28,
+        floatX: 25,
+        floatY: 30,
+        parallaxMultiplier: 28,
       },
       {
         id: "is-2",
         type: "circle",
-        width: 380,
-        height: 380,
-        top: "45%",
+        width: 370,
+        height: 370,
+        top: "42%",
         left: "60%",
-        color: "radial-gradient(circle, rgba(16, 185, 129, 0.25), rgba(20, 184, 166, 0.06))",
-        blur: "blur-3xl",
-        opacity: 0.3,
+        color: "radial-gradient(circle, rgba(16, 185, 129, 0.6), rgba(20, 184, 166, 0.3))",
+        blur: "blur-2xl",
         duration: 19,
-        floatDistance: 40,
-        parallaxFactor: -35,
+        floatX: -32,
+        floatY: -35,
+        parallaxMultiplier: -36,
       },
       {
         id: "is-3",
@@ -263,113 +263,113 @@ export const PROJECT_THEMES: Record<string, ProjectThemeConfig> = {
         width: 250,
         height: 250,
         top: "65%",
-        left: "20%",
-        color: "linear-gradient(45deg, rgba(20, 184, 166, 0.22), rgba(132, 204, 22, 0.1))",
-        blur: "blur-2xl",
-        opacity: 0.25,
+        left: "18%",
+        color: "linear-gradient(45deg, rgba(20, 184, 166, 0.5), rgba(132, 204, 22, 0.3))",
+        blur: "blur-xl",
         duration: 14,
-        floatDistance: 25,
-        parallaxFactor: 20,
+        floatX: 20,
+        floatY: 20,
+        parallaxMultiplier: 20,
       },
     ],
   },
 
   utilify: {
-    // Sky Blue, Royal Sapphire & Indigo (Multi-tool Utility)
+    // Sky Blue, Royal Sapphire & Indigo (Desktop Utility Toolkit)
     titleGradient: "from-sky-300 via-blue-400 to-indigo-400",
-    accentGlow: "rgba(56, 189, 248, 0.15)",
+    accentColor: "rgba(56, 189, 248, 0.5)",
     shapes: [
       {
         id: "ut-1",
         type: "circle",
         width: 360,
         height: 360,
-        top: "15%",
+        top: "12%",
         left: "60%",
-        color: "radial-gradient(circle, rgba(56, 189, 248, 0.28), rgba(37, 99, 235, 0.08))",
-        blur: "blur-3xl",
-        opacity: 0.35,
+        color: "radial-gradient(circle, rgba(56, 189, 248, 0.65), rgba(37, 99, 235, 0.3))",
+        blur: "blur-2xl",
         duration: 17,
-        floatDistance: 35,
-        parallaxFactor: -30,
+        floatX: -30,
+        floatY: 35,
+        parallaxMultiplier: -32,
       },
       {
         id: "ut-2",
         type: "diamond",
-        width: 320,
-        height: 320,
+        width: 310,
+        height: 310,
         top: "40%",
-        left: "10%",
-        color: "linear-gradient(135deg, rgba(37, 99, 235, 0.24), rgba(99, 102, 241, 0.1))",
-        blur: "blur-3xl",
-        opacity: 0.3,
+        left: "8%",
+        color: "linear-gradient(135deg, rgba(37, 99, 235, 0.6), rgba(99, 102, 241, 0.3))",
+        blur: "blur-xl",
         duration: 20,
-        floatDistance: 40,
-        parallaxFactor: 35,
+        floatX: 35,
+        floatY: -30,
+        parallaxMultiplier: 35,
       },
       {
         id: "ut-3",
         type: "pill",
-        width: 280,
+        width: 290,
         height: 170,
         top: "65%",
-        left: "45%",
-        color: "linear-gradient(45deg, rgba(99, 102, 241, 0.2), rgba(56, 189, 248, 0.12))",
-        blur: "blur-2xl",
-        opacity: 0.25,
+        left: "42%",
+        color: "linear-gradient(45deg, rgba(99, 102, 241, 0.5), rgba(56, 189, 248, 0.3))",
+        blur: "blur-xl",
         duration: 15,
-        floatDistance: 25,
-        parallaxFactor: -18,
+        floatX: -20,
+        floatY: 20,
+        parallaxMultiplier: -20,
       },
     ],
   },
 
   "projeto-rosa": {
-    // Neon Rose, Magenta & Purple (DirectML GRU Neural Network)
-    titleGradient: "from-rose-400 via-pink-400 to-purple-400",
-    accentGlow: "rgba(244, 63, 94, 0.15)",
+    // Neon Rose, Magenta & Crimson (DirectML GRU Neural Inference)
+    titleGradient: "from-rose-400 via-pink-400 to-fuchsia-400",
+    accentColor: "rgba(244, 63, 94, 0.5)",
     shapes: [
       {
         id: "pr-1",
         type: "circle",
         width: 380,
         height: 380,
-        top: "15%",
-        left: "10%",
-        color: "radial-gradient(circle, rgba(244, 63, 94, 0.3), rgba(236, 72, 153, 0.08))",
-        blur: "blur-3xl",
-        opacity: 0.35,
+        top: "12%",
+        left: "8%",
+        color: "radial-gradient(circle, rgba(244, 63, 94, 0.7), rgba(236, 72, 153, 0.35))",
+        blur: "blur-2xl",
         duration: 18,
-        floatDistance: 40,
-        parallaxFactor: 32,
+        floatX: 30,
+        floatY: 35,
+        parallaxMultiplier: 34,
       },
       {
         id: "pr-2",
-        type: "ring",
-        width: 340,
-        height: 340,
-        top: "45%",
-        left: "65%",
-        color: "radial-gradient(circle, rgba(168, 85, 247, 0.26), rgba(244, 63, 94, 0.06))",
-        blur: "blur-3xl",
-        opacity: 0.3,
+        type: "diamond",
+        width: 330,
+        height: 330,
+        top: "42%",
+        left: "62%",
+        color: "linear-gradient(135deg, rgba(217, 70, 239, 0.6), rgba(244, 63, 94, 0.3))",
+        blur: "blur-xl",
         duration: 20,
-        floatDistance: 45,
-        parallaxFactor: -36,
+        floatX: -35,
+        floatY: -35,
+        parallaxMultiplier: -38,
       },
       {
         id: "pr-3",
-        type: "diamond",
-        width: 250,
-        height: 250,
+        type: "pill",
+        width: 280,
+        height: 180,
         top: "65%",
-        left: "30%",
-        color: "linear-gradient(135deg, rgba(236, 72, 153, 0.22), rgba(168, 85, 247, 0.12))",
-        blur: "blur-2xl",
-        opacity: 0.25,
+        left: "28%",
+        color: "linear-gradient(45deg, rgba(236, 72, 153, 0.55), rgba(168, 85, 247, 0.3))",
+        blur: "blur-xl",
         duration: 15,
-        floatDistance: 25,
-        parallaxFactor: 20,
+        floatX: 20,
+        floatY: 20,
+        parallaxMultiplier: 22,
       },
     ],
   },
@@ -377,35 +377,35 @@ export const PROJECT_THEMES: Record<string, ProjectThemeConfig> = {
   "exo-webapi": {
     // Electric Purple to Cyan (Enterprise C# .NET Architecture)
     titleGradient: "from-purple-300 via-indigo-400 to-cyan-300",
-    accentGlow: "rgba(192, 132, 252, 0.15)",
+    accentColor: "rgba(192, 132, 252, 0.5)",
     shapes: [
       {
         id: "ew-1",
         type: "rect",
         width: 340,
-        height: 300,
-        top: "15%",
-        left: "60%",
-        color: "linear-gradient(135deg, rgba(192, 132, 252, 0.26), rgba(129, 140, 248, 0.12))",
-        blur: "blur-3xl",
-        opacity: 0.35,
+        height: 290,
+        top: "12%",
+        left: "62%",
+        color: "linear-gradient(135deg, rgba(192, 132, 252, 0.65), rgba(129, 140, 248, 0.35))",
+        blur: "blur-xl",
         duration: 17,
-        floatDistance: 30,
-        parallaxFactor: -28,
+        floatX: -26,
+        floatY: 30,
+        parallaxMultiplier: -30,
       },
       {
         id: "ew-2",
         type: "circle",
         width: 370,
         height: 370,
-        top: "40%",
-        left: "10%",
-        color: "radial-gradient(circle, rgba(103, 232, 249, 0.22), rgba(192, 132, 252, 0.05))",
-        blur: "blur-3xl",
-        opacity: 0.3,
+        top: "38%",
+        left: "8%",
+        color: "radial-gradient(circle, rgba(103, 232, 249, 0.6), rgba(192, 132, 252, 0.25))",
+        blur: "blur-2xl",
         duration: 19,
-        floatDistance: 38,
-        parallaxFactor: 34,
+        floatX: 32,
+        floatY: -35,
+        parallaxMultiplier: 36,
       },
       {
         id: "ew-3",
@@ -413,13 +413,13 @@ export const PROJECT_THEMES: Record<string, ProjectThemeConfig> = {
         width: 260,
         height: 260,
         top: "65%",
-        left: "45%",
-        color: "linear-gradient(45deg, rgba(129, 140, 248, 0.2), rgba(103, 232, 249, 0.1))",
-        blur: "blur-2xl",
-        opacity: 0.25,
+        left: "42%",
+        color: "linear-gradient(45deg, rgba(129, 140, 248, 0.55), rgba(103, 232, 249, 0.3))",
+        blur: "blur-xl",
         duration: 15,
-        floatDistance: 25,
-        parallaxFactor: -20,
+        floatX: -20,
+        floatY: 20,
+        parallaxMultiplier: -22,
       },
     ],
   },
@@ -430,23 +430,29 @@ const DEFAULT_THEME = PROJECT_THEMES["lymadhouse"];
 export interface ProjectAmbientBackgroundProps {
   slug: string;
   isFocused?: boolean;
+  mouseRelativeX?: number; // normalizado de -0.5 a 0.5
+  mouseRelativeY?: number; // normalizado de -0.5 a 0.5
 }
 
 export default function ProjectAmbientBackground({
   slug,
   isFocused = false,
+  mouseRelativeX = 0,
+  mouseRelativeY = 0,
 }: ProjectAmbientBackgroundProps) {
   const theme = PROJECT_THEMES[slug] || DEFAULT_THEME;
-  const containerRef = useRef<HTMLDivElement>(null);
 
-  // Coordenadas relativas do cursor (-0.5 a 0.5) para parallax suave
-  const mouseX = useMotionValue(0);
-  const mouseY = useMotionValue(0);
+  const rawX = useMotionValue(0);
+  const rawY = useMotionValue(0);
 
-  // Mola suave para amortecimento natural do movimento
-  const springConfig = { damping: 30, stiffness: 80, mass: 0.6 };
-  const smoothX = useSpring(mouseX, springConfig);
-  const smoothY = useSpring(mouseY, springConfig);
+  useEffect(() => {
+    rawX.set(mouseRelativeX);
+    rawY.set(mouseRelativeY);
+  }, [mouseRelativeX, mouseRelativeY, rawX, rawY]);
+
+  // Molas ultra-suaves para amortecer o movimento do cursor
+  const springX = useSpring(rawX, { damping: 25, stiffness: 60 });
+  const springY = useSpring(rawY, { damping: 25, stiffness: 60 });
 
   const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
 
@@ -458,36 +464,20 @@ export default function ProjectAmbientBackground({
     return () => mq.removeEventListener("change", handler);
   }, []);
 
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (prefersReducedMotion || !containerRef.current) return;
-    const rect = containerRef.current.getBoundingClientRect();
-    const x = (e.clientX - rect.left) / rect.width - 0.5;
-    const y = (e.clientY - rect.top) / rect.height - 0.5;
-    mouseX.set(x);
-    mouseY.set(y);
-  };
-
-  const handleMouseLeave = () => {
-    mouseX.set(0);
-    mouseY.set(0);
-  };
+  // Coordenadas normalizadas convertidas em percentuais para o spotlight interativo
+  const spotlightX = useTransform(springX, (val) => `${((val + 0.5) * 100).toFixed(1)}%`);
+  const spotlightY = useTransform(springY, (val) => `${((val + 0.5) * 100).toFixed(1)}%`);
 
   return (
     <div
-      ref={containerRef}
-      onMouseMove={handleMouseMove}
-      onMouseLeave={handleMouseLeave}
-      className="absolute inset-0 -z-10 pointer-events-auto overflow-hidden rounded-3xl"
+      className="absolute inset-0 pointer-events-none overflow-hidden rounded-3xl z-0"
       aria-hidden="true"
     >
-      {/* Placa de Vidro Fosco Escuro (Dark Frosted Glass) */}
-      <div className="absolute inset-0 bg-zinc-950/70 backdrop-blur-3xl border border-white/[0.04] rounded-3xl z-10 transition-colors duration-500" />
+      {/* 1. Base Plate: Dark Charcoal Foundation */}
+      <div className="absolute inset-0 bg-[#08080b]/85 rounded-3xl" />
 
-      {/* Vinheta escura nas bordas para blend perfeito com o fundo preto do site */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_40%,rgba(5,5,5,0.85)_100%)] z-20 pointer-events-none" />
-
-      {/* Camada das Formas Geométricas Translúcidas em Movimento Orgânico e Parallax Interativo */}
-      <div className="absolute inset-0 z-0">
+      {/* 2. Camada das Formas Geométricas Translúcidas em Movimento e Parallax */}
+      <div className="absolute inset-0 overflow-hidden rounded-3xl">
         {theme.shapes.map((shape) => {
           const borderRadiusClass =
             shape.type === "circle"
@@ -497,57 +487,114 @@ export default function ProjectAmbientBackground({
               : shape.type === "diamond"
               ? "rounded-3xl rotate-45"
               : shape.type === "hexagon"
-              ? "rounded-[2rem] rotate-12"
+              ? "rounded-[2.5rem] rotate-12"
               : "rounded-2xl rotate-6";
 
           return (
-            <motion.div
+            <ParallaxShape
               key={shape.id}
-              style={{
-                width: shape.width,
-                height: shape.height,
-                top: shape.top,
-                left: shape.left,
-                background: shape.color,
-                opacity: isFocused ? shape.opacity * 1.25 : shape.opacity,
-                x: prefersReducedMotion ? 0 : smoothX,
-                y: prefersReducedMotion ? 0 : smoothY,
-              }}
-              animate={
-                prefersReducedMotion
-                  ? {}
-                  : {
-                      x: [
-                        0,
-                        shape.floatDistance * 0.7,
-                        -shape.floatDistance * 0.5,
-                        0,
-                      ],
-                      y: [
-                        0,
-                        -shape.floatDistance,
-                        shape.floatDistance * 0.6,
-                        0,
-                      ],
-                      rotate:
-                        shape.type === "diamond"
-                          ? [45, 60, 30, 45]
-                          : shape.type === "rect"
-                          ? [6, 18, -6, 6]
-                          : [0, 20, -15, 0],
-                      scale: isFocused ? [1, 1.06, 0.96, 1] : 1,
-                    }
-              }
-              transition={{
-                repeat: Infinity,
-                duration: shape.duration,
-                ease: "easeInOut",
-              }}
-              className={`absolute pointer-events-none ${shape.blur} ${borderRadiusClass} transition-opacity duration-700`}
+              shape={shape}
+              springX={springX}
+              springY={springY}
+              borderRadiusClass={borderRadiusClass}
+              isFocused={isFocused}
+              prefersReducedMotion={prefersReducedMotion}
             />
           );
         })}
       </div>
+
+      {/* 3. Spotlight interativo do cursor que projeta uma aura sutil na cor tema do projeto */}
+      <motion.div
+        className="absolute inset-0 rounded-3xl transition-opacity duration-500"
+        style={{
+          background: useTransform(
+            [spotlightX, spotlightY],
+            ([x, y]) =>
+              `radial-gradient(550px circle at ${x} ${y}, ${theme.accentColor}, transparent 65%)`
+          ),
+          opacity: isFocused ? 0.75 : 0.4,
+        }}
+      />
+
+      {/* 4. Difusor de Vidro Fosco (Dark Frosted Glass Overlay) */}
+      <div className="absolute inset-0 backdrop-blur-md bg-black/20 border border-white/[0.08] rounded-3xl transition-colors duration-500" />
+
+      {/* 5. Vinheta suave nas bordas para integração com o fundo do site */}
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_55%,rgba(5,5,7,0.6)_100%)] rounded-3xl pointer-events-none" />
     </div>
+  );
+}
+
+// Subcomponente que separa o parallax do cursor da animação de flutuação contínua
+interface ParallaxShapeProps {
+  shape: ProjectThemeConfig["shapes"][0];
+  springX: MotionValue<number>;
+  springY: MotionValue<number>;
+  borderRadiusClass: string;
+  isFocused: boolean;
+  prefersReducedMotion: boolean;
+}
+
+function ParallaxShape({
+  shape,
+  springX,
+  springY,
+  borderRadiusClass,
+  isFocused,
+  prefersReducedMotion,
+}: ParallaxShapeProps) {
+  // Transforma o movimento da mola na translação de parallax correspondente ao fator da forma
+  const parallaxX = useTransform(
+    springX,
+    (val: number) => (prefersReducedMotion ? 0 : val * shape.parallaxMultiplier)
+  );
+  const parallaxY = useTransform(
+    springY,
+    (val: number) => (prefersReducedMotion ? 0 : val * shape.parallaxMultiplier)
+  );
+
+  return (
+    <motion.div
+      style={{
+        position: "absolute",
+        width: shape.width,
+        height: shape.height,
+        top: shape.top,
+        left: shape.left,
+        x: parallaxX,
+        y: parallaxY,
+      }}
+      className="pointer-events-none"
+    >
+      <motion.div
+        animate={
+          prefersReducedMotion
+            ? {}
+            : {
+                x: [0, shape.floatX, -shape.floatX * 0.7, 0],
+                y: [0, -shape.floatY, shape.floatY * 0.7, 0],
+                rotate:
+                  shape.type === "diamond"
+                    ? [45, 60, 30, 45]
+                    : shape.type === "rect"
+                    ? [6, 18, -6, 6]
+                    : [0, 20, -15, 0],
+                scale: isFocused ? [1, 1.06, 0.98, 1] : 1,
+              }
+        }
+        transition={{
+          repeat: Infinity,
+          duration: shape.duration,
+          ease: "easeInOut",
+        }}
+        style={{
+          background: shape.color,
+        }}
+        className={`w-full h-full ${shape.blur} ${borderRadiusClass} border border-white/10 transition-opacity duration-700 ${
+          isFocused ? "opacity-90" : "opacity-60"
+        }`}
+      />
+    </motion.div>
   );
 }
