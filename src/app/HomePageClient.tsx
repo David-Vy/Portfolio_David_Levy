@@ -4,6 +4,7 @@
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 import SocialIcons from "@/components/SocialIcons";
+import HeroSyntaxBackground from "@/components/HeroSyntaxBackground";
 import ProjectsSection from '@/components/ProjectsSection';
 import SkillsSection from '@/components/SkillsSection';
 import ProcessTimeline from '@/components/ProcessTimeline';
@@ -16,48 +17,53 @@ export default function HomePageClient() {
       {/* SEÇÃO HERO */}
       <section
         id="home"
-        className="relative min-h-[85vh] flex flex-col items-center justify-center text-center px-6 pt-32 pb-20 max-w-4xl mx-auto"
+        className="relative min-h-[85vh] flex flex-col items-center justify-center text-center px-6 pt-32 pb-20 w-full overflow-hidden"
       >
-        <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-          className="flex flex-col items-center"
-        >
-          <h1 className="text-5xl sm:text-7xl md:text-8xl font-semibold tracking-tight text-white leading-none">
-            David Levy
-          </h1>
+        {/* Fundo Interativo: Queda Física de Símbolos de Sintaxe & Sedimentação */}
+        <HeroSyntaxBackground />
 
-          <p className="mt-6 text-xl sm:text-2xl text-zinc-300 font-normal tracking-tight">
-            Engenheiro de Software & Desenvolvedor Full-Stack
-          </p>
+        <div className="relative z-10 max-w-4xl mx-auto flex flex-col items-center">
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+            className="flex flex-col items-center"
+          >
+            <h1 className="text-5xl sm:text-7xl md:text-8xl font-semibold tracking-tight text-white leading-none">
+              David Levy
+            </h1>
 
-          <p className="mt-5 max-w-2xl text-zinc-400 text-base sm:text-lg leading-relaxed font-normal">
-            Desenvolvendo aplicações web e desktop de alto desempenho, arquiteturas distribuídas e ecossistemas escaláveis com foco em código limpo, microsserviços e engenharia moderna.
-          </p>
+            <p className="mt-6 text-xl sm:text-2xl text-zinc-300 font-normal tracking-tight">
+              Engenheiro de Software & Desenvolvedor Full-Stack
+            </p>
 
-          {/* Ações Rápidas */}
-          <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
-            <a
-              href="#projetos"
-              className="pill-button pill-button-primary px-6 py-3 text-sm"
-            >
-              Explorar Projetos
-            </a>
+            <p className="mt-5 max-w-2xl text-zinc-400 text-base sm:text-lg leading-relaxed font-normal">
+              Desenvolvendo aplicações web e desktop de alto desempenho, arquiteturas distribuídas e ecossistemas escaláveis com foco em código limpo, microsserviços e engenharia moderna.
+            </p>
 
-            <Link
-              href="/chat"
-              className="pill-button px-6 py-3 text-sm text-zinc-300 hover:text-white"
-            >
-              Chat em Tempo Real
-            </Link>
-          </div>
+            {/* Ações Rápidas */}
+            <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
+              <a
+                href="#projetos"
+                className="pill-button pill-button-primary px-6 py-3 text-sm"
+              >
+                Explorar Projetos
+              </a>
 
-          {/* Redes Sociais */}
-          <div className="mt-10">
-            <SocialIcons />
-          </div>
-        </motion.div>
+              <Link
+                href="/chat"
+                className="pill-button px-6 py-3 text-sm text-zinc-300 hover:text-white"
+              >
+                Chat em Tempo Real
+              </Link>
+            </div>
+
+            {/* Redes Sociais */}
+            <div className="mt-10">
+              <SocialIcons />
+            </div>
+          </motion.div>
+        </div>
       </section>
 
       {/* SEÇÃO STATEMENT (MANIFESTO EDITORIAL) */}
