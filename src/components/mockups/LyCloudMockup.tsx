@@ -9,7 +9,6 @@ import {
   HardDrive,
   Activity,
   Layers,
-  Zap,
   CheckCircle2,
   RefreshCw,
 } from "lucide-react";

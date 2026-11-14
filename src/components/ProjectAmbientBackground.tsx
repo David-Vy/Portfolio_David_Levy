@@ -436,7 +436,7 @@ export interface ProjectAmbientBackgroundProps {
 
 export default function ProjectAmbientBackground({
   slug,
-  isFocused = false,
+  isFocused: _isFocused = false,
   mouseRelativeX = 0,
   mouseRelativeY = 0,
 }: ProjectAmbientBackgroundProps) {
@@ -497,7 +497,6 @@ export default function ProjectAmbientBackground({
               springX={springX}
               springY={springY}
               borderRadiusClass={borderRadiusClass}
-              isFocused={isFocused}
               prefersReducedMotion={prefersReducedMotion}
             />
           );
@@ -513,7 +512,7 @@ export default function ProjectAmbientBackground({
             ([x, y]) =>
               `radial-gradient(550px circle at ${x} ${y}, ${theme.accentColor}, transparent 65%)`
           ),
-          opacity: isFocused ? 0.75 : 0.4,
+          opacity: 0.6,
         }}
       />
 
@@ -532,7 +531,6 @@ interface ParallaxShapeProps {
   springX: MotionValue<number>;
   springY: MotionValue<number>;
   borderRadiusClass: string;
-  isFocused: boolean;
   prefersReducedMotion: boolean;
 }
 
@@ -541,7 +539,6 @@ function ParallaxShape({
   springX,
   springY,
   borderRadiusClass,
-  isFocused,
   prefersReducedMotion,
 }: ParallaxShapeProps) {
   // Transforma o movimento da mola na translação de parallax correspondente ao fator da forma
@@ -580,7 +577,6 @@ function ParallaxShape({
                     : shape.type === "rect"
                     ? [6, 18, -6, 6]
                     : [0, 20, -15, 0],
-                scale: isFocused ? [1, 1.06, 0.98, 1] : 1,
               }
         }
         transition={{
@@ -591,9 +587,7 @@ function ParallaxShape({
         style={{
           background: shape.color,
         }}
-        className={`w-full h-full ${shape.blur} ${borderRadiusClass} border border-white/10 transition-opacity duration-700 ${
-          isFocused ? "opacity-90" : "opacity-60"
-        }`}
+        className={`w-full h-full ${shape.blur} ${borderRadiusClass} border border-white/10 opacity-75`}
       />
     </motion.div>
   );

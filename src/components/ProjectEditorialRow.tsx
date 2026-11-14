@@ -56,8 +56,10 @@ export default function ProjectEditorialRow({ project, index, isFocused = false 
       transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
-      className={`relative py-12 md:py-20 px-6 sm:px-8 lg:px-12 my-6 sm:my-8 rounded-3xl min-h-[70vh] md:min-h-[82vh] flex items-center justify-center transition-all duration-500 border border-white/[0.08] shadow-2xl ${
-        isFocused ? "opacity-100 ring-1 ring-white/10" : "opacity-80 hover:opacity-100"
+      className={`relative py-12 md:py-20 px-6 sm:px-8 lg:px-12 my-6 sm:my-8 rounded-3xl min-h-[70vh] md:min-h-[82vh] flex items-center justify-center transition-[border-color,box-shadow,ring-color] duration-300 border shadow-2xl opacity-100 ${
+        isFocused
+          ? "border-white/20 ring-1 ring-white/15 shadow-[0_8px_40px_rgba(0,0,0,0.6)]"
+          : "border-white/[0.08] hover:border-white/20"
       }`}
     >
       {/* Fundo de Vidro Fosco Escuro com Formas Geométricas em Movimento & Interatividade Dinâmica */}
