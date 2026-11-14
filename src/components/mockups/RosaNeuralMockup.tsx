@@ -3,7 +3,7 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Sparkles, Heart, User } from "lucide-react";
+import { Sparkles, User } from "lucide-react";
 import { ROSA_DIALOGUES, RosaDialogue } from "@/lib/rosa-dialogues";
 
 interface ChatMessage {
@@ -11,6 +11,27 @@ interface ChatMessage {
   sender: "user" | "rosa";
   text: string;
   isStreaming?: boolean;
+}
+
+/**
+ * Ícone de Coração com geometria equilibrada e centralização óptica milimétrica
+ * no viewBox 24x24 (margens uniformes de 2px nas laterais e 2.6px verticalmente).
+ */
+function RosaAvatarHeart({ className = "w-3.5 h-3.5" }: { className?: string }) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="rgba(244, 63, 94, 0.45)"
+      stroke="#fda4af"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={className}
+      aria-hidden="true"
+    >
+      <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+    </svg>
+  );
 }
 
 export default function RosaNeuralMockup() {
@@ -154,7 +175,7 @@ export default function RosaNeuralMockup() {
 
   return (
     <div className="w-full h-full flex flex-col bg-zinc-950/90 border border-white/[0.08] rounded-2xl overflow-hidden shadow-2xl relative select-none">
-      {/* 1. Área Central de Conversação Fluida (Cabeçalho removido para layout minimalista e imersivo) */}
+      {/* 1. Área Central de Conversação Fluida */}
       <div
         ref={chatContainerRef}
         className="flex-1 p-5 sm:p-6 overflow-y-auto space-y-4 scroll-smooth"
@@ -170,10 +191,10 @@ export default function RosaNeuralMockup() {
                 msg.sender === "user" ? "justify-end" : "justify-start"
               }`}
             >
-              {/* Avatar da Rosa: Ícone de Coração com Alinhamento Óptico Perfeito */}
+              {/* Avatar da Rosa: Ícone de Coração Centralizado com Precisão Óptica */}
               {msg.sender === "rosa" && (
                 <div className="w-7 h-7 rounded-full bg-rose-950/60 border border-rose-500/30 flex items-center justify-center shrink-0 mt-0.5 text-rose-300 shadow-sm">
-                  <Heart className="w-3.5 h-3.5 fill-rose-400/40 text-rose-300 translate-y-[1.5px]" />
+                  <RosaAvatarHeart />
                 </div>
               )}
 
@@ -209,7 +230,7 @@ export default function RosaNeuralMockup() {
               className="flex items-start gap-3 justify-start"
             >
               <div className="w-7 h-7 rounded-full bg-rose-950/60 border border-rose-500/30 flex items-center justify-center shrink-0 text-rose-300">
-                <Heart className="w-3.5 h-3.5 fill-rose-400/40 text-rose-300 translate-y-[1.5px] animate-pulse" />
+                <RosaAvatarHeart className="w-3.5 h-3.5 animate-pulse" />
               </div>
               <div className="bg-rose-950/20 border border-rose-500/20 rounded-2xl rounded-tl-sm px-4 py-3 flex items-center gap-1.5">
                 <motion.span
@@ -242,7 +263,7 @@ export default function RosaNeuralMockup() {
               className="flex items-start gap-3 justify-start"
             >
               <div className="w-7 h-7 rounded-full bg-rose-950/60 border border-rose-500/30 flex items-center justify-center shrink-0 text-rose-300">
-                <Heart className="w-3.5 h-3.5 fill-rose-400/40 text-rose-300 translate-y-[1.5px]" />
+                <RosaAvatarHeart />
               </div>
               <div className="max-w-[85%] sm:max-w-[80%] bg-rose-950/25 border border-rose-500/25 text-rose-50 rounded-2xl rounded-tl-sm px-4 py-2.5 text-xs sm:text-sm leading-relaxed backdrop-blur-md shadow-[0_4px_24px_rgba(244,63,94,0.08)]">
                 <div className="flex items-center gap-1.5 mb-1 opacity-70 text-[10px] font-mono text-rose-300">
@@ -266,7 +287,7 @@ export default function RosaNeuralMockup() {
           <span className="truncate">Rosa conversa com você através do modelo DirectML GRU...</span>
         </div>
         <div className="w-8 h-8 rounded-xl bg-rose-500/10 border border-rose-500/20 text-rose-400 flex items-center justify-center shrink-0">
-          <Heart className="w-4 h-4 fill-rose-500/20 translate-y-[1px]" />
+          <RosaAvatarHeart className="w-4 h-4" />
         </div>
       </footer>
     </div>
