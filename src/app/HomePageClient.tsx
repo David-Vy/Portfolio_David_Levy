@@ -2,7 +2,6 @@
 "use client";
 
 import { motion } from 'framer-motion';
-import Link from 'next/link';
 import SocialIcons from "@/components/SocialIcons";
 import HeroSyntaxBackground from "@/components/HeroSyntaxBackground";
 import ProjectsSection from '@/components/ProjectsSection';
@@ -50,12 +49,12 @@ export default function HomePageClient() {
                 Explorar Projetos
               </a>
 
-              <Link
-                href="/chat"
+              <a
+                href="#contato"
                 className="pill-button px-6 py-3 text-sm text-zinc-300 hover:text-white"
               >
-                Chat em Tempo Real
-              </Link>
+                Entrar em Contato
+              </a>
             </div>
 
             {/* Redes Sociais */}

@@ -119,11 +119,11 @@ export default function Header() {
 
             <div className="flex flex-col gap-3 pt-6 border-t border-white/[0.06]">
               <Link
-                href="/chat"
+                href="/#contato"
                 onClick={() => setMobileMenuOpen(false)}
                 className="w-full py-3 rounded-full text-center text-sm font-medium bg-white text-black hover:bg-zinc-200 transition-colors"
               >
-                Chat em Tempo Real
+                Contato
               </Link>
             </div>
           </motion.div>

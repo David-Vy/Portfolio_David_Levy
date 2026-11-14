@@ -2,8 +2,7 @@
 "use client";
 
 import { motion } from 'framer-motion';
-import Link from 'next/link';
-import { MessageSquare, Mail, Github, Linkedin } from 'lucide-react';
+import { Mail, Github, Linkedin } from 'lucide-react';
 
 export default function ContactSection() {
   return (
@@ -20,7 +19,7 @@ export default function ContactSection() {
         </h2>
 
         <p className="text-zinc-400 text-base sm:text-lg max-w-2xl mx-auto leading-relaxed font-normal mb-10">
-          Estou aberto a oportunidades de estágio e nível júnior em Engenharia de Software, sistemas distribuídos e desenvolvimento Full-Stack. Sinta-se à vontade para me contatar por e-mail, chat ou pelas redes profissionais.
+          Estou aberto a oportunidades de estágio e nível júnior em Engenharia de Software, sistemas distribuídos e desenvolvimento Full-Stack. Sinta-se à vontade para me contatar diretamente por e-mail ou pelas redes profissionais.
         </p>
 
         {/* Ações Principais */}
@@ -33,13 +32,15 @@ export default function ContactSection() {
             <span>david.vyf@gmail.com</span>
           </a>
 
-          <Link
-            href="/chat"
+          <a
+            href="https://www.linkedin.com/in/david-levy-dev"
+            target="_blank"
+            rel="noopener noreferrer"
             className="pill-button px-6 py-3 text-sm text-zinc-300 hover:text-white"
           >
-            <MessageSquare className="w-4 h-4" />
-            <span>Chat em Tempo Real</span>
-          </Link>
+            <Linkedin className="w-4 h-4" />
+            <span>Conectar no LinkedIn</span>
+          </a>
         </div>
 
         {/* Links Profissionais Diretos */}

@@ -47,6 +47,23 @@ export default function ProjectsSection() {
     }, 700);
   }, []);
 
+  // Se o usuário veio de um retorno de projeto (ex: #projeto-lycloud-server), posiciona diretamente nele
+  useEffect(() => {
+    if (typeof window !== "undefined" && window.location.hash) {
+      const rawHash = window.location.hash.replace("#", "");
+      const cleanSlug = rawHash.replace(/^projeto-/, "");
+      const targetIndex = projectsData.findIndex(
+        (p) => p.slug === cleanSlug || p.slug === rawHash
+      );
+      if (targetIndex !== -1) {
+        const timer = setTimeout(() => {
+          scrollToProject(targetIndex);
+        }, 150);
+        return () => clearTimeout(timer);
+      }
+    }
+  }, [scrollToProject]);
+
   // Monitorar rolagem livre para identificar qual projeto a câmera está enquadrando
   useEffect(() => {
     let ticking = false;
@@ -305,6 +322,7 @@ export default function ProjectsSection() {
         {projectsData.map((project, index) => (
           <div
             key={project.slug}
+            id={`projeto-${project.slug}`}
             ref={(el) => {
               rowRefs.current[index] = el;
             }}

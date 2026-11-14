@@ -1,14 +1,13 @@
 // src/components/NextPageZone.tsx
 "use client";
 
-import Link from "next/link";
-import { ArrowUpRight, MessageSquare } from "lucide-react";
+import { ArrowUpRight, Mail } from "lucide-react";
 
 export default function NextPageZone() {
   return (
     <section className="relative w-full border-t border-white/[0.06] overflow-hidden bg-zinc-950/30">
-      <Link
-        href="/chat"
+      <a
+        href="mailto:david.vyf@gmail.com"
         className="group relative block w-full py-20 sm:py-28 px-6 md:px-12 max-w-7xl mx-auto transition-all duration-700"
       >
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-8 relative z-10">
@@ -35,8 +34,8 @@ export default function NextPageZone() {
             </span>
 
             <div className="pill-button pill-button-primary px-8 py-4 text-base font-semibold group-hover:shadow-[0_0_35px_rgba(255,255,255,0.3)] transition-all duration-500">
-              <MessageSquare className="w-4 h-4" />
-              <span>Iniciar Chat</span>
+              <Mail className="w-4 h-4" />
+              <span>Enviar Mensagem</span>
               <ArrowUpRight className="w-4 h-4 transition-transform duration-500 group-hover:translate-x-1 group-hover:-translate-y-1" />
             </div>
           </div>
@@ -44,7 +43,7 @@ export default function NextPageZone() {
 
         {/* Linha luminosa interativa inferior no hover estilo Studio Mirage */}
         <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-white/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 blur-[0.5px]" />
-      </Link>
+      </a>
     </section>
   );
 }

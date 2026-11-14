@@ -114,7 +114,7 @@ export default function ProjectPageClient({ project }: { project: Project }) {
       {/* Botão Voltar */}
       <div className="mb-10">
         <Link
-          href="/#projetos"
+          href={`/#projeto-${project.slug}`}
           className="inline-flex items-center gap-2 text-xs font-mono uppercase tracking-wider text-zinc-400 hover:text-white transition-colors py-2 px-4 rounded-full border border-white/10 bg-white/[0.03] hover:bg-white/[0.08]"
         >
           <ArrowLeft size={14} />
