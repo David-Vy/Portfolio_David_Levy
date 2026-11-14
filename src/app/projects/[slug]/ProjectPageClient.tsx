@@ -15,6 +15,7 @@ import {
   Code2
 } from "lucide-react";
 import ProjectMediaGallery from "@/components/ProjectMediaGallery";
+import { PROJECT_THEMES } from "@/components/ProjectAmbientBackground";
 import LyCloudMockup from "@/components/mockups/LyCloudMockup";
 import RosaNeuralMockup from "@/components/mockups/RosaNeuralMockup";
 
@@ -22,6 +23,7 @@ export default function ProjectPageClient({ project }: { project: Project }) {
   const hasLongDescription = project.longDescriptionHtml && project.longDescriptionHtml.length > 0;
   const hasLinks = project.githubUrl || project.liveUrl || project.downloadUrl;
   const hasMultipleImages = Boolean(project.images && project.images.length > 1);
+  const theme = PROJECT_THEMES[project.slug] || PROJECT_THEMES["lymadhouse"];
 
   // Renderizador Inteligente de Mídia / Mockup / Fallback
   const renderProjectMedia = () => {
@@ -116,8 +118,10 @@ export default function ProjectPageClient({ project }: { project: Project }) {
           {project.category}
         </span>
 
-        <h1 className="text-4xl sm:text-6xl md:text-7xl font-semibold tracking-tight text-white mb-6">
-          {project.title}
+        <h1 className="text-4xl sm:text-6xl md:text-7xl font-bold tracking-tight mb-6">
+          <span className={`bg-gradient-to-r ${theme.titleGradient} bg-clip-text text-transparent`}>
+            {project.title}
+          </span>
         </h1>
 
         <p className="text-lg sm:text-xl text-zinc-400 max-w-3xl leading-relaxed font-normal">
