@@ -3,7 +3,7 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Sparkles, Heart, Bot, User, Clock } from "lucide-react";
+import { Sparkles, Heart, User } from "lucide-react";
 import { ROSA_DIALOGUES, RosaDialogue } from "@/lib/rosa-dialogues";
 
 interface ChatMessage {
@@ -17,8 +17,6 @@ export default function RosaNeuralMockup() {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [isThinking, setIsThinking] = useState(false);
   const [streamingText, setStreamingText] = useState("");
-  const [currentDialogueIndex, setCurrentDialogueIndex] = useState<number>(0);
-  const [countdown, setCountdown] = useState<number | null>(null);
 
   const chatContainerRef = useRef<HTMLDivElement>(null);
   const usedIndicesRef = useRef<number[]>([]);
@@ -68,7 +66,6 @@ export default function RosaNeuralMockup() {
       if (!isMountedRef.current) return;
 
       const dialogue = getNextDialogue();
-      setCurrentDialogueIndex(dialogue.id);
 
       // 1. Pessoa envia a mensagem
       const userMsgId = `user-${Date.now()}`;
@@ -114,9 +111,8 @@ export default function RosaNeuralMockup() {
                 { id: rosaMsgId, sender: "rosa", text: fullResponse },
               ]);
 
-              // 4. Inicia contagem regressiva de exatamente 5 segundos após a Rosa responder
+              // 4. Aguarda exatamente 5 segundos após a Rosa responder para iniciar o próximo ciclo
               let secondsLeft = 5;
-              setCountdown(secondsLeft);
 
               countdownInterval = setInterval(() => {
                 if (!isMountedRef.current) {
@@ -124,11 +120,8 @@ export default function RosaNeuralMockup() {
                   return;
                 }
                 secondsLeft -= 1;
-                if (secondsLeft > 0) {
-                  setCountdown(secondsLeft);
-                } else {
+                if (secondsLeft <= 0) {
                   if (countdownInterval) clearInterval(countdownInterval);
-                  setCountdown(null);
                   runCycle(); // Próximo ciclo!
                 }
               }, 1000);
@@ -161,60 +154,10 @@ export default function RosaNeuralMockup() {
 
   return (
     <div className="w-full h-full flex flex-col bg-zinc-950/90 border border-white/[0.08] rounded-2xl overflow-hidden shadow-2xl relative select-none">
-      {/* 1. Header Minimalista do Chat com Identidade da Rosa */}
-      <header className="px-5 py-3.5 border-b border-white/[0.06] bg-zinc-900/40 backdrop-blur-md flex items-center justify-between shrink-0">
-        <div className="flex items-center gap-3">
-          {/* Avatar Animado com Pulso Suave */}
-          <div className="relative">
-            <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-rose-600 via-pink-500 to-rose-400 flex items-center justify-center text-white shadow-[0_0_12px_rgba(244,63,94,0.4)]">
-              <Bot className="w-4 h-4" />
-            </div>
-            <span className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-rose-500 border-2 border-zinc-950 ring-1 ring-rose-400/50 animate-pulse" />
-          </div>
-
-          <div>
-            <div className="flex items-center gap-2">
-              <h4 className="text-sm font-semibold text-white tracking-tight flex items-center gap-1.5">
-                <span>Rosa Neural</span>
-                <Heart className="w-3 h-3 text-rose-400 fill-rose-400/30 inline-block animate-pulse" />
-              </h4>
-              <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-rose-500/10 text-rose-300 border border-rose-500/20">
-                v3.2 DirectML
-              </span>
-            </div>
-            <p className="text-[11px] text-zinc-400 font-mono flex items-center gap-1.5">
-              <span className="w-1.5 h-1.5 rounded-full bg-rose-400" />
-              <span>meiga, dócil & expressiva</span>
-            </p>
-          </div>
-        </div>
-
-        {/* Status de Próxima Mensagem & Telemetria */}
-        <div className="flex items-center gap-2 font-mono text-[11px] text-zinc-400">
-          {countdown !== null ? (
-            <motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-rose-950/40 border border-rose-500/20 text-rose-300"
-            >
-              <Clock className="w-3 h-3 text-rose-400 animate-spin" />
-              <span>próxima pergunta em {countdown}s</span>
-            </motion.div>
-          ) : isThinking ? (
-            <span className="text-rose-400 flex items-center gap-1">
-              <Sparkles className="w-3 h-3 animate-spin" />
-              processando emoção...
-            </span>
-          ) : (
-            <span className="text-zinc-500 hidden sm:inline-block">diálogo #{currentDialogueIndex || 1}</span>
-          )}
-        </div>
-      </header>
-
-      {/* 2. Área Central de Conversação Fluida */}
+      {/* 1. Área Central de Conversação Fluida (Cabeçalho removido para layout minimalista e imersivo) */}
       <div
         ref={chatContainerRef}
-        className="flex-1 p-4 sm:p-5 overflow-y-auto space-y-4 scroll-smooth"
+        className="flex-1 p-5 sm:p-6 overflow-y-auto space-y-4 scroll-smooth"
       >
         <AnimatePresence initial={false}>
           {messages.map((msg) => (
@@ -227,10 +170,10 @@ export default function RosaNeuralMockup() {
                 msg.sender === "user" ? "justify-end" : "justify-start"
               }`}
             >
-              {/* Avatar da Rosa */}
+              {/* Avatar da Rosa: Ícone de Coração Carinhoso */}
               {msg.sender === "rosa" && (
                 <div className="w-7 h-7 rounded-full bg-rose-950/60 border border-rose-500/30 flex items-center justify-center shrink-0 mt-0.5 text-rose-300 shadow-sm">
-                  <Bot className="w-3.5 h-3.5" />
+                  <Heart className="w-3.5 h-3.5 fill-rose-400/40 text-rose-300" />
                 </div>
               )}
 
@@ -266,7 +209,7 @@ export default function RosaNeuralMockup() {
               className="flex items-start gap-3 justify-start"
             >
               <div className="w-7 h-7 rounded-full bg-rose-950/60 border border-rose-500/30 flex items-center justify-center shrink-0 text-rose-300">
-                <Bot className="w-3.5 h-3.5" />
+                <Heart className="w-3.5 h-3.5 fill-rose-400/40 text-rose-300 animate-pulse" />
               </div>
               <div className="bg-rose-950/20 border border-rose-500/20 rounded-2xl rounded-tl-sm px-4 py-3 flex items-center gap-1.5">
                 <motion.span
@@ -299,7 +242,7 @@ export default function RosaNeuralMockup() {
               className="flex items-start gap-3 justify-start"
             >
               <div className="w-7 h-7 rounded-full bg-rose-950/60 border border-rose-500/30 flex items-center justify-center shrink-0 text-rose-300">
-                <Bot className="w-3.5 h-3.5" />
+                <Heart className="w-3.5 h-3.5 fill-rose-400/40 text-rose-300" />
               </div>
               <div className="max-w-[85%] sm:max-w-[80%] bg-rose-950/25 border border-rose-500/25 text-rose-50 rounded-2xl rounded-tl-sm px-4 py-2.5 text-xs sm:text-sm leading-relaxed backdrop-blur-md shadow-[0_4px_24px_rgba(244,63,94,0.08)]">
                 <div className="flex items-center gap-1.5 mb-1 opacity-70 text-[10px] font-mono text-rose-300">
@@ -316,7 +259,7 @@ export default function RosaNeuralMockup() {
         </AnimatePresence>
       </div>
 
-      {/* 3. Rodapé Minimalista Simulando a Interface de Envio */}
+      {/* 2. Rodapé Minimalista Simulando a Interface de Envio */}
       <footer className="p-3.5 bg-zinc-950/90 border-t border-white/[0.06] flex items-center gap-3 shrink-0">
         <div className="flex-1 flex items-center gap-2.5 px-3.5 py-2 rounded-xl bg-white/[0.03] border border-white/[0.08] text-xs text-zinc-400">
           <Sparkles className="w-3.5 h-3.5 text-rose-400 shrink-0" />
