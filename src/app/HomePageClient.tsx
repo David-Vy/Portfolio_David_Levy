@@ -4,6 +4,7 @@
 import { motion } from 'framer-motion';
 import SocialIcons from "@/components/SocialIcons";
 import HeroSyntaxBackground from "@/components/HeroSyntaxBackground";
+import GalaxySpaceBackground from "@/components/GalaxySpaceBackground";
 import ProjectsSection from '@/components/ProjectsSection';
 import SkillsSection from '@/components/SkillsSection';
 import ProcessTimeline from '@/components/ProcessTimeline';
@@ -66,8 +67,11 @@ export default function HomePageClient() {
       </section>
 
       {/* SEÇÃO STATEMENT (MANIFESTO EDITORIAL) */}
-      <section id="statement" className="relative py-24 md:py-32 border-t border-white/[0.06]">
-        <div className="max-w-4xl mx-auto px-6 md:px-10">
+      <section id="statement" className="relative py-24 md:py-32 border-t border-b border-white/[0.06] overflow-hidden">
+        {/* Fundo Cósmico Animado: Galáxia, Estrelas Cintilantes, Nebulosas e Meteoros */}
+        <GalaxySpaceBackground />
+
+        <div className="relative z-10 max-w-4xl mx-auto px-6 md:px-10">
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}

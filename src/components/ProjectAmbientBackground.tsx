@@ -436,7 +436,6 @@ export interface ProjectAmbientBackgroundProps {
 
 export default function ProjectAmbientBackground({
   slug,
-  isFocused: _isFocused = false,
   mouseRelativeX = 0,
   mouseRelativeY = 0,
 }: ProjectAmbientBackgroundProps) {
