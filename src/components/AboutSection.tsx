@@ -5,6 +5,7 @@ import React from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { Award, Globe2, CheckCircle2 } from "lucide-react";
+import SolarSystemBackground from "@/components/SolarSystemBackground";
 
 // SVGs das Bandeiras Nacionais com precisão óptica e proporção equilibrada
 function BrazilFlag() {
@@ -138,8 +139,12 @@ export default function AboutSection() {
   ];
 
   return (
-    <section id="sobre" className="relative py-24 md:py-32 px-6 md:px-10 max-w-7xl mx-auto border-t border-white/[0.06]">
-      {/* Cabeçalho Editorial */}
+    <section id="sobre" className="relative py-24 md:py-32 border-t border-white/[0.06] overflow-hidden">
+      {/* Fundo Dinâmico Cósmico: Sistema Solar Minimalista & Interativo */}
+      <SolarSystemBackground />
+
+      <div className="relative z-10 px-6 md:px-10 max-w-7xl mx-auto">
+        {/* Cabeçalho Editorial */}
       <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6">
         <div>
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-semibold tracking-tight text-white">
@@ -317,6 +322,7 @@ export default function AboutSection() {
             </div>
           </div>
         </motion.div>
+      </div>
       </div>
     </section>
   );
