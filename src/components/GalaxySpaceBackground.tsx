@@ -10,9 +10,7 @@ interface Star {
   twinkleSpeed: number;
   twinklePhase: number;
   color: string;
-  hasSpikes: boolean;
-  spikeLength: number;
-  layer: 1 | 2 | 3; // 1: micro fundo distante, 2: intermediária, 3: estrela proeminente de primeiro plano
+  isBrightPoint: boolean;
 }
 
 interface Stardust {
@@ -21,7 +19,6 @@ interface Stardust {
   radius: number;
   alpha: number;
   speed: number;
-  color: string;
 }
 
 interface ShootingStar {
@@ -34,15 +31,6 @@ interface ShootingStar {
   width: number;
   active: boolean;
   decay: number;
-}
-
-interface NebulaCloud {
-  xRatio: number;
-  yRatio: number;
-  baseRadius: number;
-  pulseSpeed: number;
-  pulsePhase: number;
-  colors: [string, string, string];
 }
 
 export default function GalaxySpaceBackground() {
@@ -62,86 +50,28 @@ export default function GalaxySpaceBackground() {
     let width = 0;
     let height = 0;
 
-    // Respeito a acessibilidade de movimento reduzido
+    // Respeito à preferência de acessibilidade
     const prefersReducedMotion =
       typeof window !== "undefined" &&
       window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-    // Estruturas de dados dos corpos celestes
+    // Estruturas dos corpos celestes monocromáticos
     let stars: Star[] = [];
     let stardust: Stardust[] = [];
     let shootingStar: ShootingStar | null = null;
     let nextShootingStarTime = Date.now() + 2000;
 
-    // Nebulosas cósmicas volumétricas inspiradas em telescópios espaciais (Hubble / James Webb)
-    const nebulae: NebulaCloud[] = [
-      {
-        // Núcleo galáctico ultravioleta e púrpura cósmico
-        xRatio: 0.52,
-        yRatio: 0.48,
-        baseRadius: 0.62,
-        pulseSpeed: 0.0005,
-        pulsePhase: 0,
-        colors: [
-          "rgba(139, 92, 246, 0.20)",
-          "rgba(76, 29, 149, 0.08)",
-          "rgba(8, 4, 20, 0)",
-        ],
-      },
-      {
-        // Nuvem estelar de Carina / Ciano estelar
-        xRatio: 0.20,
-        yRatio: 0.38,
-        baseRadius: 0.52,
-        pulseSpeed: 0.0007,
-        pulsePhase: 1.8,
-        colors: [
-          "rgba(6, 182, 212, 0.16)",
-          "rgba(14, 116, 144, 0.06)",
-          "rgba(2, 6, 23, 0)",
-        ],
-      },
-      {
-        // Filamento estelar magenta e rubi profundo
-        xRatio: 0.82,
-        yRatio: 0.58,
-        baseRadius: 0.55,
-        pulseSpeed: 0.0006,
-        pulsePhase: 3.5,
-        colors: [
-          "rgba(236, 72, 153, 0.15)",
-          "rgba(157, 23, 77, 0.05)",
-          "rgba(15, 3, 14, 0)",
-        ],
-      },
-      {
-        // Abismo azul safira interestelar
-        xRatio: 0.38,
-        yRatio: 0.72,
-        baseRadius: 0.48,
-        pulseSpeed: 0.0008,
-        pulsePhase: 4.9,
-        colors: [
-          "rgba(59, 130, 246, 0.14)",
-          "rgba(29, 78, 216, 0.04)",
-          "rgba(2, 6, 23, 0)",
-        ],
-      },
+    // Paleta estritamente monocromática (brancos puros e prateados suaves)
+    const monochromePalette = [
+      "255, 255, 255", // Branco puro
+      "245, 245, 250", // Branco estelar sutil
+      "230, 230, 238", // Prateado claro
+      "205, 205, 215", // Prata suave
+      "180, 180, 195", // Cinza cósmico discreto
     ];
 
-    // Cores espectrais autênticas de estrelas astronômicas (RGB)
-    const starColorPalette = [
-      "220, 238, 255", // Classe B/A: Azul-branco brilhante (Sirius / Vega)
-      "255, 255, 255", // Classe A: Branco puro estelar
-      "255, 244, 214", // Classe F: Branco quente
-      "255, 222, 153", // Classe G: Âmbar solar dourado (Sol / Capella)
-      "255, 192, 170", // Classe M: Rubi estelar suave (Betelgeuse)
-      "175, 215, 255", // Classe O: Azul profundo de alta energia
-      "224, 231, 255", // Diamante estelar levemente violeta
-    ];
-
-    // Ângulo do braço da galáxia (diagonal majestosa de ~ -20 graus)
-    const galaxyAngle = -0.35;
+    // Ângulo natural do disco de poeira cósmica (~ -22 graus)
+    const galaxyAngle = -0.38;
     const cosA = Math.cos(galaxyAngle);
     const sinA = Math.sin(galaxyAngle);
 
@@ -164,60 +94,51 @@ export default function GalaxySpaceBackground() {
 
     const initSpace = () => {
       const isMobile = width < 768;
-      const starCount = isMobile ? 220 : 460;
-      const dustCount = isMobile ? 180 : 380;
+      const starCount = isMobile ? 220 : 420;
+      const dustCount = isMobile ? 140 : 280;
 
       stars = [];
       stardust = [];
 
-      // 1. Gera poeira estelar concentrada no disco galáctico (Milky Way Stream)
+      // 1. Poeira estelar monocromática (micro-pontos semelhantes à faixa da Via Láctea no céu real)
       for (let i = 0; i < dustCount; i++) {
         const along = (Math.random() - 0.5) * (width * 1.5);
-        // Distribuição normalizada por somatório triangular (maior densidade no núcleo do plano)
+        // Distribuição mais densa no centro do plano
         const across =
-          (Math.random() + Math.random() + Math.random() - 1.5) * (height * 0.5);
-
-        const colorPick =
-          starColorPalette[Math.floor(Math.random() * starColorPalette.length)];
+          (Math.random() + Math.random() + Math.random() - 1.5) * (height * 0.45);
 
         stardust.push({
           along,
           across,
-          radius: 0.35 + Math.random() * 0.75,
-          alpha: 0.15 + Math.random() * 0.45,
-          speed: 0.05 + Math.random() * 0.12,
-          color: colorPick,
+          radius: 0.35 + Math.random() * 0.45,
+          alpha: 0.12 + Math.random() * 0.30,
+          speed: 0.04 + Math.random() * 0.08,
         });
       }
 
-      // 2. Gera estrelas distribuídas em 3 camadas ópticas de profundidade
+      // 2. Campo estelar minimalista: exclusivamente pontos circulares de magnitudes variadas
       for (let i = 0; i < starCount; i++) {
         const x = Math.random() * width;
         const y = Math.random() * height;
 
         const rand = Math.random();
-        let layer: 1 | 2 | 3 = 1;
-        let radius = 0.45 + Math.random() * 0.55;
-        let baseAlpha = 0.28 + Math.random() * 0.45;
-        let hasSpikes = false;
-        let spikeLength = 0;
+        let radius = 0.45 + Math.random() * 0.45; // 75% são micro pontinhos (0.45px a 0.9px)
+        let baseAlpha = 0.25 + Math.random() * 0.45;
+        let isBrightPoint = false;
 
         if (rand > 0.94) {
-          // Estrela proeminente de primeiro plano com brilho e reflexo difrativo
-          layer = 3;
-          radius = 1.9 + Math.random() * 0.9;
-          baseAlpha = 0.8 + Math.random() * 0.2;
-          hasSpikes = true;
-          spikeLength = radius * (5 + Math.random() * 3);
-        } else if (rand > 0.68) {
-          // Estrela intermediária
-          layer = 2;
-          radius = 0.95 + Math.random() * 0.75;
-          baseAlpha = 0.48 + Math.random() * 0.4;
+          // Pontos ligeiramente maiores e mais luminosos (sem spikes, apenas pontos nítidos)
+          radius = 1.35 + Math.random() * 0.45; // Máximo 1.8px
+          baseAlpha = 0.82 + Math.random() * 0.18;
+          isBrightPoint = true;
+        } else if (rand > 0.72) {
+          // Pontos intermediários
+          radius = 0.85 + Math.random() * 0.4;
+          baseAlpha = 0.45 + Math.random() * 0.35;
         }
 
         const colorPick =
-          starColorPalette[Math.floor(Math.random() * starColorPalette.length)];
+          monochromePalette[Math.floor(Math.random() * monochromePalette.length)];
 
         stars.push({
           x,
@@ -227,20 +148,18 @@ export default function GalaxySpaceBackground() {
           twinkleSpeed: 0.0012 + Math.random() * 0.0035,
           twinklePhase: Math.random() * Math.PI * 2,
           color: colorPick,
-          hasSpikes,
-          spikeLength,
-          layer,
+          isBrightPoint,
         });
       }
     };
 
     const spawnShootingStar = () => {
-      // Meteoro com trajetória diagonal elegante
+      // Estrela cadente monocromática em trajetória suave e limpa
       const startX = Math.random() * (width * 0.8);
-      const startY = Math.random() * (height * 0.45);
-      const angle = 0.52 + (Math.random() - 0.5) * 0.25; // ~30 graus
-      const speed = 14 + Math.random() * 9;
-      const length = 110 + Math.random() * 80;
+      const startY = Math.random() * (height * 0.4);
+      const angle = 0.52 + (Math.random() - 0.5) * 0.2; // ~30 graus
+      const speed = 13 + Math.random() * 7;
+      const length = 95 + Math.random() * 65;
 
       shootingStar = {
         x: startX,
@@ -248,14 +167,14 @@ export default function GalaxySpaceBackground() {
         length,
         speed,
         angle,
-        opacity: 1,
-        width: 1.6 + Math.random() * 0.8,
+        opacity: 0.95,
+        width: 1.4 + Math.random() * 0.5,
         active: true,
         decay: 0.02 + Math.random() * 0.012,
       };
 
-      // Intervalo entre meteoros: de 4.5s a 8.5s
-      nextShootingStarTime = Date.now() + 4500 + Math.random() * 4000;
+      // Intervalo entre meteoros: de 4s a 8s
+      nextShootingStarTime = Date.now() + 4000 + Math.random() * 4000;
     };
 
     let lastTime = performance.now();
@@ -272,32 +191,26 @@ export default function GalaxySpaceBackground() {
       // 1. Limpeza do quadro
       ctx.clearRect(0, 0, width, height);
 
-      // 2. Fundo negro cósmico com sutis gradientes profundos
-      const spaceGrad = ctx.createLinearGradient(0, 0, width, height);
-      spaceGrad.addColorStop(0, "rgba(4, 4, 10, 0.96)");
-      spaceGrad.addColorStop(0.5, "rgba(6, 6, 15, 0.98)");
-      spaceGrad.addColorStop(1, "rgba(3, 3, 8, 0.96)");
-      ctx.fillStyle = spaceGrad;
+      // 2. Fundo monocromático profundo (vácuo do espaço minimalista)
+      ctx.fillStyle = "rgba(4, 4, 7, 0.98)";
       ctx.fillRect(0, 0, width, height);
 
-      // 3. Renderiza as nebulosas galácticas com respiração cósmica suave
-      for (let i = 0; i < nebulae.length; i++) {
-        const neb = nebulae[i];
-        const pulse = Math.sin(time * neb.pulseSpeed + neb.pulsePhase) * 0.08;
-        const cx = width * neb.xRatio;
-        const cy = height * neb.yRatio;
-        const radius = Math.max(width, height) * (neb.baseRadius + pulse);
+      // Brilho difuso ambiente estritamente monocromático e ultra discreto (nuvem estelar sutil)
+      const ambientGlow = ctx.createRadialGradient(
+        width * 0.5,
+        height * 0.5,
+        0,
+        width * 0.5,
+        height * 0.5,
+        Math.max(width, height) * 0.65
+      );
+      ambientGlow.addColorStop(0, "rgba(255, 255, 255, 0.025)");
+      ambientGlow.addColorStop(0.5, "rgba(240, 240, 245, 0.010)");
+      ambientGlow.addColorStop(1, "rgba(0, 0, 0, 0)");
+      ctx.fillStyle = ambientGlow;
+      ctx.fillRect(0, 0, width, height);
 
-        const radial = ctx.createRadialGradient(cx, cy, 0, cx, cy, radius);
-        radial.addColorStop(0, neb.colors[0]);
-        radial.addColorStop(0.48, neb.colors[1]);
-        radial.addColorStop(1, neb.colors[2]);
-
-        ctx.fillStyle = radial;
-        ctx.fillRect(0, 0, width, height);
-      }
-
-      // 4. Renderiza e translada a poeira estelar ao longo do disco galáctico
+      // 3. Renderiza a poeira estelar (stardust) ao longo do plano galáctico
       const centerX = width * 0.5;
       const centerY = height * 0.5;
 
@@ -312,84 +225,58 @@ export default function GalaxySpaceBackground() {
         const px = centerX + p.along * cosA - p.across * sinA;
         const py = centerY + p.along * sinA + p.across * cosA;
 
-        // Desenha apenas se dentro da visão
         if (px >= -20 && px <= width + 20 && py >= -20 && py <= height + 20) {
           ctx.beginPath();
           ctx.arc(px, py, p.radius, 0, Math.PI * 2);
-          ctx.fillStyle = `rgba(${p.color}, ${p.alpha})`;
+          ctx.fillStyle = `rgba(255, 255, 255, ${p.alpha})`;
           ctx.fill();
         }
       }
 
-      // 5. Renderiza as estrelas cintilantes com suas camadas
+      // 4. Renderiza todas as estrelas como pontinhos limpos de luz
       for (let i = 0; i < stars.length; i++) {
         const s = stars[i];
 
-        // Cintilação suave baseada em seno contínuo
+        // Cintilação suave e realista
         const twinkle = Math.sin(time * s.twinkleSpeed + s.twinklePhase);
         const currentAlpha = Math.max(
           0.12,
-          Math.min(1, s.baseAlpha + twinkle * 0.38)
+          Math.min(1, s.baseAlpha + twinkle * 0.35)
         );
 
-        // Deriva sideral cósmica ultra suave
+        // Deriva sideral cósmica ultra lenta
         if (!prefersReducedMotion) {
-          const driftSpeed = s.layer === 3 ? 0.045 : s.layer === 2 ? 0.026 : 0.012;
+          const driftSpeed = s.isBrightPoint ? 0.03 : 0.015;
           s.x -= driftSpeed * 60 * delta;
-          if (s.x < -30) s.x = width + 30;
+          if (s.x < -20) s.x = width + 20;
         }
 
-        // Desenho do corpo da estrela
-        ctx.beginPath();
-        ctx.arc(s.x, s.y, s.radius, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(${s.color}, ${currentAlpha})`;
-        ctx.fill();
-
-        // Auréola e reflexo difrativo de 4 pontas para estrelas proeminentes (layer 3)
-        if (s.hasSpikes && currentAlpha > 0.4) {
-          // Halo estelar difuso suave
+        // Auréola sutil apenas para os pontinhos mais brilhantes (sempre circular, sem spikes)
+        if (s.isBrightPoint && currentAlpha > 0.45) {
           const halo = ctx.createRadialGradient(
             s.x,
             s.y,
             0,
             s.x,
             s.y,
-            s.radius * 5
+            s.radius * 2.8
           );
-          halo.addColorStop(0, `rgba(${s.color}, ${currentAlpha * 0.48})`);
-          halo.addColorStop(1, `rgba(${s.color}, 0)`);
+          halo.addColorStop(0, `rgba(${s.color}, ${currentAlpha * 0.35})`);
+          halo.addColorStop(1, "rgba(255, 255, 255, 0)");
           ctx.fillStyle = halo;
           ctx.beginPath();
-          ctx.arc(s.x, s.y, s.radius * 5, 0, Math.PI * 2);
+          ctx.arc(s.x, s.y, s.radius * 2.8, 0, Math.PI * 2);
           ctx.fill();
-
-          // Spikes de difração em cruz elegante (óptica de telescópio espacial)
-          const spikeLen = s.spikeLength * (0.85 + twinkle * 0.15);
-          ctx.strokeStyle = `rgba(${s.color}, ${currentAlpha * 0.6})`;
-          ctx.lineWidth = 0.8;
-          ctx.beginPath();
-          // Eixo horizontal
-          ctx.moveTo(s.x - spikeLen, s.y);
-          ctx.lineTo(s.x + spikeLen, s.y);
-          // Eixo vertical
-          ctx.moveTo(s.x, s.y - spikeLen);
-          ctx.lineTo(s.x, s.y + spikeLen);
-          ctx.stroke();
-
-          // Spikes secundários diagonais sutis de 45 graus (brilho de diamante cósmico)
-          const diagLen = spikeLen * 0.35;
-          ctx.strokeStyle = `rgba(${s.color}, ${currentAlpha * 0.3})`;
-          ctx.lineWidth = 0.5;
-          ctx.beginPath();
-          ctx.moveTo(s.x - diagLen, s.y - diagLen);
-          ctx.lineTo(s.x + diagLen, s.y + diagLen);
-          ctx.moveTo(s.x - diagLen, s.y + diagLen);
-          ctx.lineTo(s.x + diagLen, s.y - diagLen);
-          ctx.stroke();
         }
+
+        // Ponto estelar circular
+        ctx.beginPath();
+        ctx.arc(s.x, s.y, s.radius, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(${s.color}, ${currentAlpha})`;
+        ctx.fill();
       }
 
-      // 6. Gerenciamento e renderização de Estrelas Cadentes (Meteoros)
+      // 5. Estrelas Cadentes (Meteoro Monocromático)
       const now = Date.now();
       if (!shootingStar && now >= nextShootingStarTime && !prefersReducedMotion) {
         spawnShootingStar();
@@ -403,12 +290,11 @@ export default function GalaxySpaceBackground() {
         const tailX = ms.x - cos * ms.length;
         const tailY = ms.y - sin * ms.length;
 
-        // Cauda ionizada com gradiente luminoso estelar
+        // Cauda ionizada monocromática elegante (branco puro e prateado translúcido)
         const meteorGrad = ctx.createLinearGradient(ms.x, ms.y, tailX, tailY);
         meteorGrad.addColorStop(0, `rgba(255, 255, 255, ${ms.opacity})`);
-        meteorGrad.addColorStop(0.2, `rgba(186, 230, 253, ${ms.opacity * 0.88})`);
-        meteorGrad.addColorStop(0.65, `rgba(168, 85, 247, ${ms.opacity * 0.45})`);
-        meteorGrad.addColorStop(1, "rgba(10, 6, 26, 0)");
+        meteorGrad.addColorStop(0.35, `rgba(228, 228, 231, ${ms.opacity * 0.65})`);
+        meteorGrad.addColorStop(1, "rgba(255, 255, 255, 0)");
 
         ctx.save();
         ctx.strokeStyle = meteorGrad;
@@ -419,16 +305,16 @@ export default function GalaxySpaceBackground() {
         ctx.lineTo(ms.x, ms.y);
         ctx.stroke();
 
-        // Cabeça brilhante do meteoro com corona ionizada
+        // Ponto frontal brilhante do meteoro
         ctx.beginPath();
-        ctx.arc(ms.x, ms.y, ms.width * 1.35, 0, Math.PI * 2);
+        ctx.arc(ms.x, ms.y, ms.width * 1.15, 0, Math.PI * 2);
         ctx.fillStyle = `rgba(255, 255, 255, ${ms.opacity})`;
-        ctx.shadowColor = "rgba(186, 230, 253, 0.95)";
-        ctx.shadowBlur = 10;
+        ctx.shadowColor = "rgba(255, 255, 255, 0.85)";
+        ctx.shadowBlur = 6;
         ctx.fill();
         ctx.restore();
 
-        // Movimento do meteoro
+        // Avanço do meteoro
         ms.x += cos * ms.speed * 60 * delta;
         ms.y += sin * ms.speed * 60 * delta;
         ms.opacity -= ms.decay * 60 * delta;
@@ -441,7 +327,7 @@ export default function GalaxySpaceBackground() {
       animationFrameId = requestAnimationFrame(render);
     };
 
-    // Observador de visibilidade (desativa a animação quando fora da tela para poupar CPU/GPU)
+    // Observador de visibilidade (pausa renderização quando fora da tela)
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -475,15 +361,15 @@ export default function GalaxySpaceBackground() {
       className="absolute inset-0 pointer-events-none overflow-hidden select-none z-0"
       aria-hidden="true"
     >
-      {/* Canvas da Galáxia */}
+      {/* Canvas do Céu Estelar Monocromático */}
       <canvas ref={canvasRef} className="block w-full h-full" />
 
-      {/* Vinhetas verticais para integração orgânica impecável com as seções adjacentes */}
+      {/* Vinhetas verticais para transição orgânica e imperceptível entre seções */}
       <div className="absolute inset-x-0 top-0 h-28 bg-gradient-to-b from-background via-background/60 to-transparent pointer-events-none" />
       <div className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-background via-background/60 to-transparent pointer-events-none" />
 
-      {/* Máscara radial de contraste para garantir legibilidade perfeita da tipografia editorial */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(5,5,9,0.3)_0%,rgba(5,5,9,0.6)_65%,rgba(5,5,9,0.85)_100%)] pointer-events-none" />
+      {/* Máscara radial de contraste suave para manter leitura confortável da tipografia */}
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(5,5,8,0.25)_0%,rgba(5,5,8,0.55)_65%,rgba(5,5,8,0.85)_100%)] pointer-events-none" />
     </div>
   );
 }
