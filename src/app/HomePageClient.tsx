@@ -79,7 +79,7 @@ export default function HomePageClient() {
             transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
             className="text-2xl sm:text-3xl md:text-4xl font-medium text-white tracking-tight leading-snug"
           >
-            A engenharia de software atinge sua maturidade quando arquitetura robusta, performance e design convergem em sistemas escaláveis e confiáveis.
+            Assim como na mecânica celeste, a engenharia de software atinge sua maturidade quando arquitetura robusta, tolerância a falhas e alta performance convergem em perfeita harmonia.
           </motion.h2>
 
           <motion.div
@@ -90,10 +90,10 @@ export default function HomePageClient() {
             className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-8 text-zinc-400 text-base leading-relaxed font-normal"
           >
             <p>
-              Da concepção de plataformas desktop com streaming em tempo real via WebRTC e aceleração de hardware em C++ até a orquestração de microsserviços com Docker, bancos relacionais e NoSQL.
+              Da telemetria em tempo real via WebRTC e aceleração nativa em C++ — operando sob latência crítica como pulsos no vácuo — até a constelação de microsserviços orquestrados com Docker, bancos relacionais e NoSQL.
             </p>
             <p>
-              Cada projeto reflete o compromisso com código sustentável, princípios SOLID, controle de concorrência e alto rigor técnico de entrega.
+              Cada sistema é concebido com o rigor da engenharia de missão crítica: código sustentável, princípios SOLID, controle de concorrência e resiliência para navegar na imensidão da escala.
             </p>
           </motion.div>
         </div>
