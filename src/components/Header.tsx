@@ -10,7 +10,13 @@ import { useLanguage } from "@/context/LanguageContext";
 import { BrazilFlag, UsaFlag } from "@/components/LanguageFlags";
 import LiveText from "@/components/LiveText";
 
-function LanguageSwitcherMinimal({ className = "" }: { className?: string }) {
+function LanguageSwitcherMinimal({
+  className = "",
+  idPrefix = "desktop",
+}: {
+  className?: string;
+  idPrefix?: string;
+}) {
   const { language, setLanguage } = useLanguage();
 
   return (
@@ -36,7 +42,7 @@ function LanguageSwitcherMinimal({ className = "" }: { className?: string }) {
       >
         {language === "pt" && (
           <motion.div
-            layoutId="activeLangPill"
+            layoutId={`activeLangPill-${idPrefix}`}
             className="absolute inset-0 rounded-full bg-white/12 border border-white/20 shadow-[0_2px_12px_rgba(255,255,255,0.08)]"
             transition={{
               type: "spring",
@@ -76,7 +82,7 @@ function LanguageSwitcherMinimal({ className = "" }: { className?: string }) {
       >
         {language === "en" && (
           <motion.div
-            layoutId="activeLangPill"
+            layoutId={`activeLangPill-${idPrefix}`}
             className="absolute inset-0 rounded-full bg-white/12 border border-white/20 shadow-[0_2px_12px_rgba(255,255,255,0.08)]"
             transition={{
               type: "spring",
@@ -174,12 +180,12 @@ export default function Header() {
             </nav>
 
             {/* Switcher de Idioma com Animação Fluida Spring */}
-            <LanguageSwitcherMinimal />
+            <LanguageSwitcherMinimal idPrefix="desktop" />
           </div>
 
           {/* Área Mobile: Switcher de Idioma e Botão Hamburger */}
           <div className="flex md:hidden items-center gap-3">
-            <LanguageSwitcherMinimal />
+            <LanguageSwitcherMinimal idPrefix="mobile" />
 
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
