@@ -4,14 +4,13 @@
 import React from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
-import { Award, Globe2, CheckCircle2 } from "lucide-react";
 import SolarSystemBackground from "@/components/SolarSystemBackground";
 
-// SVGs das Bandeiras Nacionais com precisão óptica e proporção equilibrada
+// SVGs das Bandeiras Nacionais — discretas e com proporções oficiais
 function BrazilFlag() {
   return (
-    <svg viewBox="0 0 32 24" className="w-6 h-4.5 rounded shadow-sm shrink-0" aria-label="Bandeira do Brasil">
-      <rect width="32" height="24" fill="#009b3a" rx="2" />
+    <svg viewBox="0 0 32 24" className="w-5 h-3.5 rounded-xs shrink-0 shadow-xs" aria-label="Bandeira do Brasil">
+      <rect width="32" height="24" fill="#009b3a" rx="1.5" />
       <polygon points="16,3 29,12 16,21 3,12" fill="#fedf00" />
       <circle cx="16" cy="12" r="5.2" fill="#002776" />
       <path d="M 11.2,13.2 Q 16,10.2 20.8,13.2" stroke="#ffffff" strokeWidth="0.9" fill="none" />
@@ -21,8 +20,8 @@ function BrazilFlag() {
 
 function SpainFlag() {
   return (
-    <svg viewBox="0 0 32 24" className="w-6 h-4.5 rounded shadow-sm shrink-0" aria-label="Bandeira da Espanha">
-      <rect width="32" height="24" fill="#aa151b" rx="2" />
+    <svg viewBox="0 0 32 24" className="w-5 h-3.5 rounded-xs shrink-0 shadow-xs" aria-label="Bandeira da Espanha">
+      <rect width="32" height="24" fill="#aa151b" rx="1.5" />
       <rect y="6" width="32" height="12" fill="#f1bf00" />
       <circle cx="9" cy="12" r="2.8" fill="#aa151b" opacity="0.85" />
     </svg>
@@ -31,8 +30,8 @@ function SpainFlag() {
 
 function UsaFlag() {
   return (
-    <svg viewBox="0 0 32 24" className="w-6 h-4.5 rounded shadow-sm shrink-0" aria-label="Bandeira dos Estados Unidos">
-      <rect width="32" height="24" fill="#ffffff" rx="2" />
+    <svg viewBox="0 0 32 24" className="w-5 h-3.5 rounded-xs shrink-0 shadow-xs" aria-label="Bandeira dos Estados Unidos">
+      <rect width="32" height="24" fill="#ffffff" rx="1.5" />
       <rect y="0" width="32" height="3.7" fill="#b22234" />
       <rect y="7.4" width="32" height="3.7" fill="#b22234" />
       <rect y="14.8" width="32" height="3.7" fill="#b22234" />
@@ -47,11 +46,11 @@ function UsaFlag() {
   );
 }
 
-// SVGs das Instituições de Ensino com estética de design institucional Google
+// Emblemas Institucionais — discretos e minimalistas
 function AnhangueraLogo() {
   return (
-    <svg viewBox="0 0 32 32" className="w-6 h-6" fill="none" aria-label="Logo Faculdade Anhanguera">
-      <rect width="32" height="32" rx="8" fill="#18181b" />
+    <svg viewBox="0 0 32 32" className="w-5 h-5 shrink-0" fill="none" aria-label="Logo Faculdade Anhanguera">
+      <rect width="32" height="32" rx="6" fill="#18181b" />
       <path d="M16 6L7 25h4.8l2.2-4.8h6l2.2 4.8H25L16 6z" fill="#f97316" />
       <polygon points="16,12 14.5,17 17.5,17" fill="#18181b" />
       <line x1="14" y1="20.2" x2="18" y2="20.2" stroke="#ffffff" strokeWidth="1.2" strokeLinecap="round" />
@@ -59,20 +58,20 @@ function AnhangueraLogo() {
   );
 }
 
-function SenaiLogo() {
+function EtsmLogo() {
   return (
-    <svg viewBox="0 0 40 24" className="w-8 h-5" fill="none" aria-label="Logo SENAI">
-      <rect width="40" height="24" rx="4" fill="#dc2626" />
-      <text x="20" y="16.5" fill="#ffffff" fontSize="9.5" fontWeight="900" fontFamily="sans-serif" textAnchor="middle" letterSpacing="0.8">SENAI</text>
+    <svg viewBox="0 0 32 32" className="w-5 h-5 shrink-0" fill="none" aria-label="Logo Escola Técnica de Santa Maria">
+      <rect width="32" height="32" rx="6" fill="#18181b" />
+      <path d="M10 13l-3 3 3 3M22 13l3 3-3 3M17 10l-2 12" stroke="#38bdf8" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   );
 }
 
-function EtsmLogo() {
+function SenaiLogo() {
   return (
-    <svg viewBox="0 0 32 32" className="w-6 h-6" fill="none" aria-label="Logo Escola Técnica de Santa Maria">
-      <rect width="32" height="32" rx="8" fill="#18181b" />
-      <path d="M10 13l-3 3 3 3M22 13l3 3-3 3M17 10l-2 12" stroke="#38bdf8" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+    <svg viewBox="0 0 38 22" className="w-6 h-4 shrink-0" fill="none" aria-label="Logo SENAI">
+      <rect width="38" height="22" rx="3" fill="#dc2626" />
+      <text x="19" y="15" fill="#ffffff" fontSize="9" fontWeight="900" fontFamily="sans-serif" textAnchor="middle" letterSpacing="0.6">SENAI</text>
     </svg>
   );
 }
@@ -85,8 +84,6 @@ export default function AboutSection() {
       period: "Previsão Jan/2030",
       description: "Fundamentos de engenharia web, arquitetura de sistemas e computação em nuvem.",
       logo: <AnhangueraLogo />,
-      badge: "Graduação Superior",
-      tags: ["Arquitetura de Software", "Sistemas Distribuídos", "Computação em Nuvem"],
     },
     {
       role: "Técnico em Desenvolvimento de Sistemas",
@@ -94,8 +91,6 @@ export default function AboutSection() {
       period: "2024–2025 (1.200h)",
       description: "Lógica avançada de programação, modelagem relacional de dados e desenvolvimento de software.",
       logo: <EtsmLogo />,
-      badge: "Formação Técnica • 1.200h",
-      tags: ["Algoritmos & Estruturas", "Modelagem SQL", "Desenvolvimento Web & Desktop"],
     },
     {
       role: "Programador Full-Stack",
@@ -103,8 +98,6 @@ export default function AboutSection() {
       period: "Concluído (670h)",
       description: "Metodologias ágeis (Scrum), APIs RESTful, SQL/NoSQL e testes automatizados.",
       logo: <SenaiLogo />,
-      badge: "Qualificação Profissional • 670h",
-      tags: ["Metodologias Ágeis (Scrum)", "APIs RESTful", "Testes Automatizados"],
     },
   ];
 
@@ -139,190 +132,159 @@ export default function AboutSection() {
   ];
 
   return (
-    <section id="sobre" className="relative py-24 md:py-32 border-t border-white/[0.06] overflow-hidden">
+    <section id="sobre" className="relative py-28 md:py-36 border-t border-white/[0.06] overflow-hidden">
       {/* Fundo Dinâmico Cósmico: Sistema Solar Minimalista & Interativo */}
       <SolarSystemBackground />
 
       <div className="relative z-10 px-6 md:px-10 max-w-7xl mx-auto">
-        {/* Cabeçalho Editorial */}
-      <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6">
-        <div>
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-semibold tracking-tight text-white">
+        {/* A. Cabeçalho Editorial */}
+        <div className="mb-20 max-w-3xl">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-semibold tracking-tight text-white mb-4">
             Sobre David Levy
           </h2>
+          <p className="text-zinc-400 text-base sm:text-lg font-normal leading-relaxed">
+            Trajetória em Engenharia de Software, fundamentação acadêmica e princípios de desenvolvimento.
+          </p>
         </div>
 
-        <p className="text-zinc-400 text-sm sm:text-base max-w-md font-normal leading-relaxed">
-          Trajetória em Engenharia de Software, fundamentação acadêmica e princípios de desenvolvimento.
-        </p>
-      </div>
-
-      {/* Grid Principal */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
-        {/* Coluna Visual: Foto com acabamento minimalista e Princípios */}
-        <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.2 }}
-          transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-          className="lg:col-span-5 flex flex-col gap-6"
-        >
-          <div className="relative w-full aspect-square rounded-2xl overflow-hidden border border-white/[0.08] bg-zinc-950 shadow-2xl group">
-            <Image
-              src="/images/profile-photo.jpg"
-              alt="David Levy - Engenheiro de Software"
-              fill
-              sizes="(max-width: 1024px) 100vw, 420px"
-              className="object-cover grayscale contrast-[1.05] brightness-95 group-hover:grayscale-0 group-hover:scale-[1.02] transition-all duration-700 ease-out"
-              priority
-            />
-          </div>
-
-          <p className="text-xs font-mono text-zinc-400">
-            Brasília, DF — Disponível para atuação presencial, remota ou híbrida
-          </p>
-
-          {/* Princípios de Engenharia (Inspirados no Google Engineering) */}
-          <div className="pt-4 border-t border-white/[0.06] space-y-2.5">
-            <span className="text-[11px] font-mono uppercase tracking-wider text-zinc-400 font-medium block">
-              Princípios de Engenharia
-            </span>
-            <div className="flex flex-col gap-2">
-              {engineeringPrinciples.map((principle) => (
-                <div
-                  key={principle}
-                  className="flex items-center gap-2.5 px-3 py-2 rounded-xl bg-white/[0.02] border border-white/[0.06] text-xs font-mono text-zinc-300 transition-colors hover:border-white/20 hover:text-white"
-                >
-                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
-                  <span>{principle}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-        </motion.div>
-
-        {/* Coluna Editorial de Conteúdo */}
-        <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.2 }}
-          transition={{ duration: 0.5, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
-          className="lg:col-span-7 flex flex-col space-y-12"
-        >
-          {/* Narrativa Principal */}
-          <div className="space-y-6 text-zinc-400 text-base sm:text-lg leading-relaxed font-normal">
-            <p className="text-white text-xl sm:text-2xl font-medium tracking-tight leading-snug">
-              Olá, sou David Levy. Estudante de Engenharia de Software e desenvolvedor Full-Stack.
-            </p>
-            <p>
-              Tenho experiência prática no desenvolvimento de aplicações Web e Desktop de alto desempenho utilizando React, Next.js, TypeScript, Node.js e Electron. Minha atuação é orientada à engenharia de software estruturada, com ênfase em sistemas distribuídos, microsserviços e comunicação em tempo real.
-            </p>
-            <p>
-              Construo ecossistemas completos — desde soluções desktop com streaming de baixa latência em WebRTC e aceleração nativa via hardware em C++ (DirectX/DXGI), até plataformas privadas com orquestração em Docker, monorepos e persistência relacional com PostgreSQL e NoSQL.
-            </p>
-            <p>
-              Busco oportunidades de estágio ou posição técnica/júnior em Engenharia de Software e desenvolvimento Full-Stack, com foco em arquitetura limpa, código sustentável e evolução contínua.
-            </p>
-          </div>
-
-          {/* Formação Acadêmica & Certificações Ilustrativas com Logos SVG */}
-          <div className="pt-6 border-t border-white/[0.06] space-y-6">
-            <div className="flex items-center gap-2">
-              <Award className="w-4 h-4 text-purple-400" />
-              <h3 className="text-sm font-mono uppercase tracking-wider text-zinc-300 font-medium">
-                Formação Acadêmica & Certificações
-              </h3>
+        {/* B. Grid de Apresentação Pessoal */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
+          {/* Coluna Esquerda: Fotografia e Princípios */}
+          <motion.div
+            initial={{ opacity: 0, y: 12 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.2 }}
+            transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
+            className="lg:col-span-5 flex flex-col space-y-8"
+          >
+            {/* Fotografia em Proporção Natural 4:5 e Acabamento Minimalista */}
+            <div className="relative w-full aspect-[4/5] rounded-2xl overflow-hidden border border-white/[0.08] bg-zinc-950">
+              <Image
+                src="/images/profile-photo.jpg"
+                alt="David Levy - Engenheiro de Software"
+                fill
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 40vw, 420px"
+                className="object-cover grayscale contrast-[1.05] brightness-95"
+                loading="lazy"
+              />
             </div>
 
-            <div className="flex flex-col gap-3.5">
-              {credentials.map((cred) => (
-                <div
-                  key={cred.role}
-                  className="group relative p-4 sm:p-5 rounded-2xl bg-zinc-950/60 border border-white/[0.07] hover:border-white/20 hover:bg-zinc-900/40 transition-all duration-300"
-                >
-                  <div className="flex items-start gap-4">
-                    {/* Logo Institucional */}
-                    <div className="w-11 h-11 rounded-xl bg-white/[0.04] border border-white/[0.08] flex items-center justify-center shrink-0 shadow-sm transition-transform duration-300 group-hover:scale-105">
-                      {cred.logo}
-                    </div>
+            {/* Localização Integrada */}
+            <p className="text-xs text-zinc-400 font-normal leading-relaxed">
+              Brasília, DF — Disponível para atuação presencial, remota ou híbrida
+            </p>
 
-                    <div className="flex-1 min-w-0">
-                      <div className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-1 mb-1">
-                        <h4 className="text-base font-medium text-white tracking-tight">
-                          {cred.role}
-                        </h4>
-                        <span className="text-xs font-mono text-zinc-400 shrink-0">
-                          {cred.period}
-                        </span>
-                      </div>
-
-                      <p className="text-sm font-medium text-zinc-300 mb-1.5">
-                        {cred.institution}
-                      </p>
-
-                      <p className="text-xs text-zinc-400 leading-relaxed mb-3">
-                        {cred.description}
-                      </p>
-
-                      {/* Tags de Foco Técnico da Formação */}
-                      <div className="flex flex-wrap gap-1.5">
-                        {cred.tags.map((tag) => (
-                          <span
-                            key={tag}
-                            className="text-[11px] font-mono px-2 py-0.5 rounded-md bg-white/[0.03] border border-white/[0.06] text-zinc-300"
-                          >
-                            {tag}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              ))}
+            {/* Princípios de Engenharia Integrados com Discrição */}
+            <div className="pt-6 border-t border-white/[0.06] space-y-3">
+              <span className="text-xs font-mono uppercase tracking-wider text-zinc-400 font-medium block">
+                Princípios de Engenharia
+              </span>
+              <ul className="space-y-2 text-sm text-zinc-300">
+                {engineeringPrinciples.map((principle) => (
+                  <li key={principle} className="flex items-center gap-2.5">
+                    <span className="w-1.5 h-1.5 rounded-full bg-zinc-500 shrink-0" />
+                    <span>{principle}</span>
+                  </li>
+                ))}
+              </ul>
             </div>
-          </div>
+          </motion.div>
 
-          {/* Seção Exclusiva de Idiomas & Proficiência Internacional com Bandeiras SVG */}
-          <div className="pt-6 border-t border-white/[0.06] space-y-6">
-            <div className="flex items-center gap-2">
-              <Globe2 className="w-4 h-4 text-sky-400" />
-              <h3 className="text-sm font-mono uppercase tracking-wider text-zinc-300 font-medium">
-                Idiomas & Proficiência Internacional
-              </h3>
+          {/* Coluna Direita: Biografia Editorial, Formação e Idiomas */}
+          <motion.div
+            initial={{ opacity: 0, y: 12 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.2 }}
+            transition={{ duration: 0.25, delay: 0.08, ease: [0.16, 1, 0.3, 1] }}
+            className="lg:col-span-7 flex flex-col space-y-16"
+          >
+            {/* Narrativa Principal */}
+            <div className="space-y-6 text-zinc-400 text-base sm:text-lg leading-relaxed font-normal">
+              <p className="text-white text-xl sm:text-2xl font-medium tracking-tight leading-snug">
+                Olá, sou David Levy. Estudante de Engenharia de Software e desenvolvedor Full-Stack.
+              </p>
+              <p>
+                Tenho experiência prática no desenvolvimento de aplicações Web e Desktop de alto desempenho utilizando React, Next.js, TypeScript, Node.js e Electron. Minha atuação é orientada à engenharia de software estruturada, com ênfase em sistemas distribuídos, microsserviços e comunicação em tempo real.
+              </p>
+              <p>
+                Construo ecossistemas completos — desde soluções desktop com streaming de baixa latência em WebRTC e aceleração nativa via hardware em C++ (DirectX/DXGI), até plataformas privadas com orquestração em Docker, monorepos e persistência relacional com PostgreSQL e NoSQL.
+              </p>
+              <p>
+                Busco oportunidades de estágio ou posição técnica/júnior em Engenharia de Software e desenvolvimento Full-Stack, com foco em arquitetura limpa, código sustentável e evolução contínua.
+              </p>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
-              {languages.map((lang) => (
-                <div
-                  key={lang.name}
-                  className="p-4 rounded-2xl bg-zinc-950/60 border border-white/[0.07] hover:border-white/20 hover:bg-zinc-900/40 transition-all duration-300 flex flex-col justify-between"
-                >
-                  <div>
-                    <div className="flex items-center justify-between mb-3">
-                      {lang.flag}
-                      <span className="text-[10px] font-mono uppercase tracking-wider px-2 py-0.5 rounded-full bg-white/[0.04] border border-white/[0.08] text-zinc-300">
-                        {lang.level}
+            {/* C. Formação Acadêmica & Qualificações — Apresentação Cronológica Editorial */}
+            <div className="pt-8 border-t border-white/[0.06] space-y-8">
+              <div>
+                <h3 className="text-lg font-medium text-white tracking-tight">
+                  Formação Acadêmica & Certificações
+                </h3>
+              </div>
+
+              <div className="space-y-8">
+                {credentials.map((cred) => (
+                  <div
+                    key={cred.role}
+                    className="flex flex-col space-y-2 pb-8 border-b border-white/[0.06] last:border-b-0 last:pb-0"
+                  >
+                    <div className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-1">
+                      <h4 className="text-base font-medium text-white tracking-tight">
+                        {cred.role}
+                      </h4>
+                      <span className="text-xs font-mono text-zinc-400 shrink-0">
+                        {cred.period}
                       </span>
                     </div>
 
-                    <h4 className="text-base font-semibold text-white tracking-tight mb-0.5">
-                      {lang.name}
-                    </h4>
+                    <div className="flex items-center gap-2 text-sm text-zinc-300">
+                      {cred.logo}
+                      <span>{cred.institution}</span>
+                    </div>
 
-                    <span className="text-[11px] font-mono text-zinc-400 block mb-2">
+                    <p className="text-sm text-zinc-400 leading-relaxed pt-1">
+                      {cred.description}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* D. Idiomas & Proficiência Internacional — Lista Compacta e Integrada */}
+            <div className="pt-8 border-t border-white/[0.06] space-y-6">
+              <div>
+                <h3 className="text-lg font-medium text-white tracking-tight">
+                  Idiomas & Proficiência Internacional
+                </h3>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+                {languages.map((lang) => (
+                  <div key={lang.name} className="flex flex-col space-y-1.5">
+                    <div className="flex items-center gap-2 mb-0.5">
+                      {lang.flag}
+                      <h4 className="text-base font-medium text-white tracking-tight">
+                        {lang.name}
+                      </h4>
+                    </div>
+
+                    <span className="text-xs font-mono text-zinc-300">
+                      {lang.level}
+                    </span>
+
+                    <span className="text-xs text-zinc-400">
                       {lang.institution}
                     </span>
-                  </div>
 
-                  <p className="text-xs text-zinc-400 leading-relaxed pt-2 border-t border-white/[0.04]">
-                    {lang.description}
-                  </p>
-                </div>
-              ))}
+                    <p className="text-xs text-zinc-400 leading-relaxed pt-1">
+                      {lang.description}
+                    </p>
+                  </div>
+                ))}
+              </div>
             </div>
-          </div>
-        </motion.div>
-      </div>
+          </motion.div>
+        </div>
       </div>
     </section>
   );
