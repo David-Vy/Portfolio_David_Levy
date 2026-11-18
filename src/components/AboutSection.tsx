@@ -7,6 +7,7 @@ import { motion } from "framer-motion";
 import SolarSystemBackground from "@/components/SolarSystemBackground";
 import { BrazilFlag, UsaFlag } from "@/components/LanguageFlags";
 import { useLanguage } from "@/context/LanguageContext";
+import LiveText from "@/components/LiveText";
 
 // SVGs das Bandeiras Nacionais — discretas e com proporções oficiais
 function SpainFlag() {
@@ -130,11 +131,14 @@ export default function AboutSection() {
         {/* A. Cabeçalho Editorial */}
         <div className="mb-20 max-w-3xl">
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-semibold tracking-tight text-white mb-4">
-            {t.about.sectionTitle}
+            <LiveText text={t.about.sectionTitle} mode="chars" />
           </h2>
-          <p className="text-zinc-400 text-base sm:text-lg font-normal leading-relaxed">
-            {t.about.sectionSubtitle}
-          </p>
+          <LiveText
+            text={t.about.sectionSubtitle}
+            as="p"
+            mode="words"
+            className="text-zinc-400 text-base sm:text-lg font-normal leading-relaxed"
+          />
         </div>
 
         {/* B. Grid de Apresentação Pessoal */}
@@ -160,20 +164,23 @@ export default function AboutSection() {
             </div>
 
             {/* Localização Integrada */}
-            <p className="text-xs text-zinc-400 font-normal leading-relaxed">
-              {t.about.location}
-            </p>
+            <LiveText
+              text={t.about.location}
+              as="p"
+              mode="words"
+              className="text-xs text-zinc-400 font-normal leading-relaxed"
+            />
 
             {/* Princípios de Engenharia Integrados com Discrição */}
             <div className="pt-6 border-t border-white/[0.06] space-y-3">
               <span className="text-xs font-mono uppercase tracking-wider text-zinc-400 font-medium block">
-                {t.about.principlesTitle}
+                <LiveText text={t.about.principlesTitle} mode="chars" />
               </span>
               <ul className="space-y-2 text-sm text-zinc-300">
                 {t.about.principles.map((principle) => (
                   <li key={principle} className="flex items-center gap-2.5">
                     <span className="w-1.5 h-1.5 rounded-full bg-zinc-500 shrink-0" />
-                    <span>{principle}</span>
+                    <LiveText text={principle} mode="words" />
                   </li>
                 ))}
               </ul>
@@ -191,18 +198,18 @@ export default function AboutSection() {
             {/* Narrativa Principal */}
             <div className="space-y-6 text-zinc-400 text-base sm:text-lg leading-relaxed font-normal">
               <p className="text-white text-xl sm:text-2xl font-medium tracking-tight leading-snug">
-                {t.about.bioGreeting}
+                <LiveText text={t.about.bioGreeting} mode="words" showCursor />
               </p>
-              <p>{t.about.bioP1}</p>
-              <p>{t.about.bioP2}</p>
-              <p>{t.about.bioP3}</p>
+              <LiveText text={t.about.bioP1} as="p" mode="words" />
+              <LiveText text={t.about.bioP2} as="p" mode="words" />
+              <LiveText text={t.about.bioP3} as="p" mode="words" />
             </div>
 
             {/* C. Formação Acadêmica & Qualificações — Apresentação Cronológica Editorial */}
             <div className="pt-8 border-t border-white/[0.06] space-y-8">
               <div>
                 <h3 className="text-lg font-medium text-white tracking-tight">
-                  {t.about.academicTitle}
+                  <LiveText text={t.about.academicTitle} mode="chars" />
                 </h3>
               </div>
 
@@ -238,7 +245,7 @@ export default function AboutSection() {
             <div className="pt-8 border-t border-white/[0.06] space-y-6">
               <div>
                 <h3 className="text-lg font-medium text-white tracking-tight">
-                  {t.about.languagesTitle}
+                  <LiveText text={t.about.languagesTitle} mode="chars" />
                 </h3>
               </div>
 

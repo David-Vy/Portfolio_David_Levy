@@ -8,6 +8,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X } from "lucide-react";
 import { useLanguage } from "@/context/LanguageContext";
 import { BrazilFlag, UsaFlag } from "@/components/LanguageFlags";
+import LiveText from "@/components/LiveText";
 
 function LanguageSwitcherMinimal({ className = "" }: { className?: string }) {
   const { language, setLanguage } = useLanguage();
@@ -16,41 +17,87 @@ function LanguageSwitcherMinimal({ className = "" }: { className?: string }) {
     <div
       role="group"
       aria-label="Seleção de idioma / Language selection"
-      className={`inline-flex items-center gap-1 p-1 rounded-full bg-white/[0.04] border border-white/[0.08] backdrop-blur-xs ${className}`}
+      className={`relative inline-flex items-center p-1 rounded-full bg-zinc-900/90 border border-white/[0.08] backdrop-blur-md shadow-inner select-none ${className}`}
     >
       {/* Opção Português */}
-      <button
+      <motion.button
         type="button"
+        whileTap={{ scale: 0.93 }}
+        whileHover={{ scale: 1.03 }}
         onClick={() => setLanguage("pt")}
-        className={`flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-mono transition-all duration-150 cursor-pointer ${
+        className={`relative z-10 flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-mono transition-colors duration-200 cursor-pointer ${
           language === "pt"
-            ? "bg-white/10 text-white shadow-xs font-medium"
-            : "text-zinc-500 hover:text-zinc-300 opacity-60 hover:opacity-100"
+            ? "text-white font-semibold"
+            : "text-zinc-500 hover:text-zinc-300 opacity-60 hover:opacity-90"
         }`}
         aria-label="Mudar idioma para Português"
         aria-pressed={language === "pt"}
         title="Português (Brasil)"
       >
-        <BrazilFlag className="w-4 h-3" />
-        <span className="text-[10px] tracking-wider">PT</span>
-      </button>
+        {language === "pt" && (
+          <motion.div
+            layoutId="activeLangPill"
+            className="absolute inset-0 rounded-full bg-white/12 border border-white/20 shadow-[0_2px_12px_rgba(255,255,255,0.08)]"
+            transition={{
+              type: "spring",
+              stiffness: 420,
+              damping: 30,
+            }}
+          />
+        )}
+        <motion.span
+          className="relative z-10 inline-flex items-center"
+          animate={
+            language === "pt"
+              ? { scale: [1, 1.16, 1], rotate: [0, -6, 0] }
+              : { scale: 0.92 }
+          }
+          transition={{ duration: 0.28, ease: "easeOut" }}
+        >
+          <BrazilFlag className="w-4 h-3" />
+        </motion.span>
+        <span className="relative z-10 text-[10px] tracking-wider">PT</span>
+      </motion.button>
 
       {/* Opção Inglês */}
-      <button
+      <motion.button
         type="button"
+        whileTap={{ scale: 0.93 }}
+        whileHover={{ scale: 1.03 }}
         onClick={() => setLanguage("en")}
-        className={`flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-mono transition-all duration-150 cursor-pointer ${
+        className={`relative z-10 flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-mono transition-colors duration-200 cursor-pointer ${
           language === "en"
-            ? "bg-white/10 text-white shadow-xs font-medium"
-            : "text-zinc-500 hover:text-zinc-300 opacity-60 hover:opacity-100"
+            ? "text-white font-semibold"
+            : "text-zinc-500 hover:text-zinc-300 opacity-60 hover:opacity-90"
         }`}
         aria-label="Switch language to English"
         aria-pressed={language === "en"}
         title="English (US)"
       >
-        <UsaFlag className="w-4 h-3" />
-        <span className="text-[10px] tracking-wider">EN</span>
-      </button>
+        {language === "en" && (
+          <motion.div
+            layoutId="activeLangPill"
+            className="absolute inset-0 rounded-full bg-white/12 border border-white/20 shadow-[0_2px_12px_rgba(255,255,255,0.08)]"
+            transition={{
+              type: "spring",
+              stiffness: 420,
+              damping: 30,
+            }}
+          />
+        )}
+        <motion.span
+          className="relative z-10 inline-flex items-center"
+          animate={
+            language === "en"
+              ? { scale: [1, 1.16, 1], rotate: [0, 6, 0] }
+              : { scale: 0.92 }
+          }
+          transition={{ duration: 0.28, ease: "easeOut" }}
+        >
+          <UsaFlag className="w-4 h-3" />
+        </motion.span>
+        <span className="relative z-10 text-[10px] tracking-wider">EN</span>
+      </motion.button>
     </div>
   );
 }
@@ -112,7 +159,7 @@ export default function Header() {
             </div>
           </Link>
 
-          {/* Navegação Desktop & Switcher de Idioma */}
+          {/* Navegação Desktop & Switcher de Idioma com Transição Fluida */}
           <div className="hidden md:flex items-center gap-8">
             <nav className="flex items-center gap-8 text-sm" aria-label="Navegação Principal">
               {navLinks.map((link) => (
@@ -121,12 +168,12 @@ export default function Header() {
                   href={link.href}
                   className="text-zinc-400 hover:text-white transition-colors duration-150 text-sm font-normal"
                 >
-                  {link.name}
+                  <LiveText text={link.name} mode="chars" />
                 </Link>
               ))}
             </nav>
 
-            {/* Switcher de Idioma Minimalista Desktop */}
+            {/* Switcher de Idioma com Animação Fluida Spring */}
             <LanguageSwitcherMinimal />
           </div>
 
@@ -164,7 +211,7 @@ export default function Header() {
                   onClick={() => setMobileMenuOpen(false)}
                   className="text-lg font-medium text-zinc-300 hover:text-white transition-colors py-1"
                 >
-                  {link.name}
+                  <LiveText text={link.name} mode="chars" />
                 </Link>
               ))}
             </nav>

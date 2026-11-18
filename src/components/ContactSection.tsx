@@ -4,6 +4,7 @@
 import { motion } from "framer-motion";
 import { Mail, Github, Linkedin } from "lucide-react";
 import { useLanguage } from "@/context/LanguageContext";
+import LiveText from "@/components/LiveText";
 
 export default function ContactSection() {
   const { t } = useLanguage();
@@ -18,12 +19,15 @@ export default function ContactSection() {
         className="flex flex-col items-center"
       >
         <h2 className="text-3xl sm:text-5xl md:text-6xl font-semibold tracking-tight text-white mb-6">
-          {t.contact.title}
+          <LiveText text={t.contact.title} mode="chars" />
         </h2>
 
-        <p className="text-zinc-400 text-base sm:text-lg max-w-2xl mx-auto leading-relaxed font-normal mb-10">
-          {t.contact.subtitle}
-        </p>
+        <LiveText
+          text={t.contact.subtitle}
+          as="p"
+          mode="words"
+          className="text-zinc-400 text-base sm:text-lg max-w-2xl mx-auto leading-relaxed font-normal mb-10"
+        />
 
         {/* Ações Principais */}
         <div className="flex flex-wrap items-center justify-center gap-4">
@@ -42,7 +46,7 @@ export default function ContactSection() {
             className="pill-button px-6 py-3 text-sm text-zinc-300 hover:text-white"
           >
             <Linkedin className="w-4 h-4" />
-            <span>{t.contact.connectLinkedIn}</span>
+            <LiveText text={t.contact.connectLinkedIn} mode="chars" />
           </a>
         </div>
 
@@ -71,7 +75,7 @@ export default function ContactSection() {
           <span className="text-zinc-600 hidden sm:inline">·</span>
 
           <span className="font-mono text-xs text-zinc-500">
-            {t.contact.location}
+            <LiveText text={t.contact.location} mode="words" />
           </span>
         </div>
       </motion.div>

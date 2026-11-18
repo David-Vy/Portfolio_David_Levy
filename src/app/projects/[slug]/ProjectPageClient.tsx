@@ -20,6 +20,7 @@ import LyCloudMockup from "@/components/mockups/LyCloudMockup";
 import RosaNeuralMockup from "@/components/mockups/RosaNeuralMockup";
 import ExoWebApiMockup from "@/components/mockups/ExoWebApiMockup";
 import { useLanguage } from "@/context/LanguageContext";
+import LiveText from "@/components/LiveText";
 
 export default function ProjectPageClient({ project }: { project: Project }) {
   const { language, t } = useLanguage();
@@ -125,14 +126,14 @@ export default function ProjectPageClient({ project }: { project: Project }) {
           className="inline-flex items-center gap-2 text-xs font-mono uppercase tracking-wider text-zinc-400 hover:text-white transition-colors py-2 px-4 rounded-full border border-white/10 bg-white/[0.03] hover:bg-white/[0.08]"
         >
           <ArrowLeft size={14} />
-          <span>{t.projectDetail.backToProjects}</span>
+          <LiveText text={t.projectDetail.backToProjects} mode="chars" />
         </Link>
       </div>
 
       {/* Cabeçalho Editorial do Projeto */}
       <header className="mb-12">
         <span className="text-xs font-mono uppercase tracking-wider text-zinc-400 font-medium block mb-4">
-          {displayCategory}
+          <LiveText text={displayCategory} mode="chars" />
         </span>
 
         <h1 className="text-4xl sm:text-6xl md:text-7xl font-bold tracking-tight mb-6">
@@ -141,9 +142,12 @@ export default function ProjectPageClient({ project }: { project: Project }) {
           </span>
         </h1>
 
-        <p className="text-lg sm:text-xl text-zinc-400 max-w-3xl leading-relaxed font-normal">
-          {displayDescription}
-        </p>
+        <LiveText
+          text={displayDescription}
+          as="p"
+          mode="words"
+          className="text-lg sm:text-xl text-zinc-400 max-w-3xl leading-relaxed font-normal"
+        />
 
         {/* Tags de Tecnologias */}
         <div className="flex flex-wrap gap-2 mt-8">
@@ -175,7 +179,7 @@ export default function ProjectPageClient({ project }: { project: Project }) {
           <div className="flex items-center gap-2 pb-4 border-b border-white/[0.06]">
             <Layers className="w-5 h-5 text-emerald-400" />
             <h2 className="text-xl font-bold text-white tracking-tight">
-              {t.projectDetail.overviewArchitecture}
+              <LiveText text={t.projectDetail.overviewArchitecture} mode="chars" />
             </h2>
           </div>
 
@@ -186,7 +190,7 @@ export default function ProjectPageClient({ project }: { project: Project }) {
             />
           ) : (
             <p className="text-zinc-400">
-              {t.projectDetail.documentationPending}
+              <LiveText text={t.projectDetail.documentationPending} mode="chars" />
             </p>
           )}
         </div>
@@ -196,7 +200,7 @@ export default function ProjectPageClient({ project }: { project: Project }) {
           {hasLinks && (
             <div className="p-6 rounded-2xl border border-white/[0.08] bg-zinc-950">
               <h3 className="text-sm font-medium text-white tracking-tight mb-4">
-                {t.projectDetail.projectLinks}
+                <LiveText text={t.projectDetail.projectLinks} mode="chars" />
               </h3>
 
               <div className="space-y-2.5">
@@ -209,7 +213,9 @@ export default function ProjectPageClient({ project }: { project: Project }) {
                   >
                     <div className="flex items-center gap-2.5">
                       <Github size={16} />
-                      <span>{t.projectDetail.githubRepo}</span>
+                      <span>
+                        <LiveText text={t.projectDetail.githubRepo} mode="chars" />
+                      </span>
                     </div>
                     <ExternalLink size={13} className="opacity-50" />
                   </a>
@@ -224,7 +230,9 @@ export default function ProjectPageClient({ project }: { project: Project }) {
                   >
                     <div className="flex items-center gap-2.5">
                       <ExternalLink size={16} />
-                      <span>{t.projectDetail.livePlatform}</span>
+                      <span>
+                        <LiveText text={t.projectDetail.livePlatform} mode="chars" />
+                      </span>
                     </div>
                     <ExternalLink size={13} />
                   </a>
@@ -238,7 +246,9 @@ export default function ProjectPageClient({ project }: { project: Project }) {
                   >
                     <div className="flex items-center gap-2.5">
                       <HardDriveDownload size={16} />
-                      <span>{t.projectDetail.downloadBuild}</span>
+                      <span>
+                        <LiveText text={t.projectDetail.downloadBuild} mode="chars" />
+                      </span>
                     </div>
                     <ExternalLink size={13} className="opacity-50" />
                   </a>
@@ -251,7 +261,7 @@ export default function ProjectPageClient({ project }: { project: Project }) {
           {project.architectureHighlights && project.architectureHighlights.length > 0 && (
             <div className="p-6 rounded-2xl border border-white/[0.08] bg-zinc-950">
               <h3 className="text-xs font-mono uppercase tracking-wider text-zinc-400 mb-3">
-                {language === "en" ? "Architecture Highlights" : "Destaques Arquiteturais"}
+                <LiveText text={language === "en" ? "Architecture Highlights" : "Destaques Arquiteturais"} mode="chars" />
               </h3>
               <ul className="space-y-2 text-xs font-mono text-zinc-400">
                 {project.architectureHighlights.map((highlight, idx) => (
@@ -267,21 +277,29 @@ export default function ProjectPageClient({ project }: { project: Project }) {
           {/* Ficha Técnica Rápida */}
           <div className="p-6 rounded-2xl border border-white/[0.08] bg-zinc-950 text-xs font-mono space-y-3">
             <div className="flex justify-between items-center py-1.5 border-b border-white/[0.04]">
-              <span className="text-zinc-500 uppercase tracking-wider">{language === "en" ? "Engineer" : "Desenvolvedor"}</span>
+              <span className="text-zinc-500 uppercase tracking-wider">
+                <LiveText text={language === "en" ? "Engineer" : "Desenvolvedor"} mode="chars" />
+              </span>
               <span className="text-zinc-300">David Levy</span>
             </div>
             <div className="flex justify-between items-center py-1.5 border-b border-white/[0.04]">
-              <span className="text-zinc-500 uppercase tracking-wider">{language === "en" ? "Domain" : "Categoria"}</span>
+              <span className="text-zinc-500 uppercase tracking-wider">
+                <LiveText text={language === "en" ? "Domain" : "Categoria"} mode="chars" />
+              </span>
               <span className="text-zinc-300 text-right max-w-[160px] truncate" title={displayCategory}>
                 {displayCategory}
               </span>
             </div>
             <div className="flex justify-between items-center py-1.5 border-b border-white/[0.04]">
               <span className="text-zinc-500 uppercase tracking-wider">Status</span>
-              <span className="text-zinc-300">{language === "en" ? "Complete" : "Completo"}</span>
+              <span className="text-zinc-300">
+                <LiveText text={language === "en" ? "Complete" : "Completo"} mode="chars" />
+              </span>
             </div>
             <div className="flex justify-between items-center py-1.5">
-              <span className="text-zinc-500 uppercase tracking-wider">{language === "en" ? "Core Tech" : "Tags Principais"}</span>
+              <span className="text-zinc-500 uppercase tracking-wider">
+                <LiveText text={language === "en" ? "Core Tech" : "Tags Principais"} mode="chars" />
+              </span>
               <span className="text-zinc-300">{project.tags.slice(0, 3).join(", ")}</span>
             </div>
           </div>

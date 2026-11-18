@@ -11,6 +11,7 @@ import ProcessTimeline from "@/components/ProcessTimeline";
 import AboutSection from "@/components/AboutSection";
 import ContactSection from "@/components/ContactSection";
 import { useLanguage } from "@/context/LanguageContext";
+import LiveText from "@/components/LiveText";
 
 export default function HomePageClient() {
   const { t } = useLanguage();
@@ -36,28 +37,36 @@ export default function HomePageClient() {
               {t.hero.title}
             </h1>
 
-            <p className="mt-6 text-xl sm:text-2xl text-zinc-300 font-normal tracking-tight">
-              {t.hero.role}
-            </p>
+            <LiveText
+              text={t.hero.role}
+              as="p"
+              mode="chars"
+              showCursor
+              className="mt-6 text-xl sm:text-2xl text-zinc-300 font-normal tracking-tight min-h-[32px]"
+            />
 
-            <p className="mt-5 max-w-2xl text-zinc-400 text-base sm:text-lg leading-relaxed font-normal">
-              {t.hero.description}
-            </p>
+            <LiveText
+              text={t.hero.description}
+              as="p"
+              mode="words"
+              showCursor
+              className="mt-5 max-w-2xl text-zinc-400 text-base sm:text-lg leading-relaxed font-normal min-h-[56px]"
+            />
 
             {/* Ações Rápidas */}
             <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
               <a
                 href="#projetos"
-                className="pill-button pill-button-primary px-6 py-3 text-sm"
+                className="pill-button pill-button-primary px-6 py-3 text-sm inline-flex items-center"
               >
-                {t.hero.exploreProjects}
+                <LiveText text={t.hero.exploreProjects} mode="chars" />
               </a>
 
               <a
                 href="#contato"
-                className="pill-button px-6 py-3 text-sm text-zinc-300 hover:text-white"
+                className="pill-button px-6 py-3 text-sm text-zinc-300 hover:text-white inline-flex items-center"
               >
-                {t.hero.contact}
+                <LiveText text={t.hero.contact} mode="chars" />
               </a>
             </div>
 
@@ -85,7 +94,7 @@ export default function HomePageClient() {
             transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
             className="text-2xl sm:text-3xl md:text-4xl font-medium text-white tracking-tight leading-snug"
           >
-            {t.statement.quote}
+            <LiveText text={t.statement.quote} mode="words" showCursor />
           </motion.h2>
 
           <motion.div
@@ -95,8 +104,8 @@ export default function HomePageClient() {
             transition={{ duration: 0.6, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
             className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-8 text-zinc-400 text-base leading-relaxed font-normal"
           >
-            <p>{t.statement.p1}</p>
-            <p>{t.statement.p2}</p>
+            <LiveText text={t.statement.p1} as="p" mode="words" />
+            <LiveText text={t.statement.p2} as="p" mode="words" />
           </motion.div>
         </div>
       </section>

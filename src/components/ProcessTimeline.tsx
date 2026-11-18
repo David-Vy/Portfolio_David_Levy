@@ -3,6 +3,7 @@
 
 import { motion } from "framer-motion";
 import { useLanguage } from "@/context/LanguageContext";
+import LiveText from "@/components/LiveText";
 
 export default function ProcessTimeline() {
   const { t } = useLanguage();
@@ -13,13 +14,16 @@ export default function ProcessTimeline() {
       <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6">
         <div>
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-semibold tracking-tight text-white">
-            {t.process.sectionTitle}
+            <LiveText text={t.process.sectionTitle} mode="chars" />
           </h2>
         </div>
 
-        <p className="text-zinc-400 text-sm sm:text-base max-w-md font-normal leading-relaxed">
-          {t.process.sectionSubtitle}
-        </p>
+        <LiveText
+          text={t.process.sectionSubtitle}
+          as="p"
+          mode="words"
+          className="text-zinc-400 text-sm sm:text-base max-w-md font-normal leading-relaxed"
+        />
       </div>
 
       {/* Grid Editorial Aberto (Sem cartões fechados nem 3D tilt) */}
@@ -38,12 +42,15 @@ export default function ProcessTimeline() {
             </span>
 
             <h3 className="text-lg font-medium text-white tracking-tight mb-2">
-              {step.title}
+              <LiveText text={step.title} mode="chars" />
             </h3>
 
-            <p className="text-sm text-zinc-400 leading-relaxed font-normal">
-              {step.description}
-            </p>
+            <LiveText
+              text={step.description}
+              as="p"
+              mode="words"
+              className="text-sm text-zinc-400 leading-relaxed font-normal"
+            />
           </motion.div>
         ))}
       </div>

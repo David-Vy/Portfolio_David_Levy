@@ -17,6 +17,7 @@ import {
 } from "@/lib/skills-data";
 import SkillsNetworkBackground from "@/components/SkillsNetworkBackground";
 import { useLanguage } from "@/context/LanguageContext";
+import LiveText from "@/components/LiveText";
 
 function getCategoryIcon(iconName?: string) {
   switch (iconName) {
@@ -220,10 +221,10 @@ function SpotlightCard({ category, index, className = "", categoryTitle, skillsC
           </div>
           <div>
             <h3 className="text-base sm:text-lg font-semibold text-white tracking-tight">
-              {categoryTitle || category.title}
+              <LiveText text={categoryTitle || category.title} mode="chars" />
             </h3>
             <span className="text-[11px] font-mono text-zinc-400">
-              {category.skills.length} {skillsCountLabel || "competências"}
+              {category.skills.length} <LiveText text={skillsCountLabel || "competências"} mode="chars" />
             </span>
           </div>
         </div>
@@ -261,13 +262,16 @@ export default function SkillsSection() {
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
           <div>
             <h2 className="text-3xl sm:text-4xl md:text-5xl font-semibold tracking-tight text-white">
-              {t.skills.sectionTitle}
+              <LiveText text={t.skills.sectionTitle} mode="chars" />
             </h2>
           </div>
 
-          <p className="text-zinc-400 text-sm sm:text-base max-w-md font-normal leading-relaxed">
-            {t.skills.sectionSubtitle}
-          </p>
+          <LiveText
+            text={t.skills.sectionSubtitle}
+            as="p"
+            mode="words"
+            className="text-zinc-400 text-sm sm:text-base max-w-md font-normal leading-relaxed"
+          />
         </div>
 
         {/* Grid de Cards com Efeito Spotlight */}

@@ -14,6 +14,7 @@ import RosaNeuralMockup from "./mockups/RosaNeuralMockup";
 import LyMadhouseMockup from "./mockups/LyMadhouseMockup";
 import ExoWebApiMockup from "./mockups/ExoWebApiMockup";
 import { useLanguage } from "@/context/LanguageContext";
+import LiveText from "@/components/LiveText";
 
 /**
  * Interface estendida retrocompatível com a base atual e aberta
@@ -136,7 +137,7 @@ export default function ProjectEditorialRow({ project, index, isFocused = false 
         <div className={`lg:col-span-5 flex flex-col justify-center space-y-4 ${!isEven ? "lg:order-1" : "lg:order-2"}`}>
           {/* Overline de Categoria */}
           <span className="text-xs font-mono uppercase tracking-wider text-zinc-400 font-medium">
-            {displayCategory || project.category || "Engenharia de Software"}
+            <LiveText text={displayCategory || project.category || "Engenharia de Software"} mode="chars" />
           </span>
 
           {/* Título Display Editorial com Fonte Ampliada e Degradê Exclusivo Inspirado no Gemini */}
@@ -149,9 +150,12 @@ export default function ProjectEditorialRow({ project, index, isFocused = false 
           </Link>
 
           {/* Resumo Editorial (2 a 3 linhas) */}
-          <p className="text-zinc-300 text-sm sm:text-base leading-relaxed line-clamp-3 font-normal">
-            {displayDescription || project.description}
-          </p>
+          <LiveText
+            text={displayDescription || project.description}
+            as="p"
+            mode="words"
+            className="text-zinc-300 text-sm sm:text-base leading-relaxed line-clamp-3 font-normal"
+          />
 
           {/* Pills de Tecnologias */}
           <div className="flex flex-wrap gap-2 pt-1">
@@ -171,7 +175,7 @@ export default function ProjectEditorialRow({ project, index, isFocused = false 
               href={`/projects/${project.slug}`}
               className="inline-flex items-center gap-2 text-sm font-semibold text-white hover:text-zinc-200 transition-colors group/cta"
             >
-              <span>{t.projects.viewCaseStudy || "Ver Estudo de Caso"}</span>
+              <LiveText text={t.projects.viewCaseStudy || "Ver Estudo de Caso"} mode="chars" />
               <ArrowRight className="w-4 h-4 transition-transform duration-200 group-hover/cta:translate-x-1" />
             </Link>
 

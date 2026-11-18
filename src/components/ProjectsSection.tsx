@@ -6,6 +6,7 @@ import { ChevronUp, ChevronDown } from "lucide-react";
 import { projectsData } from "@/lib/projects-data";
 import ProjectEditorialRow from "./ProjectEditorialRow";
 import { useLanguage } from "@/context/LanguageContext";
+import LiveText from "@/components/LiveText";
 
 export default function ProjectsSection() {
   const { t } = useLanguage();
@@ -310,13 +311,16 @@ export default function ProjectsSection() {
       <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 md:mb-16 gap-6">
         <div>
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-semibold tracking-tight text-white">
-            {t.projects.sectionTitle}
+            <LiveText text={t.projects.sectionTitle} mode="chars" />
           </h2>
         </div>
 
-        <p className="text-zinc-400 text-sm sm:text-base max-w-lg font-normal leading-relaxed">
-          {t.projects.sectionSubtitle}
-        </p>
+        <LiveText
+          text={t.projects.sectionSubtitle}
+          as="p"
+          mode="words"
+          className="text-zinc-400 text-sm sm:text-base max-w-lg font-normal leading-relaxed"
+        />
       </div>
 
       {/* Lista Editorial em Linhas Abertas (Feed com Câmera de Foco Automático) */}

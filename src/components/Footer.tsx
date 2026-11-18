@@ -6,6 +6,7 @@ import Link from "next/link";
 import { ArrowUp } from "lucide-react";
 import SocialIcons from "./SocialIcons";
 import { useLanguage } from "@/context/LanguageContext";
+import LiveText from "@/components/LiveText";
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
@@ -45,7 +46,7 @@ export default function Footer() {
             className="flex items-center gap-1.5 text-zinc-500 hover:text-white transition-colors cursor-pointer"
             aria-label={t.footer.backToTop}
           >
-            <span>{t.footer.backToTop}</span>
+            <LiveText text={t.footer.backToTop} mode="chars" />
             <ArrowUp className="w-3.5 h-3.5" />
           </button>
         </div>
