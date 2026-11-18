@@ -5,8 +5,10 @@ import React, { useState, useEffect, useRef, useCallback } from "react";
 import { ChevronUp, ChevronDown } from "lucide-react";
 import { projectsData } from "@/lib/projects-data";
 import ProjectEditorialRow from "./ProjectEditorialRow";
+import { useLanguage } from "@/context/LanguageContext";
 
 export default function ProjectsSection() {
+  const { t } = useLanguage();
   const [focusedIndex, setFocusedIndex] = useState<number>(0);
   const [isSectionActive, setIsSectionActive] = useState<boolean>(false);
   const rowRefs = useRef<(HTMLDivElement | null)[]>([]);
@@ -308,12 +310,12 @@ export default function ProjectsSection() {
       <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 md:mb-16 gap-6">
         <div>
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-semibold tracking-tight text-white">
-            Projetos Selecionados
+            {t.projects.sectionTitle}
           </h2>
         </div>
 
         <p className="text-zinc-400 text-sm sm:text-base max-w-lg font-normal leading-relaxed">
-          Sistemas distribuídos em tempo real, plataformas de streaming de baixa latência, arquiteturas em nuvem e aplicações de alto desempenho.
+          {t.projects.sectionSubtitle}
         </p>
       </div>
 
@@ -340,15 +342,15 @@ export default function ProjectsSection() {
       {/* Indicador Flutuante de Feed / Câmera (Desktop) */}
       {isSectionActive && focusedIndex >= 0 && (
         <aside
-          aria-label="Navegação do Feed de Projetos"
+          aria-label={t.projects.feedNavigation}
           className="fixed right-6 bottom-8 z-40 hidden xl:flex flex-col items-center gap-1.5 px-2.5 py-2.5 rounded-full bg-zinc-950/80 backdrop-blur-md border border-white/[0.08] transition-opacity duration-300 shadow-2xl"
         >
           <button
             type="button"
             onClick={() => scrollToProject(focusedIndex - 1)}
             disabled={focusedIndex === 0}
-            aria-label="Projeto anterior"
-            className="p-1 rounded-full text-zinc-400 hover:text-white hover:bg-white/10 disabled:opacity-20 disabled:hover:bg-transparent transition-colors"
+            aria-label={t.projects.prevProject}
+            className="p-1 rounded-full text-zinc-400 hover:text-white hover:bg-white/10 disabled:opacity-20 disabled:hover:bg-transparent transition-colors cursor-pointer"
           >
             <ChevronUp size={15} />
           </button>
@@ -363,8 +365,8 @@ export default function ProjectsSection() {
             type="button"
             onClick={() => scrollToProject(focusedIndex + 1)}
             disabled={focusedIndex === projectsData.length - 1}
-            aria-label="Próximo projeto"
-            className="p-1 rounded-full text-zinc-400 hover:text-white hover:bg-white/10 disabled:opacity-20 disabled:hover:bg-transparent transition-colors"
+            aria-label={t.projects.nextProject}
+            className="p-1 rounded-full text-zinc-400 hover:text-white hover:bg-white/10 disabled:opacity-20 disabled:hover:bg-transparent transition-colors cursor-pointer"
           >
             <ChevronDown size={15} />
           </button>

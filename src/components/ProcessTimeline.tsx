@@ -2,55 +2,29 @@
 "use client";
 
 import { motion } from "framer-motion";
-
-interface Step {
-  number: string;
-  title: string;
-  description: string;
-}
-
-const steps: Step[] = [
-  {
-    number: "01",
-    title: "Arquitetura & Domínio",
-    description: "Análise profunda de requisitos, modelagem relacional e NoSQL, e estruturação de fluxo de dados para microsserviços e aplicações distribuídas.",
-  },
-  {
-    number: "02",
-    title: "Engenharia & Clean Code",
-    description: "Implementação modular com TypeScript, princípios SOLID, controle rigoroso de concorrência e camadas seguras de autenticação e autorização.",
-  },
-  {
-    number: "03",
-    title: "Performance & Validação",
-    description: "Otimização de latência e consumo de memória, comunicação em tempo real via WebSockets/WebRTC e testes automatizados de integração.",
-  },
-  {
-    number: "04",
-    title: "Deploy & Observabilidade",
-    description: "Orquestração em contêineres Docker, integração e entrega contínua (CI/CD) e instrumentação de logs e telemetria para monitoramento contínuo.",
-  },
-];
+import { useLanguage } from "@/context/LanguageContext";
 
 export default function ProcessTimeline() {
+  const { t } = useLanguage();
+
   return (
     <section id="processo" className="relative py-24 md:py-32 px-6 md:px-10 max-w-7xl mx-auto border-t border-white/[0.06]">
       {/* Cabeçalho da Seção */}
       <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6">
         <div>
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-semibold tracking-tight text-white">
-            Metodologia de Engenharia
+            {t.process.sectionTitle}
           </h2>
         </div>
 
         <p className="text-zinc-400 text-sm sm:text-base max-w-md font-normal leading-relaxed">
-          Um fluxo de desenvolvimento estruturado que garante previsibilidade, arquitetura escalável e entrega de software com alto rigor técnico.
+          {t.process.sectionSubtitle}
         </p>
       </div>
 
       {/* Grid Editorial Aberto (Sem cartões fechados nem 3D tilt) */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-10">
-        {steps.map((step, idx) => (
+        {t.process.steps.map((step, idx) => (
           <motion.div
             key={step.number}
             initial={{ opacity: 0, y: 16 }}

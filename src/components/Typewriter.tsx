@@ -1,25 +1,42 @@
 // src/components/Typewriter.tsx
 "use client";
 
-import { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
+import { useState, useEffect } from "react";
+import { motion } from "framer-motion";
+import { useLanguage } from "@/context/LanguageContext";
 
-const roles = [
+const rolesPt = [
   "Engenheiro de Software & Sistemas",
   "Desenvolvedor Full-Stack (Web & Desktop)",
-  "Especialista em Cloud, APIs & Real-Time"
+  "Especialista em Cloud, APIs & Real-Time",
+];
+
+const rolesEn = [
+  "Software & Systems Engineer",
+  "Full-Stack Developer (Web & Desktop)",
+  "Cloud, APIs & Real-Time Specialist",
 ];
 
 export default function Typewriter() {
+  const { language } = useLanguage();
+  const roles = language === "en" ? rolesEn : rolesPt;
+
   const [textIndex, setTextIndex] = useState(0);
   const [charIndex, setCharIndex] = useState(0);
   const [isDeleting, setIsDeleting] = useState(false);
-  const [currentText, setCurrentText] = useState('');
+  const [currentText, setCurrentText] = useState("");
+
+  useEffect(() => {
+    setTextIndex(0);
+    setCharIndex(0);
+    setIsDeleting(false);
+    setCurrentText("");
+  }, [language]);
 
   useEffect(() => {
     const typeSpeed = isDeleting ? 40 : 80;
     const handleTyping = () => {
-      const fullText = roles[textIndex];
+      const fullText = roles[textIndex % roles.length];
       if (isDeleting) {
         setCurrentText(fullText.substring(0, charIndex - 1));
         setCharIndex(charIndex - 1);
@@ -38,7 +55,7 @@ export default function Typewriter() {
 
     const timeout = setTimeout(handleTyping, typeSpeed);
     return () => clearTimeout(timeout);
-  }, [charIndex, isDeleting, textIndex]);
+  }, [charIndex, isDeleting, textIndex, roles]);
 
   return (
     <span className="inline-flex items-center text-lg sm:text-xl md:text-2xl font-medium text-zinc-300 min-h-[36px]">

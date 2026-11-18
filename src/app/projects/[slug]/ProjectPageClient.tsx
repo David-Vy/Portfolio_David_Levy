@@ -19,9 +19,16 @@ import { PROJECT_THEMES } from "@/components/ProjectAmbientBackground";
 import LyCloudMockup from "@/components/mockups/LyCloudMockup";
 import RosaNeuralMockup from "@/components/mockups/RosaNeuralMockup";
 import ExoWebApiMockup from "@/components/mockups/ExoWebApiMockup";
+import { useLanguage } from "@/context/LanguageContext";
 
 export default function ProjectPageClient({ project }: { project: Project }) {
-  const hasLongDescription = project.longDescriptionHtml && project.longDescriptionHtml.length > 0;
+  const { language, t } = useLanguage();
+  const projectTranslation = t.projects.items[project.slug];
+  const displayCategory = projectTranslation?.category || project.category;
+  const displayDescription = projectTranslation?.description || project.description;
+  const displayLongDescriptionHtml = projectTranslation?.longDescriptionHtml || project.longDescriptionHtml;
+
+  const hasLongDescription = displayLongDescriptionHtml && displayLongDescriptionHtml.length > 0;
   const hasLinks = project.githubUrl || project.liveUrl || project.downloadUrl;
   const hasMultipleImages = Boolean(project.images && project.images.length > 1);
   const theme = PROJECT_THEMES[project.slug] || PROJECT_THEMES["lymadhouse"];
@@ -118,14 +125,14 @@ export default function ProjectPageClient({ project }: { project: Project }) {
           className="inline-flex items-center gap-2 text-xs font-mono uppercase tracking-wider text-zinc-400 hover:text-white transition-colors py-2 px-4 rounded-full border border-white/10 bg-white/[0.03] hover:bg-white/[0.08]"
         >
           <ArrowLeft size={14} />
-          <span>Voltar aos Projetos</span>
+          <span>{t.projectDetail.backToProjects}</span>
         </Link>
       </div>
 
       {/* Cabeçalho Editorial do Projeto */}
       <header className="mb-12">
         <span className="text-xs font-mono uppercase tracking-wider text-zinc-400 font-medium block mb-4">
-          {project.category}
+          {displayCategory}
         </span>
 
         <h1 className="text-4xl sm:text-6xl md:text-7xl font-bold tracking-tight mb-6">
@@ -135,7 +142,7 @@ export default function ProjectPageClient({ project }: { project: Project }) {
         </h1>
 
         <p className="text-lg sm:text-xl text-zinc-400 max-w-3xl leading-relaxed font-normal">
-          {project.description}
+          {displayDescription}
         </p>
 
         {/* Tags de Tecnologias */}
@@ -168,18 +175,18 @@ export default function ProjectPageClient({ project }: { project: Project }) {
           <div className="flex items-center gap-2 pb-4 border-b border-white/[0.06]">
             <Layers className="w-5 h-5 text-emerald-400" />
             <h2 className="text-xl font-bold text-white tracking-tight">
-              Visão Geral & Arquitetura
+              {t.projectDetail.overviewArchitecture}
             </h2>
           </div>
 
           {hasLongDescription ? (
             <div
               className="prose prose-invert max-w-none text-zinc-300 text-base sm:text-lg leading-relaxed [&>h3]:text-white [&>h3]:text-2xl [&>h3]:font-bold [&>h3]:tracking-tight [&>h3]:mt-10 [&>h3]:mb-4 [&>h3]:border-b [&>h3]:border-white/[0.06] [&>h3]:pb-2 [&>p]:mb-6 [&>p]:text-zinc-400 [&>p>strong]:text-white [&>p>strong]:font-medium [&>ul]:space-y-2 [&>ul]:mb-6 [&>ul>li]:text-zinc-400 [&>code]:text-emerald-300 [&>code]:bg-white/[0.06] [&>code]:px-1.5 [&>code]:py-0.5 [&>code]:rounded"
-              dangerouslySetInnerHTML={{ __html: project.longDescriptionHtml! }}
+              dangerouslySetInnerHTML={{ __html: displayLongDescriptionHtml! }}
             />
           ) : (
             <p className="text-zinc-400">
-              A documentação detalhada deste projeto está sendo preparada.
+              {t.projectDetail.documentationPending}
             </p>
           )}
         </div>
@@ -189,7 +196,7 @@ export default function ProjectPageClient({ project }: { project: Project }) {
           {hasLinks && (
             <div className="p-6 rounded-2xl border border-white/[0.08] bg-zinc-950">
               <h3 className="text-sm font-medium text-white tracking-tight mb-4">
-                Links do Projeto
+                {t.projectDetail.projectLinks}
               </h3>
 
               <div className="space-y-2.5">
@@ -202,7 +209,7 @@ export default function ProjectPageClient({ project }: { project: Project }) {
                   >
                     <div className="flex items-center gap-2.5">
                       <Github size={16} />
-                      <span>Ver no GitHub</span>
+                      <span>{t.projectDetail.githubRepo}</span>
                     </div>
                     <ExternalLink size={13} className="opacity-50" />
                   </a>
@@ -217,7 +224,7 @@ export default function ProjectPageClient({ project }: { project: Project }) {
                   >
                     <div className="flex items-center gap-2.5">
                       <ExternalLink size={16} />
-                      <span>Acessar Demo Online</span>
+                      <span>{t.projectDetail.livePlatform}</span>
                     </div>
                     <ExternalLink size={13} />
                   </a>
@@ -231,7 +238,7 @@ export default function ProjectPageClient({ project }: { project: Project }) {
                   >
                     <div className="flex items-center gap-2.5">
                       <HardDriveDownload size={16} />
-                      <span>Download da Build</span>
+                      <span>{t.projectDetail.downloadBuild}</span>
                     </div>
                     <ExternalLink size={13} className="opacity-50" />
                   </a>
@@ -244,7 +251,7 @@ export default function ProjectPageClient({ project }: { project: Project }) {
           {project.architectureHighlights && project.architectureHighlights.length > 0 && (
             <div className="p-6 rounded-2xl border border-white/[0.08] bg-zinc-950">
               <h3 className="text-xs font-mono uppercase tracking-wider text-zinc-400 mb-3">
-                Destaques Arquiteturais
+                {language === "en" ? "Architecture Highlights" : "Destaques Arquiteturais"}
               </h3>
               <ul className="space-y-2 text-xs font-mono text-zinc-400">
                 {project.architectureHighlights.map((highlight, idx) => (
@@ -260,21 +267,21 @@ export default function ProjectPageClient({ project }: { project: Project }) {
           {/* Ficha Técnica Rápida */}
           <div className="p-6 rounded-2xl border border-white/[0.08] bg-zinc-950 text-xs font-mono space-y-3">
             <div className="flex justify-between items-center py-1.5 border-b border-white/[0.04]">
-              <span className="text-zinc-500 uppercase tracking-wider">Desenvolvedor</span>
+              <span className="text-zinc-500 uppercase tracking-wider">{language === "en" ? "Engineer" : "Desenvolvedor"}</span>
               <span className="text-zinc-300">David Levy</span>
             </div>
             <div className="flex justify-between items-center py-1.5 border-b border-white/[0.04]">
-              <span className="text-zinc-500 uppercase tracking-wider">Categoria</span>
-              <span className="text-zinc-300 text-right max-w-[160px] truncate" title={project.category}>
-                {project.category}
+              <span className="text-zinc-500 uppercase tracking-wider">{language === "en" ? "Domain" : "Categoria"}</span>
+              <span className="text-zinc-300 text-right max-w-[160px] truncate" title={displayCategory}>
+                {displayCategory}
               </span>
             </div>
             <div className="flex justify-between items-center py-1.5 border-b border-white/[0.04]">
               <span className="text-zinc-500 uppercase tracking-wider">Status</span>
-              <span className="text-zinc-300">Completo</span>
+              <span className="text-zinc-300">{language === "en" ? "Complete" : "Completo"}</span>
             </div>
             <div className="flex justify-between items-center py-1.5">
-              <span className="text-zinc-500 uppercase tracking-wider">Tags Principais</span>
+              <span className="text-zinc-500 uppercase tracking-wider">{language === "en" ? "Core Tech" : "Tags Principais"}</span>
               <span className="text-zinc-300">{project.tags.slice(0, 3).join(", ")}</span>
             </div>
           </div>

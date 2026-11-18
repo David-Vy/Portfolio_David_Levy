@@ -16,6 +16,7 @@ import {
   SkillApplication,
 } from "@/lib/skills-data";
 import SkillsNetworkBackground from "@/components/SkillsNetworkBackground";
+import { useLanguage } from "@/context/LanguageContext";
 
 function getCategoryIcon(iconName?: string) {
   switch (iconName) {
@@ -151,9 +152,11 @@ interface SpotlightCardProps {
   category: SkillCategory;
   index: number;
   className?: string;
+  categoryTitle?: string;
+  skillsCountLabel?: string;
 }
 
-function SpotlightCard({ category, index, className = "" }: SpotlightCardProps) {
+function SpotlightCard({ category, index, className = "", categoryTitle, skillsCountLabel }: SpotlightCardProps) {
   const cardRef = useRef<HTMLDivElement | null>(null);
   const [mousePos, setMousePos] = useState({ x: -1000, y: -1000 });
   const [isHovered, setIsHovered] = useState(false);
@@ -217,10 +220,10 @@ function SpotlightCard({ category, index, className = "" }: SpotlightCardProps) 
           </div>
           <div>
             <h3 className="text-base sm:text-lg font-semibold text-white tracking-tight">
-              {category.title}
+              {categoryTitle || category.title}
             </h3>
             <span className="text-[11px] font-mono text-zinc-400">
-              {category.skills.length} competências
+              {category.skills.length} {skillsCountLabel || "competências"}
             </span>
           </div>
         </div>
@@ -242,6 +245,8 @@ function SpotlightCard({ category, index, className = "" }: SpotlightCardProps) 
 }
 
 export default function SkillsSection() {
+  const { t } = useLanguage();
+
   return (
     <section
       id="habilidades"
@@ -256,12 +261,12 @@ export default function SkillsSection() {
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
           <div>
             <h2 className="text-3xl sm:text-4xl md:text-5xl font-semibold tracking-tight text-white">
-              Competências Técnicas
+              {t.skills.sectionTitle}
             </h2>
           </div>
 
           <p className="text-zinc-400 text-sm sm:text-base max-w-md font-normal leading-relaxed">
-            Linguagens, frameworks e ferramentas consolidadas no desenvolvimento de sistemas web, desktop e serviços distribuídos em nuvem.
+            {t.skills.sectionSubtitle}
           </p>
         </div>
 
@@ -270,11 +275,14 @@ export default function SkillsSection() {
           {skillsData.map((category, idx) => {
             // No desktop, o 5º card (Engenharia & Práticas) ocupa 2 colunas para fechar a grade com simetria perfeita (3 no topo + 3 na base)
             const isLastWideCard = idx === 4;
+            const categoryTitle = t.skills.categories[category.title] || category.title;
             return (
               <SpotlightCard
                 key={category.title}
                 category={category}
                 index={idx}
+                categoryTitle={categoryTitle}
+                skillsCountLabel={t.skills.skillsCount}
                 className={isLastWideCard ? "lg:col-span-2" : "lg:col-span-1"}
               />
             );

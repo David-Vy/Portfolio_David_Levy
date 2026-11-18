@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useRef } from "react";
+import { useLanguage } from "@/context/LanguageContext";
 
 interface PlanetConfig {
   name: string;
@@ -25,6 +26,7 @@ interface Ripple {
 }
 
 export default function SolarSystemBackground() {
+  const { language } = useLanguage();
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const containerRef = useRef<HTMLDivElement | null>(null);
 
@@ -53,12 +55,14 @@ export default function SolarSystemBackground() {
       typeof window !== "undefined" &&
       window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
+    const isEn = language === "en";
+
     // Configuração dos corpos celestes do Sistema Solar minimalista
     const planets: (PlanetConfig & { angle: number })[] = [
       {
-        name: "Mercúrio",
-        au: "0.39 UA",
-        detail: "Período: 88 dias",
+        name: isEn ? "Mercury" : "Mercúrio",
+        au: isEn ? "0.39 AU" : "0.39 UA",
+        detail: isEn ? "Period: 88 days" : "Período: 88 dias",
         distance: 0.15,
         radius: 1.8,
         speed: 0.024,
@@ -66,9 +70,9 @@ export default function SolarSystemBackground() {
         angle: Math.random() * Math.PI * 2,
       },
       {
-        name: "Vênus",
-        au: "0.72 UA",
-        detail: "Período: 225 dias",
+        name: isEn ? "Venus" : "Vênus",
+        au: isEn ? "0.72 AU" : "0.72 UA",
+        detail: isEn ? "Period: 225 days" : "Período: 225 dias",
         distance: 0.24,
         radius: 2.5,
         speed: 0.016,
@@ -76,9 +80,9 @@ export default function SolarSystemBackground() {
         angle: Math.random() * Math.PI * 2,
       },
       {
-        name: "Terra",
-        au: "1.00 UA",
-        detail: "365.2 dias • 1 Satélite",
+        name: isEn ? "Earth" : "Terra",
+        au: isEn ? "1.00 AU" : "1.00 UA",
+        detail: isEn ? "365.2 days • 1 Satellite" : "365.2 dias • 1 Satélite",
         distance: 0.35,
         radius: 3.0,
         speed: 0.012,
@@ -89,9 +93,9 @@ export default function SolarSystemBackground() {
         ],
       },
       {
-        name: "Marte",
-        au: "1.52 UA",
-        detail: "687 dias • 2 Satélites",
+        name: isEn ? "Mars" : "Marte",
+        au: isEn ? "1.52 AU" : "1.52 UA",
+        detail: isEn ? "687 days • 2 Satellites" : "687 dias • 2 Satélites",
         distance: 0.47,
         radius: 2.2,
         speed: 0.009,
@@ -102,9 +106,9 @@ export default function SolarSystemBackground() {
         ],
       },
       {
-        name: "Júpiter",
-        au: "5.20 UA",
-        detail: "11.8 anos • 4 Satélites Galileanos",
+        name: isEn ? "Jupiter" : "Júpiter",
+        au: isEn ? "5.20 AU" : "5.20 UA",
+        detail: isEn ? "11.8 years • 4 Galilean Satellites" : "11.8 anos • 4 Satélites Galileanos",
         distance: 0.67,
         radius: 5.2,
         speed: 0.0045,
@@ -116,9 +120,9 @@ export default function SolarSystemBackground() {
         ],
       },
       {
-        name: "Saturno",
-        au: "9.58 UA",
-        detail: "29.4 anos • Sistema de Anéis",
+        name: isEn ? "Saturn" : "Saturno",
+        au: isEn ? "9.58 AU" : "9.58 UA",
+        detail: isEn ? "29.4 years • Ring System" : "29.4 anos • Sistema de Anéis",
         distance: 0.85,
         radius: 4.2,
         speed: 0.0032,
@@ -129,9 +133,9 @@ export default function SolarSystemBackground() {
         angle: Math.random() * Math.PI * 2,
       },
       {
-        name: "Urano",
-        au: "19.2 UA",
-        detail: "84.0 anos • Eixo Inclinado",
+        name: isEn ? "Uranus" : "Urano",
+        au: isEn ? "19.2 AU" : "19.2 UA",
+        detail: isEn ? "84.0 years • Tilted Axis" : "84.0 anos • Eixo Inclinado",
         distance: 1.05,
         radius: 3.2,
         speed: 0.0022,
@@ -139,9 +143,9 @@ export default function SolarSystemBackground() {
         angle: Math.random() * Math.PI * 2,
       },
       {
-        name: "Netuno",
-        au: "30.1 UA",
-        detail: "164.8 anos • Sentinela Externo",
+        name: isEn ? "Neptune" : "Netuno",
+        au: isEn ? "30.1 AU" : "30.1 UA",
+        detail: isEn ? "164.8 years • Outer Sentinel" : "164.8 anos • Sentinela Externo",
         distance: 1.24,
         radius: 3.0,
         speed: 0.0016,
@@ -529,7 +533,7 @@ export default function SolarSystemBackground() {
       window.removeEventListener("mousemove", handleMouseMove);
       window.removeEventListener("click", handleClick);
     };
-  }, []);
+  }, [language]);
 
   return (
     <div

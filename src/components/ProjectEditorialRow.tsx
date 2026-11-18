@@ -13,6 +13,7 @@ import LyCloudMockup from "./mockups/LyCloudMockup";
 import RosaNeuralMockup from "./mockups/RosaNeuralMockup";
 import LyMadhouseMockup from "./mockups/LyMadhouseMockup";
 import ExoWebApiMockup from "./mockups/ExoWebApiMockup";
+import { useLanguage } from "@/context/LanguageContext";
 
 /**
  * Interface estendida retrocompatível com a base atual e aberta
@@ -27,10 +28,15 @@ export interface ProjectEditorialRowProps {
 }
 
 export default function ProjectEditorialRow({ project, index, isFocused = false }: ProjectEditorialRowProps) {
+  const { t } = useLanguage();
   const hasMultipleImages = Boolean(project.images && project.images.length > 1);
   const isMockup = Boolean(project.mockupType);
   const isEven = index % 2 === 0;
   const theme = PROJECT_THEMES[project.slug] || PROJECT_THEMES["lymadhouse"];
+
+  const projectTranslation = t.projects.items[project.slug];
+  const displayCategory = projectTranslation?.category || project.category || "Engenharia de Software";
+  const displayDescription = projectTranslation?.description || project.description;
 
   // Rastreamento de coordenadas relativas do cursor (-0.5 a 0.5) para parallax e spotlight interativo
   const [mousePos, setMousePos] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
@@ -130,7 +136,7 @@ export default function ProjectEditorialRow({ project, index, isFocused = false 
         <div className={`lg:col-span-5 flex flex-col justify-center space-y-4 ${!isEven ? "lg:order-1" : "lg:order-2"}`}>
           {/* Overline de Categoria */}
           <span className="text-xs font-mono uppercase tracking-wider text-zinc-400 font-medium">
-            {project.category || "Engenharia de Software"}
+            {displayCategory || project.category || "Engenharia de Software"}
           </span>
 
           {/* Título Display Editorial com Fonte Ampliada e Degradê Exclusivo Inspirado no Gemini */}
@@ -144,7 +150,7 @@ export default function ProjectEditorialRow({ project, index, isFocused = false 
 
           {/* Resumo Editorial (2 a 3 linhas) */}
           <p className="text-zinc-300 text-sm sm:text-base leading-relaxed line-clamp-3 font-normal">
-            {project.description}
+            {displayDescription || project.description}
           </p>
 
           {/* Pills de Tecnologias */}
@@ -165,7 +171,7 @@ export default function ProjectEditorialRow({ project, index, isFocused = false 
               href={`/projects/${project.slug}`}
               className="inline-flex items-center gap-2 text-sm font-semibold text-white hover:text-zinc-200 transition-colors group/cta"
             >
-              <span>Ver Estudo de Caso</span>
+              <span>{t.projects.viewCaseStudy || "Ver Estudo de Caso"}</span>
               <ArrowRight className="w-4 h-4 transition-transform duration-200 group-hover/cta:translate-x-1" />
             </Link>
 

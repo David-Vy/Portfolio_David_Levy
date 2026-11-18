@@ -6,10 +6,59 @@ import Image from "next/image";
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X } from "lucide-react";
+import { useLanguage } from "@/context/LanguageContext";
+import { BrazilFlag, UsaFlag } from "@/components/LanguageFlags";
+
+function LanguageSwitcherMinimal({ className = "" }: { className?: string }) {
+  const { language, setLanguage } = useLanguage();
+
+  return (
+    <div
+      role="group"
+      aria-label="Seleção de idioma / Language selection"
+      className={`inline-flex items-center gap-1 p-1 rounded-full bg-white/[0.04] border border-white/[0.08] backdrop-blur-xs ${className}`}
+    >
+      {/* Opção Português */}
+      <button
+        type="button"
+        onClick={() => setLanguage("pt")}
+        className={`flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-mono transition-all duration-150 cursor-pointer ${
+          language === "pt"
+            ? "bg-white/10 text-white shadow-xs font-medium"
+            : "text-zinc-500 hover:text-zinc-300 opacity-60 hover:opacity-100"
+        }`}
+        aria-label="Mudar idioma para Português"
+        aria-pressed={language === "pt"}
+        title="Português (Brasil)"
+      >
+        <BrazilFlag className="w-4 h-3" />
+        <span className="text-[10px] tracking-wider">PT</span>
+      </button>
+
+      {/* Opção Inglês */}
+      <button
+        type="button"
+        onClick={() => setLanguage("en")}
+        className={`flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-mono transition-all duration-150 cursor-pointer ${
+          language === "en"
+            ? "bg-white/10 text-white shadow-xs font-medium"
+            : "text-zinc-500 hover:text-zinc-300 opacity-60 hover:opacity-100"
+        }`}
+        aria-label="Switch language to English"
+        aria-pressed={language === "en"}
+        title="English (US)"
+      >
+        <UsaFlag className="w-4 h-3" />
+        <span className="text-[10px] tracking-wider">EN</span>
+      </button>
+    </div>
+  );
+}
 
 export default function Header() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const { t } = useLanguage();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -20,11 +69,11 @@ export default function Header() {
   }, []);
 
   const navLinks = [
-    { name: "Projetos", href: "/#projetos" },
-    { name: "Competências", href: "/#habilidades" },
-    { name: "Processo", href: "/#processo" },
-    { name: "Sobre", href: "/#sobre" },
-    { name: "Contato", href: "/#contato" },
+    { name: t.header.projects, href: "/#projetos" },
+    { name: t.header.skills, href: "/#habilidades" },
+    { name: t.header.process, href: "/#processo" },
+    { name: t.header.about, href: "/#sobre" },
+    { name: t.header.contact, href: "/#contato" },
   ];
 
   return (
@@ -63,28 +112,37 @@ export default function Header() {
             </div>
           </Link>
 
-          {/* Navegação Desktop: Links Simples e Diretos, Sem Duplicações */}
-          <nav className="hidden md:flex items-center gap-8 text-sm" aria-label="Navegação Principal">
-            {navLinks.map((link) => (
-              <Link
-                key={link.name}
-                href={link.href}
-                className="text-zinc-400 hover:text-white transition-colors duration-150 text-sm font-normal"
-              >
-                {link.name}
-              </Link>
-            ))}
-          </nav>
+          {/* Navegação Desktop & Switcher de Idioma */}
+          <div className="hidden md:flex items-center gap-8">
+            <nav className="flex items-center gap-8 text-sm" aria-label="Navegação Principal">
+              {navLinks.map((link) => (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  className="text-zinc-400 hover:text-white transition-colors duration-150 text-sm font-normal"
+                >
+                  {link.name}
+                </Link>
+              ))}
+            </nav>
 
-          {/* Trigger do Menu Mobile: Minimalista e sem bordas pesadas */}
-          <button
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="md:hidden p-1.5 text-zinc-400 hover:text-white transition-colors"
-            aria-label={mobileMenuOpen ? "Fechar menu de navegação" : "Abrir menu de navegação"}
-            aria-expanded={mobileMenuOpen}
-          >
-            {mobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
-          </button>
+            {/* Switcher de Idioma Minimalista Desktop */}
+            <LanguageSwitcherMinimal />
+          </div>
+
+          {/* Área Mobile: Switcher de Idioma e Botão Hamburger */}
+          <div className="flex md:hidden items-center gap-3">
+            <LanguageSwitcherMinimal />
+
+            <button
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="p-1.5 text-zinc-400 hover:text-white transition-colors cursor-pointer"
+              aria-label={mobileMenuOpen ? t.header.closeMenu : t.header.openMenu}
+              aria-expanded={mobileMenuOpen}
+            >
+              {mobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
+            </button>
+          </div>
         </div>
       </header>
 
@@ -101,7 +159,7 @@ export default function Header() {
             <nav className="flex flex-col space-y-4 max-w-7xl mx-auto" aria-label="Menu Mobile">
               {navLinks.map((link) => (
                 <Link
-                  key={link.name}
+                  key={link.href}
                   href={link.href}
                   onClick={() => setMobileMenuOpen(false)}
                   className="text-lg font-medium text-zinc-300 hover:text-white transition-colors py-1"

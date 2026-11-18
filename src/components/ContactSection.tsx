@@ -1,10 +1,13 @@
 // src/components/ContactSection.tsx
 "use client";
 
-import { motion } from 'framer-motion';
-import { Mail, Github, Linkedin } from 'lucide-react';
+import { motion } from "framer-motion";
+import { Mail, Github, Linkedin } from "lucide-react";
+import { useLanguage } from "@/context/LanguageContext";
 
 export default function ContactSection() {
+  const { t } = useLanguage();
+
   return (
     <section id="contato" className="relative py-28 md:py-36 px-6 md:px-10 max-w-4xl mx-auto border-t border-white/[0.06] text-center">
       <motion.div
@@ -15,11 +18,11 @@ export default function ContactSection() {
         className="flex flex-col items-center"
       >
         <h2 className="text-3xl sm:text-5xl md:text-6xl font-semibold tracking-tight text-white mb-6">
-          Vamos conversar?
+          {t.contact.title}
         </h2>
 
         <p className="text-zinc-400 text-base sm:text-lg max-w-2xl mx-auto leading-relaxed font-normal mb-10">
-          Estou aberto a oportunidades de estágio e nível júnior em Engenharia de Software, sistemas distribuídos e desenvolvimento Full-Stack. Sinta-se à vontade para me contatar diretamente por e-mail ou pelas redes profissionais.
+          {t.contact.subtitle}
         </p>
 
         {/* Ações Principais */}
@@ -39,7 +42,7 @@ export default function ContactSection() {
             className="pill-button px-6 py-3 text-sm text-zinc-300 hover:text-white"
           >
             <Linkedin className="w-4 h-4" />
-            <span>Conectar no LinkedIn</span>
+            <span>{t.contact.connectLinkedIn}</span>
           </a>
         </div>
 
@@ -68,7 +71,7 @@ export default function ContactSection() {
           <span className="text-zinc-600 hidden sm:inline">·</span>
 
           <span className="font-mono text-xs text-zinc-500">
-            Brasília, DF (UTC-3)
+            {t.contact.location}
           </span>
         </div>
       </motion.div>
